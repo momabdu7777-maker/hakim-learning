@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2a1b5e">
+<title>حكيم | Hakeem — تعلّم الإنجليزية باللعب</title>
+<meta name="description" content="حكيم: لعبة مغامرات لتعلّم الإنجليزية بالصوت والصورة واللعب، للأطفال والمراهقين والكبار. حمّلها مجاناً لأندرويد أو العبها من المتصفح.">
+<meta property="og:title" content="حكيم | Hakeem — تعلّم الإنجليزية باللعب">
+<meta property="og:description" content="386 كلمة وعبارة، 10 أنماط لعب، 4 فئات عمرية. حمّلها مجاناً لأندرويد أو العبها من المتصفح.">
+<meta property="og:image" content="icon.png">
+<link rel="icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1b1240;--ink-2:#251a55;--ink-3:#2f2268;
+  --violet:#7c3aed;--pink:#ec4899;--gold:#f5b301;--gold-2:#ffd166;--orange:#f97316;
+  --text:#f4f1ff;--muted:#b9b2dc;--line:rgba(255,255,255,.12);
+  --owl-body:#a26b45;--owl-belly:#f7dfbd;--owl-dark:#6e4229;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--ink)}
+body{
+  min-height:100vh;color:var(--text);font-family:'Cairo',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;line-height:1.7;
+  background:
+    radial-gradient(ellipse 80% 45% at 85% -5%,rgba(236,72,153,.28),transparent 70%),
+    radial-gradient(ellipse 80% 50% at 10% 0%,rgba(124,58,237,.45),transparent 70%),
+    var(--ink);
+}
+main{max-width:600px;margin:0 auto;padding:36px 16px 40px;text-align:center}
+.en{font-family:'Baloo 2','Cairo',sans-serif;direction:ltr;unicode-bidi:isolate}
+
+/* the owl, same drawing as in the game */
+.owl{width:150px;height:auto;display:block;margin:0 auto;overflow:visible;filter:drop-shadow(0 14px 24px rgba(0,0,0,.35));animation:floaty 3.2s ease-in-out infinite}
+.owl .lid{transform-box:fill-box;transform-origin:center top;transform:scaleY(0);animation:blink 4.5s infinite}
+.owl .wing-l{transform-box:fill-box;transform-origin:right top;animation:wave 4.5s ease-in-out infinite}
+@keyframes floaty{50%{transform:translateY(-10px)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(0)}95%{transform:scaleY(1)}}
+@keyframes wave{0%,70%,100%{transform:rotate(0)}78%,90%{transform:rotate(-28deg)}84%{transform:rotate(-12deg)}}
+
+.brand{display:flex;gap:14px;justify-content:center;align-items:baseline;margin-top:10px;font-size:clamp(46px,13vw,68px);font-weight:800;line-height:1.25}
+.brand .en{background:linear-gradient(135deg,#a78bfa,var(--pink) 55%,var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand i{font-style:normal;opacity:.3;font-weight:400}
+.tag{color:var(--muted);font-size:17px;margin-top:4px}
+.stats{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:22px 0 26px}
+.stats span{border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-size:14px;background:rgba(255,255,255,.06)}
+
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px 20px;border-radius:18px;font-weight:800;font-size:19px;text-decoration:none;transition:transform .15s}
+.btn:active{transform:scale(.98)}
+.primary{background:linear-gradient(135deg,var(--gold-2),var(--orange));color:#2a1400;box-shadow:0 10px 28px rgba(249,115,22,.35)}
+.secondary{margin-top:12px;border:1px solid var(--line);color:var(--text);background:linear-gradient(135deg,rgba(124,58,237,.55),rgba(236,72,153,.45))}
+.meta{font-size:13px;color:var(--muted);margin-top:10px}
+
+.shots{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:30px -16px 0;padding:4px 16px 14px;scrollbar-width:thin}
+.shots img{flex:0 0 auto;width:min(48vw,210px);aspect-ratio:1/2;border-radius:22px;border:3px solid rgba(255,255,255,.14);scroll-snap-align:center;background:var(--ink-2);box-shadow:0 12px 26px rgba(0,0,0,.35)}
+
+section{text-align:right;margin-top:26px;background:var(--ink-2);border:1px solid var(--line);border-radius:18px;padding:20px}
+h2{font-size:18px;color:var(--gold-2);margin-bottom:12px}
+.ages{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.age{background:var(--ink-3);border-radius:14px;padding:12px;text-align:center}
+.age b{display:block;font-size:15px}
+.age small{color:var(--muted);font-size:12.5px}
+.age .e{font-size:30px;line-height:1.3}
+.feats{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.feats li{background:var(--ink-3);border-radius:12px;padding:10px 12px;font-size:14px}
+ol{padding-right:20px}
+li{margin:6px 0}
+.note{font-size:14px;color:var(--muted);margin-top:10px}
+code{direction:ltr;display:block;text-align:left;font-size:11px;word-break:break-all;color:var(--muted);background:var(--ink);border-radius:8px;padding:8px;margin-top:6px}
+footer{margin-top:32px;font-size:13px;color:var(--muted)}
+@media (max-width:380px){.feats{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.owl,.owl .lid,.owl .wing-l{animation:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <svg class="owl" viewBox="0 0 120 132" aria-hidden="true">
+    <g fill="#f59e0b"><ellipse cx="46" cy="122" rx="10" ry="4.5"/><ellipse cx="74" cy="122" rx="10" ry="4.5"/></g>
+    <ellipse class="wing-l" cx="22" cy="82" rx="12" ry="27" fill="var(--owl-dark)"/>
+    <ellipse cx="98" cy="82" rx="12" ry="27" fill="var(--owl-dark)"/>
+    <path d="M27 44 L20 22 L44 34 Z" fill="var(--owl-dark)"/><path d="M93 44 L100 22 L76 34 Z" fill="var(--owl-dark)"/>
+    <ellipse cx="60" cy="76" rx="40" ry="46" fill="var(--owl-body)"/>
+    <ellipse cx="60" cy="90" rx="26" ry="29" fill="var(--owl-belly)"/>
+    <g fill="none" stroke="var(--owl-body)" stroke-width="2" opacity=".45" stroke-linecap="round">
+      <path d="M47 90 q4 4 8 0 q4 4 8 0 q4 4 8 0"/><path d="M51 101 q4 4 8 0 q4 4 8 0"/></g>
+    <circle cx="44" cy="58" r="15" fill="#fff"/><circle cx="76" cy="58" r="15" fill="#fff"/>
+    <circle cx="46" cy="59" r="7" fill="#1f1530"/><circle cx="74" cy="59" r="7" fill="#1f1530"/>
+    <circle cx="48.5" cy="56" r="2.4" fill="#fff"/><circle cx="76.5" cy="56" r="2.4" fill="#fff"/>
+    <g fill="var(--owl-body)"><ellipse class="lid" cx="44" cy="58" rx="16" ry="16"/><ellipse class="lid" cx="76" cy="58" rx="16" ry="16"/></g>
+    <path d="M54 70 L66 70 L60 81 Z" fill="#f59e0b"/>
+    <g fill="#ff8fab" opacity=".75"><ellipse cx="29" cy="74" rx="6" ry="3.5"/><ellipse cx="91" cy="74" rx="6" ry="3.5"/></g>
+    <path d="M28 28 L60 15 L92 28 L60 41 Z" fill="#1f1b3a"/><rect x="45" y="31" width="30" height="9" rx="2" fill="#1f1b3a"/>
+    <path d="M90 28 L92 44" stroke="#f5b301" stroke-width="2.2"/><circle cx="92" cy="46" r="3.2" fill="#f5b301"/>
+  </svg>
+  <h1 class="brand"><span>حكيم</span><i>|</i><span class="en">Hakeem</span></h1>
+  <p class="tag">مغامرة ممتعة لتعلّم الإنجليزية بالصوت والصورة واللعب مع البومة الحكيمة</p>
+
+  <div class="stats"><span>386 كلمة وعبارة</span><span>10 أنماط لعب</span><span>4 فئات عمرية</span><span>مجانية</span></div>
+
+  <a class="btn primary" href="hakeem.apk" download="hakeem.apk">⬇ تحميل لأندرويد</a>
+  <p class="meta">الإصدار 1.0 · 0.5 ميغابايت · أندرويد 7 فما فوق</p>
+  <a class="btn secondary" href="play/">▶ العب الآن من المتصفح</a>
+
+  <div class="shots" aria-label="صور من اللعبة">
+    <img src="shots/menu.webp" alt="الشاشة الرئيسية مع مهام اليوم" loading="lazy">
+    <img src="shots/balloons.webp" alt="لعبة فقاعات الكلمات" loading="lazy">
+    <img src="shots/kids.webp" alt="استمع واختر الصورة للأطفال" loading="lazy">
+    <img src="shots/teens.webp" alt="الاستماع إلى حوار للمراهقين" loading="lazy">
+    <img src="shots/shop.webp" alt="متجر حكيم" loading="lazy">
+  </div>
+
+  <section>
+    <h2>لكل فرد في العائلة</h2>
+    <div class="ages">
+      <div class="age"><div class="e">🧸</div><b>المستكشفون الصغار</b><small>4–7 سنوات · صور وأصوات بلا كتابة</small></div>
+      <div class="age"><div class="e">🎒</div><b>المتعلمون الصغار</b><small>8–12 سنة · مدرسة وبيت ورياضة</small></div>
+      <div class="age"><div class="e">🎧</div><b>المراهقون</b><small>13–17 سنة · تعابير ومحادثات</small></div>
+      <div class="age"><div class="e">💼</div><b>البالغون</b><small>18+ · سفر وعمل ومقابلات</small></div>
+    </div>
+    <p class="note">لكل لاعب ملفه الخاص على نفس الجهاز، ولكل فئة عوالمها وتقدّمها.</p>
+  </section>
+
+  <section>
+    <h2>ماذا في اللعبة؟</h2>
+    <ul class="feats">
+      <li>🔊 نطق إنجليزي لكل كلمة وجملة، مع سرعة بطيئة 🐢</li>
+      <li>🎤 تمرين النطق بالميكروفون مع تقييم</li>
+      <li>🎈 فقاعات الكلمات وبطاقات الذاكرة</li>
+      <li>🧩 ترتيب الحروف وبناء الجمل</li>
+      <li>💬 حوارات قصيرة للاستماع والفهم</li>
+      <li>🔁 مراجعة ذكية للكلمات الصعبة</li>
+      <li>🎯 مهام يومية وصندوق كنز</li>
+      <li>🛍️ متجر لتزيين البومة حكيم</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>طريقة التثبيت</h2>
+    <ol>
+      <li>اضغط «تحميل لأندرويد» وانتظر حتى ينتهي التحميل.</li>
+      <li>افتح الملف <b>hakeem.apk</b> من الإشعارات أو من مجلد التنزيلات.</li>
+      <li>إذا ظهرت رسالة «لا يُسمح بالتثبيت من هذا المصدر»، اضغط <b>الإعدادات</b> وفعّل <b>السماح من هذا المصدر</b>، ثم ارجع واضغط <b>تثبيت</b>.</li>
+      <li>إذا ظهر تنبيه من Play Protect، اختر <b>التثبيت على أي حال</b>.</li>
+    </ol>
+    <p class="note">اللعبة لا تجمع أي بيانات، وتقدّمك محفوظ على هاتفك فقط، وتعمل بدون إنترنت. تطلب إذن <b>الميكروفون</b> فقط عند تمرين النطق، ويتم التعرّف على الصوت عبر خدمة جوجل في هاتفك.</p>
+  </section>
+
+  <section>
+    <h2>التحقق من الملف</h2>
+    <p class="note">بصمة SHA-256 للملف الرسمي:</p>
+    <code>1c6365fe8b4283d2a1ddb09bd188c4a5ab78e0e9c5fd748bcffae2a79db17366</code>
+  </section>
+
+  <footer>© 2026 حكيم | Hakeem</footer>
+</main>
+</body>
+</html>

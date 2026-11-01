@@ -1,0 +1,2961 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7c5cff">
+<meta name="description" content="حكيم | Hakeem — لعبة مغامرات لتعلّم الإنجليزية بالصوت والصورة واللعب">
+<title>حكيم | Hakeem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   1. DESIGN TOKENS (per age group + light/dark)
+   ========================================================= */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --font-ar:'Cairo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-en:'Baloo 2','Cairo',system-ui,sans-serif;
+  --emoji-font:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji','Twemoji Mozilla',sans-serif;
+  --good:#16a34a; --bad:#dc2626; --gold:#f5b301;
+  --owl-body:#a26b45; --owl-belly:#f7dfbd; --owl-dark:#6e4229;
+}
+body{
+  --primary:#7c5cff; --primary-2:#ff6fb5; --accent:#2ec4ff;
+  --bg1:#f3f0ff; --bg2:#e0f4ff;
+  --surface:rgba(255,255,255,.74); --surface-solid:#fff; --border:rgba(255,255,255,.85);
+  --text:#1e1b3a; --muted:#5f5c80; --chip:rgba(124,92,255,.1); --line:rgba(30,27,58,.1);
+  --good-bg:#dcfce7; --bad-bg:#fee2e2;
+  --radius:20px; --scale:1; --shadow:0 10px 30px rgba(40,30,90,.12);
+}
+/* Little Explorers: bright, soft, huge */
+body[data-age=kids]{--primary:#f0509a;--primary-2:#ff9f1c;--accent:#22a6e8;--bg1:#fff0f7;--bg2:#e6f7ff;--radius:28px;--scale:1.12;--chip:rgba(240,80,154,.12)}
+/* Young Learners: playful but structured */
+body[data-age=young]{--primary:#2f6fe4;--primary-2:#f97316;--accent:#10b981;--bg1:#eaf3ff;--bg2:#fff4e6;--radius:22px;--scale:1.04;--chip:rgba(47,111,228,.1)}
+/* Teens: neon gradients */
+body[data-age=teens]{--primary:#7c3aed;--primary-2:#db2777;--accent:#0891b2;--bg1:#f4f0ff;--bg2:#e6fbff;--radius:16px;--chip:rgba(124,58,237,.12)}
+/* Adults: clean, elegant, minimal */
+body[data-age=adults]{--primary:#0f766e;--primary-2:#1e40af;--accent:#a16207;--bg1:#f7f8fa;--bg2:#eef2f6;--radius:12px;--scale:.97;--chip:rgba(15,118,110,.08)}
+
+html[data-theme=dark] body{
+  --surface:rgba(32,32,62,.72); --surface-solid:#1d1d38; --border:rgba(255,255,255,.08);
+  --text:#eef0ff; --muted:#a9acd0; --line:rgba(255,255,255,.1);
+  --bg1:#12122a; --bg2:#1b1440; --shadow:0 10px 30px rgba(0,0,0,.4);
+  --good-bg:rgba(22,163,74,.22); --bad-bg:rgba(220,38,38,.22);
+}
+html[data-theme=dark] body[data-age=kids]{--bg1:#1f1433;--bg2:#0f2440;--primary:#ff6fb0}
+html[data-theme=dark] body[data-age=young]{--bg1:#0f1a33;--bg2:#24160c;--primary:#4f8bff}
+html[data-theme=dark] body[data-age=teens]{--bg1:#090615;--bg2:#1a0b33;--primary:#9b6bff;--primary-2:#ff3d9a;--accent:#22d3ee}
+html[data-theme=dark] body[data-age=adults]{--bg1:#0d1316;--bg2:#141c23;--primary:#14b8a6;--accent:#d4a72c}
+
+/* =========================================================
+   2. BASE
+   ========================================================= */
+html,body{min-height:100%}
+body{
+  font-family:var(--font-ar); color:var(--text);
+  background:linear-gradient(160deg,var(--bg1),var(--bg2)); background-attachment:fixed;
+  min-height:100vh; min-height:100dvh; font-size:calc(16px * var(--scale)); line-height:1.6;
+  -webkit-tap-highlight-color:transparent; overflow-x:hidden; transition:background .4s;
+}
+button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
+input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:10px}
+.en{font-family:var(--font-en);direction:ltr;unicode-bidi:isolate}
+.emoji{font-family:var(--emoji-font);line-height:1;font-style:normal}
+.muted{color:var(--muted)} .small{font-size:.85em} .center{text-align:center}
+.hidden{display:none!important}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.row.center{justify-content:center}
+.stack{display:flex;flex-direction:column;gap:12px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* floating background blobs */
+#bg-deco{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+#bg-deco i{position:absolute;border-radius:50%;filter:blur(50px);opacity:.35;animation:drift 18s ease-in-out infinite alternate}
+#bg-deco i:nth-child(1){width:320px;height:320px;background:var(--primary);top:-80px;left:-90px}
+#bg-deco i:nth-child(2){width:280px;height:280px;background:var(--accent);bottom:-60px;right:-80px;animation-delay:-6s}
+#bg-deco i:nth-child(3){width:200px;height:200px;background:var(--primary-2);top:40%;left:55%;animation-delay:-11s;opacity:.22}
+body[data-age=adults] #bg-deco i{opacity:.12}
+@keyframes drift{to{transform:translate(40px,60px) scale(1.15)}}
+
+#app{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:16px 16px 120px;min-height:100vh;min-height:100dvh}
+.screen{animation:screenIn .35s ease both}
+@keyframes screenIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* =========================================================
+   3. COMPONENTS
+   ========================================================= */
+.glass{background:var(--surface);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:10px 22px;border-radius:calc(var(--radius) * .75);font-weight:700;font-size:1rem;transition:transform .15s,box-shadow .2s,filter .2s;user-select:none}
+.btn:active{transform:scale(.96)}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.4)}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 6px 18px color-mix(in srgb,var(--primary) 40%,transparent)}
+.btn-primary:hover:not(:disabled){filter:brightness(1.07)}
+.btn-ghost{background:var(--surface);border:1px solid var(--line)}
+.btn-danger{background:var(--bad);color:#fff}
+.btn-big{min-height:62px;font-size:1.2rem;padding:12px 34px}
+.btn-wide{width:100%}
+body[data-age=kids] .btn{min-height:62px;font-size:1.15rem}
+body[data-age=teens] .btn-primary{box-shadow:0 0 22px color-mix(in srgb,var(--primary) 55%,transparent)}
+body[data-age=adults] .btn-primary{background:var(--primary);box-shadow:none}
+
+.icon-btn{width:48px;height:48px;min-width:48px;border-radius:50%;display:inline-grid;place-items:center;background:var(--surface);border:1px solid var(--line);font-size:1.25rem;transition:transform .15s}
+.icon-btn:active{transform:scale(.9)}
+.icon-btn.sm{width:40px;height:40px;min-width:40px;font-size:1rem}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--chip);font-weight:700;font-size:.92rem;white-space:nowrap}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--chip);font-size:.8rem;font-weight:700}
+
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.topbar .title{flex:1;font-size:1.3rem;font-weight:800}
+.topbar .chips{display:flex;gap:6px;flex-wrap:wrap}
+.section-title{font-size:1.05rem;font-weight:800;margin:20px 4px 10px}
+
+.bar{height:12px;border-radius:999px;background:var(--line);overflow:hidden;flex:1}
+.bar>i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--primary),var(--primary-2));transition:width .5s ease}
+
+/* toggle switch */
+.switch{position:relative;width:58px;height:32px;border-radius:999px;background:var(--line);transition:background .2s;flex-shrink:0}
+.switch::after{content:"";position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:right .2s}
+.switch[aria-checked=true]{background:var(--primary)}
+.switch[aria-checked=true]::after{right:30px}
+.seg{display:inline-flex;background:var(--line);border-radius:999px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{padding:6px 14px;border-radius:999px;font-weight:700;min-height:38px}
+.seg button[aria-pressed=true]{background:var(--surface-solid);box-shadow:0 2px 8px rgba(0,0,0,.12);color:var(--primary)}
+
+/* =========================================================
+   4. SPLASH / PROFILES
+   ========================================================= */
+.splash{min-height:82vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
+.splash-owl{width:min(220px,55vw);animation:floaty 3s ease-in-out infinite}
+.logo{font-size:clamp(2.2rem,8vw,3.4rem);font-weight:800;display:flex;gap:14px;align-items:baseline}
+.logo .en{background:linear-gradient(135deg,var(--primary),var(--primary-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo i{font-style:normal;opacity:.35}
+.tagline{font-size:1.1rem;color:var(--muted);max-width:420px}
+@keyframes floaty{50%{transform:translateY(-10px)}}
+
+.center-head{text-align:center;margin:10px 0 20px}
+.center-head h1{font-size:1.5rem}
+.profile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.profile-card{display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 10px;text-align:center;transition:transform .2s}
+.profile-card:hover{transform:translateY(-4px)}
+.avatar{font-family:var(--emoji-font);font-size:3rem;line-height:1;width:76px;height:76px;display:grid;place-items:center;border-radius:50%;background:var(--chip)}
+.avatar.sm{width:50px;height:50px;font-size:1.8rem}
+.profile-card.add .avatar{border:2px dashed var(--muted);background:none;font-size:2rem}
+
+.form-card{padding:20px;display:flex;flex-direction:column;gap:14px}
+.form-card label{font-weight:800}
+.text-input{width:100%;min-height:54px;padding:10px 16px;border-radius:calc(var(--radius) * .7);border:2px solid var(--line);background:var(--surface-solid);font-size:1.1rem}
+.text-input:focus{border-color:var(--primary);outline:none}
+.avatar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:8px}
+.avatar-grid button{font-family:var(--emoji-font);font-size:2rem;height:60px;border-radius:16px;background:var(--surface-solid);border:2px solid transparent;transition:transform .15s}
+.avatar-grid button[aria-pressed=true]{border-color:var(--primary);transform:scale(1.08);background:var(--chip)}
+.age-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.age-card{padding:14px 10px;border-radius:var(--radius);background:var(--surface-solid);border:2px solid transparent;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.age-card .emoji{font-size:2.4rem}
+.age-card b{font-size:1rem}
+.age-card small{color:var(--muted)}
+.age-card[aria-pressed=true]{border-color:var(--primary);background:var(--chip)}
+
+/* =========================================================
+   5. MAIN MENU
+   ========================================================= */
+.menu-head{padding:16px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.who{display:flex;gap:12px;align-items:center}
+.who b{display:block;font-size:1.2rem}
+.who small{color:var(--muted)}
+.xpline{grid-column:1/-1;display:flex;align-items:center;gap:10px;font-weight:700;font-size:.9rem}
+.play-btn{width:100%;margin:18px 0;padding:22px;border-radius:calc(var(--radius) * 1.2);background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;display:flex;align-items:center;gap:16px;box-shadow:0 14px 34px color-mix(in srgb,var(--primary) 40%,transparent);text-align:start;transition:transform .2s}
+.play-btn:hover{transform:translateY(-3px)}
+.play-btn .pi{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center;font-size:1.8rem;flex-shrink:0;animation:pulse 2s infinite}
+.play-btn b{display:block;font-size:1.6rem}
+.play-btn small{opacity:.9}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.5)}70%{box-shadow:0 0 0 16px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+.menu-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.mini-card{padding:14px;display:flex;align-items:center;gap:12px;text-align:start}
+.mini-card .emoji{font-size:2rem}
+.mini-card b{display:block}
+.mini-card small{color:var(--muted)}
+.mini-card.done{opacity:.7}
+.ring{--p:0;width:58px;height:58px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-weight:800;font-size:.8rem;background:radial-gradient(closest-side,var(--surface-solid) 76%,transparent 78% 100%),conic-gradient(var(--primary) calc(var(--p) * 1%),var(--line) 0)}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.tile-btn{padding:16px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;transition:transform .2s;position:relative}
+.tile-btn:hover{transform:translateY(-3px)}
+.tile-btn .emoji{font-size:2.2rem}
+.tile-btn b{font-size:1rem}
+.tile-btn .count{position:absolute;top:8px;left:8px;min-width:24px;height:24px;border-radius:12px;background:var(--bad);color:#fff;font-size:.75rem;display:grid;place-items:center;padding:0 6px;font-weight:800}
+body[data-age=kids] .tile-btn .emoji{font-size:2.8rem}
+
+/* =========================================================
+   6. ADVENTURE MAP
+   ========================================================= */
+.world{margin-bottom:26px}
+.world-head{padding:14px 16px;display:flex;align-items:center;gap:12px;border-inline-start:6px solid var(--w)}
+.world-head .emoji{font-size:2.2rem}
+.world-head b{display:block;font-size:1.15rem}
+.world-head .en{color:var(--muted);font-size:.9rem}
+.world-head .ws{margin-inline-start:auto}
+.world.locked .world-head{filter:grayscale(.8);opacity:.7}
+.path-wrap{position:relative;margin:6px auto 0;max-width:420px}
+.path-wrap svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.path-wrap path{fill:none;stroke:color-mix(in srgb,var(--w) 45%,transparent);stroke-width:14;stroke-linecap:round;stroke-dasharray:2 22}
+.node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px}
+.node-btn{width:70px;height:70px;border-radius:50%;font-family:var(--font-en);font-weight:800;font-size:1.6rem;color:#fff;background:var(--w);box-shadow:0 6px 0 color-mix(in srgb,var(--w) 60%,#000),0 10px 20px rgba(0,0,0,.18);transition:transform .15s;display:grid;place-items:center}
+.node-btn:active{transform:translateY(4px);box-shadow:0 2px 0 color-mix(in srgb,var(--w) 60%,#000)}
+.node.boss .node-btn{width:86px;height:86px;font-size:2.2rem;background:linear-gradient(135deg,var(--w),#f5b301)}
+.node.locked .node-btn{background:#b9b8c8;box-shadow:0 6px 0 #8f8ea3;font-size:1.3rem;cursor:not-allowed}
+html[data-theme=dark] .node.locked .node-btn{background:#3a3a55;box-shadow:0 6px 0 #252540}
+.node.current .node-btn{animation:nodePulse 1.6s infinite}
+@keyframes nodePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.nstars{font-size:.95rem;letter-spacing:1px;color:var(--gold);text-shadow:0 1px 2px rgba(0,0,0,.2)}
+.nstars .off{color:var(--line);text-shadow:none}
+.node .me{position:absolute;top:-34px;font-family:var(--emoji-font);font-size:1.6rem;animation:floaty 1.6s infinite}
+body[data-age=kids] .node-btn{width:80px;height:80px}
+
+/* =========================================================
+   7. GAMEPLAY
+   ========================================================= */
+.game-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.game-top .bar{height:16px}
+.hearts{font-family:var(--emoji-font);font-size:1.1rem;white-space:nowrap;direction:ltr}
+.hud-sub{display:flex;justify-content:space-between;align-items:center;min-height:28px;margin-bottom:6px;gap:8px}
+.combo{font-weight:800;color:var(--primary-2);transition:transform .2s}
+.combo.bump{animation:bump .4s}
+.kind-tag{font-size:.85rem;color:var(--muted);font-weight:700}
+.timer{height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin-bottom:10px}
+.timer>i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#f59e0b,#ef4444)}
+.stage{display:flex;flex-direction:column;align-items:center;gap:16px;padding-top:6px}
+.prompt{font-size:1.2rem;font-weight:800;text-align:center}
+body[data-age=kids] .prompt{font-size:1.4rem}
+.speak-row{display:flex;gap:12px;justify-content:center;align-items:center}
+.speak-btn{width:92px;height:92px;border-radius:50%;font-size:2.6rem;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 10px 24px color-mix(in srgb,var(--primary) 40%,transparent);display:grid;place-items:center;font-family:var(--emoji-font);transition:transform .15s}
+.speak-btn:active{transform:scale(.92)}
+.speak-btn.slow{width:62px;height:62px;font-size:1.7rem;background:var(--surface-solid);color:inherit;box-shadow:var(--shadow)}
+.speak-btn.playing{animation:bump .5s infinite}
+
+.options{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:560px}
+.options.list{grid-template-columns:1fr}
+.opt{position:relative;min-height:120px;padding:14px 10px;border-radius:var(--radius);background:var(--surface);border:3px solid var(--border);box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:transform .15s,border-color .2s,background .2s;backdrop-filter:blur(10px)}
+.opt:hover:not(:disabled){transform:translateY(-3px)}
+.opt .emoji{font-size:clamp(3rem,13vw,4.4rem)}
+body[data-age=kids] .opt{min-height:150px}
+body[data-age=kids] .opt .emoji{font-size:clamp(4rem,18vw,5.6rem)}
+.opt .lbl{font-size:.95rem;font-weight:700;color:var(--muted)}
+.opt.text{min-height:64px;font-size:1.15rem;font-weight:700}
+.opt .kbd{position:absolute;top:6px;right:10px;font-size:.75rem;color:var(--muted);font-family:var(--font-en);opacity:.7}
+.opt.correct{border-color:var(--good);background:var(--good-bg);animation:bounce .6s}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg);animation:shake .45s}
+.opt.dim{opacity:.45}
+@keyframes bounce{0%,100%{transform:scale(1)}30%{transform:scale(1.12)}60%{transform:scale(.96)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+@keyframes bump{50%{transform:scale(1.15)}}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+
+.big-emoji{font-size:clamp(5rem,26vw,8.5rem);filter:drop-shadow(0 8px 14px rgba(0,0,0,.15));animation:pop .4s ease}
+.hint-ar{font-size:1.1rem;color:var(--muted);font-weight:700}
+
+/* spell + build tiles */
+.slots,.build-line{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;direction:ltr;min-height:66px;padding:10px;width:100%;max-width:600px;border-radius:var(--radius)}
+.build-line{background:var(--surface);border:2px dashed var(--line);align-items:center}
+.build-line.empty::before{content:"اسحب الكلمات أو اضغط عليها هنا";direction:rtl;color:var(--muted);font-family:var(--font-ar);font-size:.95rem}
+.slot{width:52px;height:60px;border-radius:14px;border:3px dashed var(--line);background:var(--surface)}
+.bank{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;direction:ltr;min-height:66px;width:100%;max-width:600px}
+.tile{min-width:52px;height:60px;padding:0 14px;border-radius:14px;background:var(--surface-solid);border:2px solid var(--line);border-bottom-width:5px;font-family:var(--font-en);font-weight:800;font-size:1.6rem;display:inline-grid;place-items:center;touch-action:none;user-select:none;transition:transform .12s}
+.tile.word{font-size:1.2rem;height:52px}
+.tile:active{transform:scale(.95)}
+.tile.placeholder{visibility:hidden}
+.tile.dragging{opacity:.3}
+.slots .tile{border-color:var(--primary)}
+.drag-ghost{position:fixed;z-index:200;pointer-events:none;transform:scale(1.1) rotate(-3deg);box-shadow:0 12px 24px rgba(0,0,0,.25);opacity:.95}
+.slots.ok .tile,.build-line.ok .tile{border-color:var(--good);background:var(--good-bg)}
+.slots.no,.build-line.no{animation:shake .45s}
+.slots.no .tile,.build-line.no .tile{border-color:var(--bad);background:var(--bad-bg)}
+
+/* fill the gap */
+.sentence{font-size:1.45rem;font-weight:700;text-align:center;line-height:2;padding:18px;max-width:600px;width:100%}
+.blank{display:inline-block;min-width:110px;border-bottom:4px solid var(--primary);color:var(--primary);padding:0 8px}
+.blank.ok{color:var(--good);border-color:var(--good)} .blank.no{color:var(--bad);border-color:var(--bad)}
+
+/* memory match */
+.memory{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:520px;perspective:900px}
+.memory.c4{grid-template-columns:repeat(4,1fr)}
+.mcard{aspect-ratio:3/4;position:relative}
+.mcard .inner{position:absolute;inset:0;transition:transform .45s;transform-style:preserve-3d}
+.mcard.flipped .inner,.mcard.matched .inner{transform:rotateY(180deg)}
+.mcard .face{position:absolute;inset:0;border-radius:calc(var(--radius) * .7);display:grid;place-items:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:4px;text-align:center}
+.mcard .back{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;font-size:2rem;font-family:var(--emoji-font);box-shadow:var(--shadow)}
+.mcard .front{background:var(--surface-solid);transform:rotateY(180deg);border:3px solid var(--line);font-family:var(--font-en);font-weight:800;font-size:clamp(.9rem,3.6vw,1.2rem);word-break:break-word}
+.mcard .front.img{font-family:var(--emoji-font);font-size:clamp(2rem,10vw,3rem)}
+.mcard.matched .front{border-color:var(--good);background:var(--good-bg)}
+.mcard.matched{animation:bounce .6s}
+.mcard.miss .front{border-color:var(--bad)}
+
+/* speak it */
+.speak-card{padding:20px 26px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:min(340px,100%)}
+.speak-card .word{font-size:2rem;font-weight:800}
+.mic{width:104px;height:104px;border-radius:50%;font-size:3rem;background:linear-gradient(135deg,#ef4444,#f97316);color:#fff;box-shadow:0 10px 26px rgba(239,68,68,.35);display:grid;place-items:center;font-family:var(--emoji-font)}
+.mic.rec{animation:micPulse 1s infinite}
+@keyframes micPulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,.6)}100%{box-shadow:0 0 0 28px rgba(239,68,68,0)}}
+.heard{min-height:28px;font-weight:700;text-align:center}
+.score-meter{width:min(320px,90%);display:flex;align-items:center;gap:10px;font-weight:800}
+.score-meter .bar>i{background:linear-gradient(90deg,#ef4444,#f59e0b,#22c55e)}
+
+/* dialogue */
+.dlg{width:100%;max-width:600px;padding:16px;display:flex;flex-direction:column;gap:12px;align-items:center}
+.dlg-lines{width:100%;display:flex;flex-direction:column;gap:8px}
+.bubble-line{display:flex;gap:8px;align-items:flex-end;max-width:92%}
+.bubble-line .who-av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;font-family:var(--font-en);flex-shrink:0;font-size:.9rem}
+.bubble-line p{background:var(--surface-solid);padding:8px 14px;border-radius:16px;border:1px solid var(--line);font-size:1.05rem}
+.bubble-line small{display:block;color:var(--muted);font-size:.75rem}
+.bubble-line.b{align-self:flex-end;flex-direction:row-reverse}
+.bubble-line.active p{border-color:var(--primary);box-shadow:0 0 0 3px var(--chip)}
+.question{font-size:1.2rem;font-weight:800;text-align:center}
+
+/* feedback panel */
+.feedback{position:fixed;z-index:50;bottom:0;left:50%;width:min(780px,100%);transform:translate(-50%,110%);transition:transform .35s cubic-bezier(.2,.9,.3,1.2);padding:16px 16px calc(16px + env(safe-area-inset-bottom)) 16px;padding-left:86px;border-radius:26px 26px 0 0;background:var(--surface-solid);box-shadow:0 -10px 30px rgba(0,0,0,.18);border-top:6px solid var(--muted)}
+.feedback{visibility:hidden}
+.feedback.show{transform:translate(-50%,0);visibility:visible}
+.feedback.ok{border-color:var(--good)} .feedback.no{border-color:var(--bad)} .feedback.skip{border-color:var(--accent)}
+.fb-title{font-size:1.25rem;font-weight:800;margin-bottom:8px}
+.feedback.ok .fb-title{color:var(--good)} .feedback.no .fb-title{color:var(--bad)}
+.fb-tip{color:var(--muted);font-weight:700;margin:-4px 0 8px;font-size:.95rem}
+.fb-word{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.fb-word .emoji{font-size:2.6rem}
+.fb-word b{display:block;font-size:1.4rem}
+.fb-word div{flex:1}
+.fb-sent{display:flex;align-items:center;gap:8px;margin-bottom:10px;color:var(--muted);font-weight:600}
+.fb-sent span{flex:1}
+
+/* intro (learn) cards */
+.learn-card{padding:26px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;width:100%;max-width:440px;margin:10px auto;animation:pop .4s}
+.learn-card .big-emoji{font-size:clamp(5rem,28vw,8rem)}
+.learn-card .word{font-size:2.2rem;font-weight:800}
+.learn-card .ar{font-size:1.3rem;font-weight:700;color:var(--muted)}
+.example{display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:600;margin-top:8px}
+
+/* =========================================================
+   8. RESULTS / LISTS / STATS
+   ========================================================= */
+.results{padding:24px 18px;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center}
+.results h1{font-size:1.6rem}
+.big-stars{display:flex;gap:10px;justify-content:center;font-size:3.6rem;direction:ltr}
+.big-stars span{color:var(--line);transform:scale(.4);opacity:.4;transition:all .4s cubic-bezier(.2,.9,.3,1.5)}
+.big-stars span.on{color:var(--gold);transform:scale(1);opacity:1;text-shadow:0 4px 14px rgba(245,179,1,.5)}
+.big-stars span:nth-child(2){transform-origin:center bottom;margin-top:-14px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;width:100%}
+.stat{padding:12px;border-radius:calc(var(--radius) * .7);background:var(--chip);text-align:center}
+.stat b{display:block;font-size:1.4rem;font-family:var(--font-en)}
+.stat small{color:var(--muted);font-weight:700}
+.word-list{display:flex;flex-direction:column;gap:8px;width:100%}
+.word-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:calc(var(--radius) * .7);background:var(--surface);border:1px solid var(--border);text-align:start}
+.word-row .emoji{font-size:2rem;width:44px;text-align:center}
+.word-row .wtxt{flex:1;min-width:0}
+.word-row b{display:block;font-size:1.1rem}
+.word-row small{color:var(--muted)}
+.word-row .weak{background:var(--bad-bg);color:var(--bad)}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tabs button{padding:8px 16px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-weight:700;min-height:42px}
+.tabs button[aria-selected=true]{background:var(--primary);color:#fff;border-color:transparent}
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.ach{padding:16px 10px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center}
+.ach .emoji{font-size:2.6rem}
+.ach small{color:var(--muted);font-size:.8rem}
+.ach.locked{filter:grayscale(1);opacity:.5}
+.chart{display:flex;align-items:flex-end;gap:8px;height:130px;padding:10px 4px 0;direction:ltr}
+.chart div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.chart i{width:100%;max-width:34px;border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,var(--primary),var(--primary-2));min-height:3px}
+.chart small{font-size:.72rem;color:var(--muted);font-family:var(--font-ar)}
+.panel{padding:16px;margin-bottom:14px}
+.lb-row{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px}
+.lb-row.me{background:var(--chip);outline:2px solid var(--primary)}
+.lb-row .rank{width:32px;font-family:var(--font-en);font-weight:800;font-size:1.2rem;text-align:center}
+
+/* settings */
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 4px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.set-row:last-child{border-bottom:none}
+.set-row b{display:block}
+.set-row small{color:var(--muted)}
+
+/* =========================================================
+   9. MASCOT, TOASTS, MODAL, CONFETTI
+   ========================================================= */
+#mascot{position:fixed;left:10px;bottom:12px;width:74px;height:82px;z-index:60;cursor:pointer;animation:floaty 3.2s ease-in-out infinite;transition:width .3s,height .3s}
+#mascot.off{display:none}
+body[data-screen=play] #mascot{width:64px;height:70px}
+.owl{width:100%;height:100%;overflow:visible;display:block}
+.owl .lid{transform-box:fill-box;transform-origin:center top;transform:scaleY(0);animation:blink 4.5s infinite}
+@keyframes blink{0%,92%,100%{transform:scaleY(0)}95%{transform:scaleY(1)}}
+.owl .pupils{transition:transform .3s}
+.owl .cheeks{transition:opacity .3s}
+.owl .wing{transform-box:fill-box}
+.owl .wing-l{transform-origin:right top} .owl .wing-r{transform-origin:left top}
+.owl-wrap.happy .owl,.owl-wrap.celebrate .owl{animation:hop .5s ease 2}
+.owl-wrap.happy .cheeks,.owl-wrap.celebrate .cheeks{opacity:.8}
+.owl-wrap.celebrate .wing-l{animation:flapL .2s ease-in-out 8 alternate}
+.owl-wrap.celebrate .wing-r{animation:flapR .2s ease-in-out 8 alternate}
+.owl-wrap.think .pupils{transform:translate(3px,-4px)}
+.owl-wrap.think .owl{transform:rotate(-6deg);transition:transform .3s}
+.owl-wrap.sad .pupils{transform:translateY(4px)}
+.owl-wrap.sad .owl{transform:rotate(5deg);transition:transform .3s}
+@keyframes hop{50%{transform:translateY(-14px)}}
+@keyframes flapL{to{transform:rotate(-35deg)}}
+@keyframes flapR{to{transform:rotate(35deg)}}
+.mascot-bubble{position:absolute;bottom:88%;left:44px;width:max-content;max-width:min(260px,70vw);background:var(--surface-solid);color:var(--text);padding:10px 14px;border-radius:18px 18px 18px 4px;box-shadow:var(--shadow);border:2px solid var(--primary);font-weight:700;font-size:.95rem;line-height:1.5;opacity:0;transform:translateY(8px) scale(.9);transform-origin:left bottom;transition:all .25s;pointer-events:none}
+.mascot-bubble.show{opacity:1;transform:none}
+
+#toast-wrap{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:300;display:flex;flex-direction:column;gap:8px;width:min(420px,calc(100% - 32px));pointer-events:none}
+.toast{padding:12px 16px;border-radius:16px;background:var(--surface-solid);box-shadow:var(--shadow);border-inline-start:5px solid var(--primary);font-weight:700;animation:toastIn .35s ease both}
+.toast.out{animation:toastOut .3s ease both}
+@keyframes toastIn{from{opacity:0;transform:translateY(-20px)}}
+@keyframes toastOut{to{opacity:0;transform:translateY(-20px)}}
+
+.overlay{position:fixed;inset:0;z-index:250;background:rgba(10,8,30,.5);display:grid;place-items:center;padding:16px;animation:screenIn .2s}
+.modal{width:min(420px,100%);padding:22px;display:flex;flex-direction:column;gap:12px;background:var(--surface-solid)}
+.modal h2{font-size:1.3rem}
+.modal-btns{display:flex;gap:10px;flex-wrap:wrap}
+.modal-btns .btn{flex:1}
+
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:280}
+
+/* =========================================================
+   10. ENGAGEMENT: hints, balloons, true/false, quests, shop, chest
+   ========================================================= */
+.stage.q-in{animation:qIn .35s ease both}
+@keyframes qIn{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+.hint-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;min-height:38px;border-radius:999px;background:linear-gradient(135deg,#fde68a,#f59e0b);color:#3b2a00;font-weight:800;font-family:var(--emoji-font),var(--font-ar);box-shadow:0 3px 10px rgba(245,158,11,.35)}
+.hint-btn small{font-family:var(--font-ar);font-size:.75rem}
+.hint-btn:disabled{opacity:.35;box-shadow:none;cursor:default}
+.tile.hinted{animation:bounce .6s;border-color:#f59e0b!important}
+.float-gain{position:fixed;z-index:120;pointer-events:none;font-weight:800;font-family:var(--font-en);font-size:1.25rem;color:var(--good);text-shadow:0 2px 0 #fff,0 0 12px rgba(255,255,255,.8);animation:floatUp 1.1s ease-out both}
+html[data-theme=dark] .float-gain{text-shadow:0 2px 6px rgba(0,0,0,.6)}
+@keyframes floatUp{0%{opacity:0;transform:translateY(10px) scale(.7)}20%{opacity:1;transform:translateY(0) scale(1.15)}100%{opacity:0;transform:translateY(-60px) scale(1)}}
+
+.tf-word{font-size:1.8rem}
+.tf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:460px}
+.tf{min-height:96px;border-radius:var(--radius);font-size:1.3rem;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:3px solid transparent;transition:transform .15s}
+.tf .emoji{font-size:2.2rem}
+.tf.yes{background:var(--good-bg);color:var(--good)} .tf.no{background:var(--bad-bg);color:var(--bad)}
+.tf:active{transform:scale(.95)}
+.tf.correct{border-color:var(--good);animation:bounce .6s} .tf.wrong{border-color:var(--bad);animation:shake .45s}
+.tf:disabled{cursor:default}
+
+.pop-field{position:relative;width:100%;max-width:560px;height:min(400px,52vh);border-radius:var(--radius);overflow:hidden;
+  background:linear-gradient(180deg,rgba(125,211,252,.35),rgba(255,255,255,.15));border:1px solid var(--border)}
+html[data-theme=dark] .pop-field{background:linear-gradient(180deg,rgba(30,58,138,.45),rgba(15,23,42,.2))}
+.balloon{position:absolute;bottom:-110px;width:clamp(68px,20vw,90px);height:clamp(80px,24vw,104px);border-radius:50% 50% 46% 46%;
+  background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.75),transparent 28%),hsl(var(--hue) 85% 62%);
+  box-shadow:inset -8px -10px 0 rgba(0,0,0,.08),0 8px 16px rgba(0,0,0,.15);display:grid;place-items:center;
+  animation:rise linear forwards;touch-action:manipulation}
+.balloon::after{content:"";position:absolute;bottom:-26px;left:50%;width:2px;height:26px;background:rgba(0,0,0,.25)}
+.balloon .emoji{font-size:clamp(2rem,9vw,2.6rem);animation:sway 2.2s ease-in-out infinite alternate}
+.balloon.popped{animation-play-state:paused}
+.balloon.popped .emoji{animation:none}
+.balloon.popped{background:none;box-shadow:none}
+.balloon.popped::after{display:none}
+.balloon.popped .emoji{animation:popb .4s ease forwards}
+.balloon.wrongb .emoji{animation:shake .4s}
+.balloon.glow{box-shadow:0 0 0 5px #fde047,0 0 26px 8px rgba(253,224,71,.8)}
+@keyframes rise{from{transform:translateY(0)}to{transform:translateY(calc(-1 * min(400px,52vh) - 240px))}}
+@keyframes sway{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
+@keyframes popb{0%{transform:scale(1)}50%{transform:scale(1.6)}100%{transform:scale(0);opacity:0}}
+
+.quests{display:flex;flex-direction:column;gap:10px}
+.quest{display:flex;align-items:center;gap:10px}
+.quest .emoji{font-size:1.6rem;width:36px;text-align:center}
+.quest .qtxt{flex:1;min-width:0}
+.quest .qtxt b{font-size:.95rem}
+.quest .bar{height:9px}
+.quest small{color:var(--muted);font-size:.8rem}
+.quest.claimed{opacity:.55}
+.quest .claim{min-height:40px;padding:6px 14px;font-size:.9rem;animation:bump 1.2s infinite}
+.wod{margin-bottom:12px}
+.wod .wod-txt{flex:1}
+.wod b{font-size:1.4rem;display:block}
+
+.shop-preview{display:flex;align-items:center;gap:14px;padding:14px;margin-bottom:6px}
+.shop-preview .owl-wrap{width:110px;height:122px;flex-shrink:0}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.shop-item{padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;border:2px solid transparent}
+.shop-item .sw{height:48px;display:grid;place-items:center}
+.shop-item .sw .emoji{font-size:2.2rem}
+.shop-item .sw i{display:block;width:40px;height:40px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.shop-item b{font-size:.85rem}
+.shop-item small{color:var(--muted);font-weight:700;font-size:.78rem}
+.shop-item.equipped{border-color:var(--primary);background:var(--chip)}
+
+.chest{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 26px;border-radius:var(--radius);background:linear-gradient(135deg,#fef3c7,#fde68a);color:#78350f;font-weight:800;animation:chestWiggle 1.4s ease-in-out infinite;box-shadow:0 8px 22px rgba(245,158,11,.35)}
+.chest .emoji{font-size:3.2rem}
+.chest b{font-size:1.6rem}
+.chest.open{animation:pop .45s ease}
+@keyframes chestWiggle{0%,60%,100%{transform:rotate(0)}70%{transform:rotate(-8deg) scale(1.05)}80%{transform:rotate(8deg) scale(1.05)}90%{transform:rotate(-4deg)}}
+
+@media (max-width:420px){
+  .menu-row{grid-template-columns:1fr}
+  .opt{min-height:104px}
+  .tile{min-width:44px;height:54px;font-size:1.35rem;padding:0 10px}
+  .slot{width:44px;height:54px}
+  .feedback{padding-left:76px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body data-age="young">
+<div id="bg-deco" aria-hidden="true"><i></i><i></i><i></i></div>
+<main id="app"></main>
+<div id="mascot" class="owl-wrap off" role="button" tabindex="0" aria-label="حكيم البومة — اضغط لنصيحة"></div>
+<div id="feedback" class="feedback" role="status" aria-live="assertive"></div>
+<div id="toast-wrap" aria-live="polite"></div>
+<div id="modal-root"></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<script>
+'use strict';
+/* =========================================================
+   1. CONTENT DATA
+   ---------------------------------------------------------
+   Vocabulary is written compactly as "word|arabic|emoji|exampleSentence"
+   and expanded at load time into structured objects:
+   { word, arabic, emoji, exampleSentence, ageGroup, world, level }
+   Levels (1–5) are assigned by position: earlier words = easier.
+   ========================================================= */
+
+/** Age-group rules: content, difficulty, lives, timers and tone. */
+const AGE_GROUPS = {
+  kids:   { id:'kids',   icon:'🧸', ar:'المستكشفون الصغار', en:'Little Explorers', range:'4–7 سنوات',
+            hearts:Infinity, timer:0,  timerDefault:false, qCount:6,  pairs:3, speakPass:45, xp:10, coins:3,
+            modes:['listen','truefalse','match','speak','pop'] },
+  young:  { id:'young',  icon:'🎒', ar:'المتعلمون الصغار', en:'Young Learners', range:'8–12 سنة',
+            hearts:3, timer:30, timerDefault:false, qCount:8,  pairs:4, speakPass:55, xp:10, coins:2, combo:true,
+            modes:['listen','look','truefalse','spell','speak','match','pop','fill','build'] },
+  teens:  { id:'teens',  icon:'🎧', ar:'المراهقون', en:'Teens', range:'13–17 سنة',
+            hearts:3, timer:20, timerDefault:true,  qCount:10, pairs:4, speakPass:62, xp:10, coins:2, combo:true,
+            modes:['listen','look','truefalse','spell','speak','match','pop','fill','build','dialogue'] },
+  adults: { id:'adults', icon:'💼', ar:'البالغون', en:'Adults', range:'18+',
+            hearts:5, timer:25, timerDefault:false, qCount:10, pairs:4, speakPass:68, xp:10, coins:2,
+            modes:['listen','look','truefalse','spell','speak','match','fill','build','dialogue'] }
+};
+
+/** Level index (0-based) at which each game mode starts appearing:
+    single words → phrases → full sentences → listening comprehension. */
+const MODE_UNLOCK = { listen:0, look:0, truefalse:0, match:0, speak:1, spell:1, pop:1, fill:2, build:3, dialogue:3 };
+
+/** Arabic instructions shown (and optionally spoken) for each mode. */
+const MODE_PROMPTS = {
+  listen:   { kids:'اسمع واختر الصورة 👂', def:'استمع واختر الإجابة الصحيحة' },
+  look:     { def:'ما اسم هذه الصورة بالإنجليزية؟' },
+  truefalse:{ kids:'هل الكلمة تطابق الصورة؟ 🤔', def:'هل الكلمة التي تسمعها تطابق الصورة؟' },
+  pop:      { kids:'افقع البالون الصحيح! 🎈', def:'استمع وافقع البالون الصحيح قبل أن يطير! 🎈' },
+  spell:    { def:'رتّب الحروف لتكتب الكلمة' },
+  speak:    { kids:'قُل الكلمة بالإنجليزية 🎤', def:'انطق الكلمة بالإنجليزية' },
+  match:    { kids:'اقلب البطاقات وطابق الكلمة مع الصورة 🃏', def:'طابق كل كلمة مع صورتها' },
+  fill:     { def:'اختر الكلمة المناسبة لإكمال الجملة' },
+  build:    { def:'رتّب الكلمات لتكوين جملة صحيحة' },
+  dialogue: { def:'استمع إلى الحوار ثم أجب عن السؤال' }
+};
+
+const WORLDS = {};          // WORLDS[group] = [{id,name,ar,icon,color,words:[...],dialogues:[...]}]
+const VOCAB = [];           // flat list of every word object
+const VOCAB_BY_KEY = new Map();
+
+/** Expand a group's compact world definitions into structured vocabulary. */
+function defineWorlds(group, list) {
+  WORLDS[group] = list.map((w, wi) => {
+    const words = w.words.map((line, i, arr) => {
+      const [word, arabic, emoji, exampleSentence] = line.split('|');
+      const obj = {
+        word, arabic, emoji, exampleSentence,
+        ageGroup: group, world: w.id, worldIndex: wi,
+        level: Math.min(5, Math.floor(i * 5 / arr.length) + 1),
+        key: group + ':' + word.toLowerCase()
+      };
+      VOCAB.push(obj);
+      VOCAB_BY_KEY.set(obj.key, obj);
+      return obj;
+    });
+    return { ...w, index: wi, words, dialogues: w.dialogues || [] };
+  });
+}
+
+/* ---------- Little Explorers (4–7) ---------- */
+defineWorlds('kids', [
+  { id:'animals', name:'Animals', ar:'الحيوانات', icon:'🐾', color:'#f59e0b', words:[
+    "cat|قطة|🐱|I see a cat.", "dog|كلب|🐶|The dog is happy.", "cow|بقرة|🐮|The cow says moo.",
+    "duck|بطة|🦆|A duck can swim.", "fish|سمكة|🐟|The fish is in the water.", "bird|طائر|🐦|The bird can fly.",
+    "lion|أسد|🦁|The lion is big.", "horse|حصان|🐴|I ride a horse.", "rabbit|أرنب|🐰|The rabbit is white.",
+    "monkey|قرد|🐵|The monkey likes bananas.", "sheep|خروف|🐑|The sheep is soft.", "frog|ضفدع|🐸|The frog can jump.",
+    "bear|دب|🐻|The bear is brown.", "elephant|فيل|🐘|The elephant is very big.", "camel|جمل|🐪|The camel lives in the desert.",
+    "chicken|دجاجة|🐔|The chicken has an egg."
+  ]},
+  { id:'food', name:'Fruits & Food', ar:'الفواكه والطعام', icon:'🍎', color:'#ef4444', words:[
+    "apple|تفاحة|🍎|I like the red apple.", "banana|موزة|🍌|The banana is yellow.", "grapes|عنب|🍇|The grapes are sweet.",
+    "strawberry|فراولة|🍓|The strawberry is red.", "watermelon|بطيخ|🍉|The watermelon is big.", "lemon|ليمون|🍋|The lemon is sour.",
+    "cherry|كرز|🍒|I have a cherry.", "pear|كمثرى|🍐|The pear is green.", "pineapple|أناناس|🍍|I like pineapple.",
+    "milk|حليب|🥛|I drink milk.", "bread|خبز|🍞|Mom makes bread.", "egg|بيضة|🥚|I eat an egg.",
+    "carrot|جزرة|🥕|The rabbit eats a carrot.", "cake|كعكة|🎂|The cake is yummy.", "water|ماء|💧|I drink water.",
+    "mango|مانجو|🥭|I love mango."
+  ]},
+  { id:'colors', name:'Colors & Sky', ar:'الألوان والسماء', icon:'🎨', color:'#8b5cf6', words:[
+    "red|أحمر|🔴|The ball is red.", "blue|أزرق|🔵|The sky is blue.", "green|أخضر|🟢|The tree is green.",
+    "yellow|أصفر|🟡|The sun is yellow.", "orange|برتقالي|🟠|My bag is orange.", "purple|بنفسجي|🟣|I like purple.",
+    "black|أسود|⚫|The cat is black.", "white|أبيض|⚪|The snow is white.", "brown|بني|🟤|The bear is brown.",
+    "pink|وردي|💗|The flower is pink.", "sun|شمس|☀️|The sun is hot.", "moon|قمر|🌙|I see the moon.",
+    "star|نجمة|⭐|The star is shining.", "cloud|غيمة|☁️|The cloud is white.", "rainbow|قوس قزح|🌈|I see a rainbow."
+  ]},
+  { id:'numbers', name:'Numbers & Toys', ar:'الأرقام والألعاب', icon:'🔢', color:'#10b981', words:[
+    "one|واحد|1️⃣|I have one nose.", "two|اثنان|2️⃣|I have two eyes.", "three|ثلاثة|3️⃣|I see three birds.",
+    "four|أربعة|4️⃣|A cat has four legs.", "five|خمسة|5️⃣|I have five fingers.", "six|ستة|6️⃣|I am six years old.",
+    "seven|سبعة|7️⃣|I see seven stars.", "eight|ثمانية|8️⃣|A spider has eight legs.", "nine|تسعة|9️⃣|I have nine balloons.",
+    "ten|عشرة|🔟|I have ten toes.", "ball|كرة|⚽|I kick the ball.", "teddy bear|دبدوب|🧸|I hug my teddy bear.",
+    "balloon|بالون|🎈|The balloon is red.", "kite|طائرة ورقية|🪁|I fly a kite.", "car|سيارة|🚗|My toy car is fast."
+  ]},
+  { id:'family', name:'Family & Body', ar:'العائلة والجسم', icon:'👨‍👩‍👧', color:'#ec4899', words:[
+    "mother|أم|👩|I love my mother.", "father|أب|👨|My father is tall.", "baby|طفل رضيع|👶|The baby is sleeping.",
+    "brother|أخ|👦|My brother is funny.", "sister|أخت|👧|My sister is kind.", "grandma|جدة|👵|Grandma tells stories.",
+    "grandpa|جد|👴|Grandpa reads a book.", "family|عائلة|👨‍👩‍👧|I love my family.", "eye|عين|👁️|Close your eye.",
+    "ear|أذن|👂|I hear with my ear.", "nose|أنف|👃|Touch your nose.", "mouth|فم|👄|Open your mouth.",
+    "hand|يد|✋|Raise your hand.", "foot|قدم|🦶|This is my foot.", "tooth|سن|🦷|My tooth is white."
+  ]},
+  { id:'home', name:'My Home', ar:'بيتي', icon:'🏠', color:'#0ea5e9', words:[
+    "house|بيت|🏠|This is my house.", "door|باب|🚪|Open the door.", "bed|سرير|🛏️|I sleep in my bed.",
+    "chair|كرسي|🪑|Sit on the chair.", "window|نافذة|🪟|Look out the window.", "light|ضوء|💡|Turn on the light.",
+    "clock|ساعة|⏰|The clock is on the wall.", "key|مفتاح|🔑|I have a key.", "book|كتاب|📖|I read a book.",
+    "cup|كوب|☕|This is my cup.", "spoon|ملعقة|🥄|I eat with a spoon.", "soap|صابون|🧼|Wash your hands with soap.",
+    "toothbrush|فرشاة أسنان|🪥|I use my toothbrush.", "bath|حوض استحمام|🛁|I take a bath.", "sofa|أريكة|🛋️|We sit on the sofa."
+  ]}
+]);
+
+/* ---------- Young Learners (8–12) ---------- */
+defineWorlds('young', [
+  { id:'school', name:'School', ar:'المدرسة', icon:'📚', color:'#2f6fe4', words:[
+    "school|مدرسة|🏫|I go to school every day.", "teacher|معلم|🧑‍🏫|My teacher is very kind.", "pencil|قلم رصاص|✏️|I write with a pencil.",
+    "pen|قلم حبر|🖊️|Can I borrow your pen?", "book|كتاب|📕|Open your book, please.", "notebook|دفتر|📓|I write in my notebook.",
+    "bag|حقيبة|🎒|My bag is very heavy.", "ruler|مسطرة|📏|I need a ruler.", "scissors|مقص|✂️|Cut the paper with scissors.",
+    "computer|حاسوب|💻|We use a computer in class.", "map|خريطة|🗺️|Look at the map.", "math|رياضيات|➗|I like math a lot.",
+    "science|علوم|🔬|Science is fun.", "homework|واجب منزلي|📝|I finish my homework early.", "student|طالب|🧑‍🎓|She is a good student.",
+    "raise your hand|ارفع يدك|🙋|Please raise your hand.", "good morning|صباح الخير|🌅|Good morning, teacher!"
+  ]},
+  { id:'home', name:'Home', ar:'البيت', icon:'🏠', color:'#f97316', words:[
+    "kitchen|مطبخ|🍳|Mom cooks in the kitchen.", "bedroom|غرفة نوم|🛏️|My bedroom is small.", "bathroom|حمام|🚿|The bathroom is clean.",
+    "garden|حديقة|🏡|We play in the garden.", "sofa|أريكة|🛋️|Dad sleeps on the sofa.", "television|تلفاز|📺|We watch television together.",
+    "phone|هاتف|📱|My phone is on the table.", "mirror|مرآة|🪞|I look in the mirror.", "window|نافذة|🪟|Please close the window.",
+    "door|باب|🚪|Someone is at the door.", "candle|شمعة|🕯️|Light the candle, please.", "broom|مكنسة|🧹|Clean the floor with a broom.",
+    "basket|سلة|🧺|Put the clothes in the basket.", "key|مفتاح|🔑|Where is my key?", "bucket|دلو|🪣|Fill the bucket with water.",
+    "wash the dishes|اغسل الصحون|🍽️|I wash the dishes after dinner.", "clean your room|نظّف غرفتك|🧽|Please clean your room now.",
+    "go to bed|اذهب إلى النوم|😴|I go to bed at nine."
+  ]},
+  { id:'food', name:'Food & Drinks', ar:'الطعام والمشروبات', icon:'🍔', color:'#ef4444', words:[
+    "breakfast|فطور|🥞|I eat breakfast at seven.", "lunch|غداء|🍱|We have lunch at school.", "dinner|عشاء|🍝|Dinner is ready!",
+    "sandwich|شطيرة|🥪|I have a cheese sandwich.", "pizza|بيتزا|🍕|Pizza is my favorite food.", "rice|أرز|🍚|We eat rice and fish.",
+    "chicken|دجاج|🍗|The chicken is delicious.", "soup|حساء|🍲|The soup is very hot.", "salad|سلطة|🥗|I like green salad.",
+    "cheese|جبن|🧀|Mice love cheese.", "juice|عصير|🧃|I drink orange juice.", "ice cream|آيس كريم|🍦|Ice cream is cold and sweet.",
+    "cookie|بسكويت|🍪|Can I have a cookie?", "hamburger|همبرجر|🍔|He wants a big hamburger.", "tea|شاي|🍵|Grandpa drinks tea.",
+    "I'm hungry|أنا جائع|😋|I'm hungry, let's eat!", "I'm thirsty|أنا عطشان|🥤|I'm thirsty, can I have water?"
+  ]},
+  { id:'sports', name:'Sports', ar:'الرياضة', icon:'⚽', color:'#10b981', words:[
+    "football|كرة القدم|⚽|We play football after school.", "basketball|كرة السلة|🏀|He plays basketball well.", "tennis|تنس|🎾|She plays tennis on Fridays.",
+    "swimming|سباحة|🏊|Swimming is good exercise.", "running|ركض|🏃|Running makes me strong.", "cycling|ركوب الدراجة|🚴|I go cycling with my dad.",
+    "volleyball|كرة الطائرة|🏐|We play volleyball on the beach.", "baseball|بيسبول|⚾|Baseball is popular in America.", "skating|تزلج|⛸️|Skating on ice is fun.",
+    "karate|كاراتيه|🥋|My brother is learning karate.", "team|فريق|👥|Our team is the best.", "goal|هدف|🥅|He scored a great goal.",
+    "winner|فائز|🏆|She is the winner today.", "medal|ميدالية|🥇|I won a gold medal.", "coach|مدرب|📋|The coach is very strict.",
+    "let's play|هيا نلعب|🙌|Let's play together!", "well done|أحسنت|👏|Well done, you won!"
+  ]},
+  { id:'weather', name:'Weather & Seasons', ar:'الطقس والفصول', icon:'☀️', color:'#eab308', words:[
+    "sunny|مشمس|☀️|It is sunny today.", "rainy|ممطر|🌧️|It is rainy outside.", "cloudy|غائم|☁️|The sky is cloudy.",
+    "windy|عاصف|🌬️|It is very windy today.", "snowy|مثلج|🌨️|It is snowy in the mountains.", "hot|حار|🥵|Summer is very hot.",
+    "cold|بارد|🥶|I feel cold in winter.", "summer|الصيف|🏖️|We swim in summer.", "winter|الشتاء|⛄|It snows in winter.",
+    "spring|الربيع|🌷|Flowers grow in spring.", "autumn|الخريف|🍂|Leaves fall in autumn.", "rainbow|قوس قزح|🌈|Look at the beautiful rainbow!",
+    "storm|عاصفة|⛈️|There is a big storm tonight.", "umbrella|مظلة|☂️|Take your umbrella with you.", "temperature|درجة الحرارة|🌡️|The temperature is thirty degrees.",
+    "what's the weather like|كيف الطقس؟|🌤️|What's the weather like today?"
+  ]},
+  { id:'nature', name:'Animals & Nature', ar:'الحيوانات والطبيعة', icon:'🌳', color:'#16a34a', words:[
+    "tree|شجرة|🌳|The tree is very tall.", "flower|زهرة|🌻|This flower smells nice.", "river|نهر|🏞️|We fish in the river.",
+    "mountain|جبل|⛰️|The mountain is high.", "sea|بحر|🌊|I swim in the sea.", "desert|صحراء|🏜️|Camels live in the desert.",
+    "forest|غابة|🌲|Many animals live in the forest.", "butterfly|فراشة|🦋|The butterfly is colorful.", "bee|نحلة|🐝|The bee makes honey.",
+    "turtle|سلحفاة|🐢|The turtle is very slow.", "dolphin|دلفين|🐬|The dolphin is very smart.", "eagle|نسر|🦅|The eagle flies high.",
+    "snake|ثعبان|🐍|Be careful, a snake!", "giraffe|زرافة|🦒|The giraffe has a long neck.", "penguin|بطريق|🐧|The penguin lives in the cold.",
+    "island|جزيرة|🏝️|We visited a small island."
+  ]}
+]);
+
+/* ---------- Teens (13–17) ---------- */
+defineWorlds('teens', [
+  { id:'routine', name:'Daily Routine', ar:'الروتين اليومي', icon:'⏰', color:'#7c3aed', words:[
+    "wake up|يستيقظ|⏰|I wake up at six thirty.", "take a shower|يستحم|🚿|I take a shower every morning.", "get dressed|يرتدي ملابسه|👕|I get dressed quickly.",
+    "have breakfast|يتناول الفطور|🥣|We have breakfast together.", "brush my teeth|أنظف أسناني|🪥|I brush my teeth twice a day.", "catch the bus|يلحق بالحافلة|🚌|I catch the bus at seven.",
+    "study|يدرس|📚|I need to study for my exam.", "do homework|يحل الواجب|📝|I do homework after lunch.", "cook|يطبخ|🍳|I will cook pasta tonight.",
+    "hang out|يقضي الوقت مع الأصدقاء|🧑‍🤝‍🧑|I hang out with friends on weekends.", "go shopping|يذهب للتسوق|🛍️|Let's go shopping this weekend.", "watch a movie|يشاهد فيلماً|🎬|We will watch a movie tonight.",
+    "exercise|يتمرن|🏋️|I exercise three times a week.", "walk the dog|يمشّي الكلب|🐕|I walk the dog every evening.", "take a nap|يأخذ قيلولة|🛌|I take a nap after school.",
+    "go to sleep|يذهب للنوم|😴|I usually go to sleep at eleven."
+  ], dialogues:[
+    { lines:[['Sam',"What time do you usually wake up?"],['Lina',"At six thirty. Then I take a shower and catch the bus at seven."]],
+      q:"What time does Lina catch the bus?", qAr:"متى تلحق لينا بالحافلة؟", options:["At seven","At six thirty","At eight","At noon"], answer:0 },
+    { lines:[['Omar',"Are you coming to hang out with us tonight?"],['Maya',"I can't. I need to study for my exam tomorrow."]],
+      q:"Why can't Maya go out?", qAr:"لماذا لا تستطيع مايا الخروج؟", options:["She has to study","She is sick","She is at work","She has no money"], answer:0 }
+  ]},
+  { id:'feelings', name:'Feelings & Personality', ar:'المشاعر والشخصية', icon:'😎', color:'#db2777', words:[
+    "happy|سعيد|😄|I am so happy today!", "sad|حزين|😢|She looks sad.", "angry|غاضب|😠|Why are you angry?",
+    "excited|متحمس|🤩|I'm excited about the trip.", "nervous|متوتر|😬|I feel nervous before exams.", "bored|يشعر بالملل|🥱|I was bored in class.",
+    "tired|متعب|😩|He is tired after training.", "scared|خائف|😱|Don't be scared!", "surprised|متفاجئ|😮|We were surprised by the news.",
+    "confused|محتار|😕|I'm confused about this question.", "proud|فخور|🏅|My parents are proud of me.", "calm|هادئ|😌|Stay calm and breathe.",
+    "shy|خجول|🙈|He is shy with new people.", "funny|مضحك|🤣|My friend is really funny.", "friendly|ودود|🤗|Our neighbors are friendly.",
+    "lazy|كسول|🦥|Don't be lazy, get up!", "smart|ذكي|🧠|She is very smart."
+  ], dialogues:[
+    { lines:[['Adam',"You look nervous. What's wrong?"],['Noor',"I have a big presentation tomorrow, and I'm scared I'll forget everything."]],
+      q:"How does Noor feel?", qAr:"كيف تشعر نور؟", options:["Nervous","Bored","Happy","Angry"], answer:0 },
+    { lines:[['Zain',"Guess what? I passed my driving test!"],['Rami',"Wow, congratulations! Your parents must be so proud."]],
+      q:"What did Zain do?", qAr:"ماذا فعل زين؟", options:["He passed his driving test","He failed an exam","He bought a car","He won a game"], answer:0 }
+  ]},
+  { id:'tech', name:'Tech & Social Media', ar:'التقنية ووسائل التواصل', icon:'📱', color:'#0891b2', words:[
+    "smartphone|هاتف ذكي|📱|I got a new smartphone.", "laptop|حاسوب محمول|💻|I do projects on my laptop.", "password|كلمة المرور|🔐|Never share your password.",
+    "download|تنزيل|⬇️|Download the app first.", "upload|رفع|⬆️|I will upload the video tonight.", "message|رسالة|💬|She sent me a message.",
+    "selfie|صورة ذاتية|🤳|Let's take a selfie!", "battery|بطارية|🔋|My battery is low.", "charger|شاحن|🔌|Can I borrow your charger?",
+    "headphones|سماعات|🎧|I have my headphones on.", "game|لعبة|🎮|This game is awesome.", "followers|متابعون|👥|She has many followers.",
+    "post|منشور|📸|Did you see my new post?", "online|متصل بالإنترنت|🌐|Are you online now?", "screen|شاشة|🖥️|Don't look at the screen too long.",
+    "video call|مكالمة فيديو|📹|We had a video call yesterday."
+  ], dialogues:[
+    { lines:[['Leo',"Can I borrow your charger? My battery is at five percent."],['Huda',"Sure, it's in my bag."]],
+      q:"Where is the charger?", qAr:"أين الشاحن؟", options:["In Huda's bag","On the table","At home","In the car"], answer:0 },
+    { lines:[['Kareem',"Did you see my new post?"],['Dana',"Not yet. I was offline all day, but I'll check it tonight."]],
+      q:"Why didn't Dana see the post?", qAr:"لماذا لم ترَ دانة المنشور؟", options:["She was offline all day","She didn't like it","She lost her phone","She was sleeping"], answer:0 }
+  ]},
+  { id:'hobbies', name:'Hobbies & Music', ar:'الهوايات والموسيقى', icon:'🎸', color:'#ea580c', words:[
+    "guitar|غيتار|🎸|He plays the guitar in a band.", "drums|طبول|🥁|My brother plays the drums.", "piano|بيانو|🎹|She practices piano every day.",
+    "singer|مغني|🎤|She wants to be a singer.", "song|أغنية|🎵|This song is stuck in my head.", "painting|الرسم|🎨|Painting helps me relax.",
+    "photography|التصوير|📷|I love photography.", "reading|القراءة|📚|Reading is my favorite hobby.", "chess|شطرنج|♟️|Do you want to play chess?",
+    "skateboard|لوح تزلج|🛹|I ride my skateboard to school.", "camping|تخييم|🏕️|We went camping last summer.", "fishing|صيد السمك|🎣|My uncle loves fishing.",
+    "dancing|الرقص|💃|Dancing is a great workout.", "gaming|ألعاب الفيديو|🕹️|Gaming is popular among teens.", "concert|حفلة موسيقية|🎟️|We are going to a concert on Friday.",
+    "movie|فيلم|🍿|That movie was amazing!"
+  ], dialogues:[
+    { lines:[['Yara',"Do you play any instruments?"],['Ali',"Yes, I play the guitar, and now I'm learning the piano."]],
+      q:"Which instrument is Ali learning now?", qAr:"ما الآلة التي يتعلمها علي الآن؟", options:["The piano","The guitar","The drums","The violin"], answer:0 },
+    { lines:[['Sami',"Are you going to the concert on Friday?"],['Rana',"I wish! The tickets cost an arm and a leg."]],
+      q:"Why isn't Rana going to the concert?", qAr:"لماذا لن تذهب رنا إلى الحفلة؟", options:["The tickets are too expensive","She is busy","She is sick","She doesn't like music"], answer:0 }
+  ]},
+  { id:'idioms', name:'Idioms & Expressions', ar:'التعابير والمصطلحات', icon:'💡', color:'#ca8a04', words:[
+    "piece of cake|سهل جداً|🍰|The test was a piece of cake.", "break the ice|يكسر الجمود|🧊|He told a joke to break the ice.", "hit the books|يذاكر بجد|📖|I need to hit the books tonight.",
+    "under the weather|متوعّك قليلاً|🤒|I'm feeling under the weather.", "on cloud nine|في قمة السعادة|☁️|She was on cloud nine after winning.", "an arm and a leg|ثمن باهظ جداً|💸|That phone costs an arm and a leg.",
+    "spill the beans|يفشي السر|🤫|Don't spill the beans about the party.", "once in a blue moon|نادراً جداً|🌕|I eat fast food once in a blue moon.", "break a leg|حظاً موفقاً|🍀|Break a leg in your show tonight!",
+    "hang in there|اصبر وتماسك|💪|Hang in there, it will get better.", "no big deal|ليس أمراً مهماً|🆗|Don't worry, it's no big deal.", "I'm all ears|كلي آذان صاغية|👂|Tell me the story, I'm all ears.",
+    "in hot water|في ورطة|♨️|He is in hot water with his teacher.", "time flies|الوقت يمر بسرعة|⏳|Time flies when you're having fun.", "let it go|انسَ الأمر|🕊️|It was a mistake, just let it go.",
+    "the ball is in your court|القرار بيدك|🎾|I did my part; the ball is in your court."
+  ], dialogues:[
+    { lines:[['Jad',"How was the math test?"],['Mira',"It was a piece of cake! I studied all week."]],
+      q:"How was the test for Mira?", qAr:"كيف كان الاختبار بالنسبة لميرا؟", options:["Very easy","Very hard","Boring","Cancelled"], answer:0 },
+    { lines:[['Tarek',"You don't look well."],['Salma',"Yeah, I'm a bit under the weather. I'll stay home today."]],
+      q:"What's wrong with Salma?", qAr:"ما مشكلة سلمى؟", options:["She feels a little sick","She is very happy","She is late","She lost a game"], answer:0 }
+  ]},
+  { id:'talk', name:'Everyday Talk', ar:'محادثات يومية', icon:'💬', color:'#4f46e5', words:[
+    "how's it going|كيف الحال؟|👋|Hey Sam, how's it going?", "what's up|ما الأخبار؟|🙂|What's up? You look happy.", "see you later|أراك لاحقاً|🚶|Bye guys, see you later!",
+    "no problem|لا مشكلة|👌|No problem, I can help.", "my bad|خطئي|🙇|Oops, my bad, I'm sorry.", "sounds good|يبدو جيداً|👍|Pizza tonight? Sounds good!",
+    "I don't know|لا أعرف|🤷|I don't know the answer.", "can you repeat that|هل يمكنك التكرار؟|🔁|Sorry, can you repeat that please?", "excuse me|عفواً|🙋|Excuse me, where is the library?",
+    "nice to meet you|سعيد بلقائك|🤝|Hi, I'm Lina. Nice to meet you.", "congratulations|مبروك|🎉|Congratulations on your win!", "good luck|بالتوفيق|🤞|Good luck on your exam!",
+    "I agree|أوافقك|✅|I agree with you completely.", "take care|اعتنِ بنفسك|❤️|Take care and see you soon.", "just kidding|أمزح فقط|😜|Just kidding, I'm not angry!",
+    "what do you mean|ماذا تقصد؟|❓|What do you mean by that?"
+  ], dialogues:[
+    { lines:[['Omar',"Hi, I'm Omar. I'm new here."],['Sara',"Nice to meet you, Omar! Do you need help finding your class?"]],
+      q:"Who is new at school?", qAr:"من الجديد في المدرسة؟", options:["Omar","Sara","The teacher","Nobody"], answer:0 },
+    { lines:[['Fadi',"Want to get pizza after school?"],['Lama',"Sounds good! See you at four."]],
+      q:"When will they meet?", qAr:"متى سيلتقيان؟", options:["At four","At two","Tomorrow morning","At night"], answer:0 }
+  ]}
+]);
+
+/* ---------- Adults (18+) ---------- */
+defineWorlds('adults', [
+  { id:'travel', name:'Travel', ar:'السفر', icon:'✈️', color:'#0f766e', words:[
+    "passport|جواز سفر|🛂|Please show me your passport.", "ticket|تذكرة|🎫|I booked a return ticket.", "airport|مطار|🛫|We arrived at the airport early.",
+    "flight|رحلة جوية|✈️|My flight is delayed by an hour.", "luggage|أمتعة|🧳|How much luggage can I bring?", "hotel|فندق|🏨|The hotel is near the beach.",
+    "taxi|سيارة أجرة|🚕|Can you call a taxi for me?", "map|خريطة|🗺️|Can you show me on the map?", "tourist|سائح|📸|I am a tourist here.",
+    "reservation|حجز|📅|I have a reservation under the name Ali.", "check in|تسجيل الوصول|🛎️|What time can I check in?", "boarding pass|بطاقة صعود الطائرة|🎟️|Here is your boarding pass.",
+    "gate|بوابة|🚪|Your flight leaves from gate twelve.", "currency exchange|صرافة العملات|💱|Where is the currency exchange?", "round trip|ذهاب وعودة|🔄|A round trip ticket is cheaper.",
+    "where is the station|أين المحطة؟|🚉|Excuse me, where is the station?"
+  ], dialogues:[
+    { lines:[['Receptionist',"Good evening. Do you have a reservation?"],['Ali',"Yes, under the name Ali Hassan, for three nights."]],
+      q:"How many nights will Ali stay?", qAr:"كم ليلة سيقيم علي؟", options:["Three","One","Two","Five"], answer:0 },
+    { lines:[['Mona',"Excuse me, my flight to Dubai is delayed. When does it leave now?"],['Agent',"It now leaves at nine fifteen from gate twelve."]],
+      q:"Which gate does the flight leave from?", qAr:"من أي بوابة تغادر الرحلة؟", options:["Gate twelve","Gate two","Gate nine","Gate fifteen"], answer:0 }
+  ]},
+  { id:'shopping', name:'Shopping', ar:'التسوق', icon:'🛒', color:'#be185d', words:[
+    "price|سعر|🏷️|What is the price of this jacket?", "cash|نقداً|💵|Can I pay in cash?", "receipt|إيصال|🧾|Could I have the receipt, please?",
+    "size|مقاس|📐|Do you have this in a larger size?", "cheap|رخيص|🪙|This shirt is cheap.", "expensive|غالٍ|💎|That watch is too expensive.",
+    "discount|خصم|📉|Is there a discount on this item?", "refund|استرداد المال|💰|I'd like a refund, please.", "customer|زبون|🧑|The customer is waiting.",
+    "credit card|بطاقة ائتمان|💳|Can I pay by credit card?", "fitting room|غرفة القياس|🪞|Where is the fitting room?", "cashier|أمين الصندوق|💁|Please pay at the cashier.",
+    "shopping cart|عربة التسوق|🛒|Put the bags in the shopping cart.", "on sale|عليه تخفيض|🔖|These shoes are on sale.", "how much is it|كم سعره؟|❔|Excuse me, how much is it?",
+    "I'm just looking|أتفرّج فقط|👀|No thanks, I'm just looking."
+  ], dialogues:[
+    { lines:[['Customer',"How much is this jacket?"],['Assistant',"It's usually fifty dollars, but it's on sale today for thirty."]],
+      q:"What is the price today?", qAr:"ما السعر اليوم؟", options:["Thirty dollars","Fifty dollars","Twenty dollars","Fifteen dollars"], answer:0 },
+    { lines:[['Assistant',"Can I help you with anything?"],['Nadia',"No thanks, I'm just looking. Where is the fitting room, though?"]],
+      q:"What is Nadia looking for?", qAr:"عن ماذا تبحث نادية؟", options:["The fitting room","The cashier","A bigger size","The exit"], answer:0 }
+  ]},
+  { id:'restaurant', name:'Restaurant & Café', ar:'المطعم والمقهى', icon:'☕', color:'#b45309', words:[
+    "menu|قائمة الطعام|📜|Could we see the menu, please?", "waiter|نادل|🤵|The waiter brought our drinks.", "coffee|قهوة|☕|I'll have a black coffee.",
+    "bill|الفاتورة|🧾|Can we have the bill, please?", "order|يطلب|📝|Are you ready to order?", "dessert|حلوى|🍮|What do you have for dessert?",
+    "spicy|حار|🌶️|Is this dish spicy?", "delicious|لذيذ|😋|The food was delicious.", "breakfast|فطور|🍳|Is breakfast included?",
+    "tip|بقشيش|💸|We left a tip for the waiter.", "vegetarian|نباتي|🥦|Do you have vegetarian dishes?", "takeaway|طلب خارجي|🥡|I'd like it as takeaway.",
+    "fresh juice|عصير طازج|🧃|I'd like a fresh juice.", "table for two|طاولة لشخصين|👫|A table for two, please.", "could I have|هل يمكنني الحصول على|🙏|Could I have some more bread?",
+    "I'm allergic to nuts|لدي حساسية من المكسرات|🥜|I'm allergic to nuts, is this safe?"
+  ], dialogues:[
+    { lines:[['Waiter',"Are you ready to order?"],['Hassan',"Yes, I'll have the chicken salad and a black coffee, please."]],
+      q:"What will Hassan drink?", qAr:"ماذا سيشرب حسن؟", options:["A black coffee","A fresh juice","Tea","Water"], answer:0 },
+    { lines:[['Layla',"Is the tomato soup spicy? I can't eat spicy food."],['Waiter',"It's a little spicy. I recommend the vegetable soup instead."]],
+      q:"What does the waiter recommend?", qAr:"بماذا ينصح النادل؟", options:["The vegetable soup","The tomato soup","A dessert","The chicken salad"], answer:0 }
+  ]},
+  { id:'work', name:'Work & Office', ar:'العمل والمكتب', icon:'💼', color:'#1e40af', words:[
+    "office|مكتب|🏢|I work in a big office.", "manager|مدير|👔|My manager is in a meeting.", "meeting|اجتماع|🗓️|The meeting starts at nine.",
+    "colleague|زميل|🧑‍🤝‍🧑|My colleague helped me today.", "deadline|موعد نهائي|⏰|The deadline is on Friday.", "salary|راتب|💰|The salary is paid monthly.",
+    "report|تقرير|📊|Please send me the report.", "schedule|جدول مواعيد|📆|Let me check my schedule.", "project|مشروع|📁|We started a new project.",
+    "printer|طابعة|🖨️|The printer is out of paper.", "presentation|عرض تقديمي|📽️|I'm giving a presentation tomorrow.", "promotion|ترقية|📈|She got a promotion last month.",
+    "teamwork|عمل جماعي|🤝|Teamwork makes us stronger.", "day off|يوم إجازة|🏖️|I'm taking a day off on Monday.", "overtime|عمل إضافي|🌙|I worked overtime this week.",
+    "I'll get back to you|سأعود إليك بالرد|↩️|Thanks, I'll get back to you soon."
+  ], dialogues:[
+    { lines:[['Manager',"When can you finish the report?"],['Khaled',"The deadline is Friday, but I can send you a draft on Wednesday."]],
+      q:"When will Khaled send the draft?", qAr:"متى سيرسل خالد المسودة؟", options:["On Wednesday","On Friday","On Monday","On Thursday"], answer:0 },
+    { lines:[['Rania',"Can we meet at ten tomorrow?"],['Sam',"Sorry, I'm taking a day off. How about Tuesday at ten?"]],
+      q:"Why can't Sam meet tomorrow?", qAr:"لماذا لا يستطيع سام الاجتماع غداً؟", options:["He is taking a day off","He has another meeting","He is sick","He is traveling"], answer:0 }
+  ]},
+  { id:'phone', name:'Phone & Email', ar:'الهاتف والبريد', icon:'📞', color:'#7c3aed', words:[
+    "inbox|صندوق الوارد|📥|My inbox is full.", "reply|يرد|↪️|I will reply by tomorrow.", "attachment|مرفق|📎|Please see the attachment.",
+    "subject|موضوع الرسالة|📌|What is the subject of the email?", "forward|يعيد توجيه|⏩|Can you forward me the email?", "signature|توقيع|✍️|Add your signature at the bottom.",
+    "voicemail|بريد صوتي|📟|I left you a voicemail.", "contact|يتواصل مع|📇|Feel free to contact me anytime.", "call back|يعاود الاتصال|📞|Could you call back later?",
+    "hold on|انتظر لحظة|⏸️|Hold on, I'll transfer you.", "speak up|ارفع صوتك|📢|Could you speak up, please?", "wrong number|رقم خاطئ|❌|Sorry, you have the wrong number.",
+    "leave a message|اترك رسالة|💬|Can I leave a message for Mr. Khan?", "Dear Sir or Madam|السيد/السيدة المحترم|✉️|Dear Sir or Madam, I am writing to apply.", "Best regards|مع أطيب التحيات|🖋️|Best regards, Ahmed.",
+    "who's calling, please|من المتصل من فضلك؟|☎️|Hello, who's calling, please?"
+  ], dialogues:[
+    { lines:[['Caller',"Hello, may I speak to Ms. Lee, please?"],['Assistant',"I'm sorry, she's in a meeting. Would you like to leave a message?"]],
+      q:"Where is Ms. Lee?", qAr:"أين السيدة لي؟", options:["In a meeting","At lunch","On vacation","At home"], answer:0 },
+    { lines:[['Omar',"Did you get my email this morning?"],['Julia',"Yes, but the attachment is missing. Could you send it again?"]],
+      q:"What is the problem with the email?", qAr:"ما المشكلة في البريد الإلكتروني؟", options:["The attachment is missing","It arrived late","The subject is wrong","Her inbox is full"], answer:0 }
+  ]},
+  { id:'interview', name:'Job Interview', ar:'مقابلة العمل', icon:'🤝', color:'#475569', words:[
+    "interview|مقابلة|🗣️|I have a job interview tomorrow.", "resume|سيرة ذاتية|📄|Please send your resume by email.", "skills|مهارات|🛠️|What skills do you have?",
+    "experience|خبرة|⭐|I have five years of experience.", "apply|يتقدّم لوظيفة|📮|I want to apply for this job.", "company|شركة|🏬|The company is growing fast.",
+    "position|منصب|💺|I'm applying for the sales position.", "strength|نقطة قوة|💪|My greatest strength is teamwork.", "weakness|نقطة ضعف|🔻|What is your biggest weakness?",
+    "qualified|مؤهَّل|🎓|I am qualified for this position.", "hire|يوظّف|✅|They decided to hire me!", "goals|أهداف|🎯|My goals are very clear.",
+    "references|جهات مرجعية|📋|I can provide two references.", "full-time|دوام كامل|🕘|Is this a full-time job?", "tell me about yourself|حدّثني عن نفسك|🙂|Please tell me about yourself.",
+    "I'm a fast learner|أتعلّم بسرعة|🚀|I'm a fast learner and I work hard."
+  ], dialogues:[
+    { lines:[['Interviewer',"So, tell me about yourself."],['Reem',"I'm an accountant with five years of experience in a large company."]],
+      q:"How many years of experience does Reem have?", qAr:"كم سنة خبرة لدى ريم؟", options:["Five","Three","Ten","One"], answer:0 },
+    { lines:[['Interviewer',"What is your greatest strength?"],['Majed',"I'm a fast learner, and I work well in a team."]],
+      q:"What is Majed's strength?", qAr:"ما نقطة قوة ماجد؟", options:["He learns quickly","He speaks four languages","He never gets tired","He likes working alone"], answer:0 }
+  ]}
+]);
+
+/** Hakeem's lines, with tone adjusted per age group. */
+const TIPS = {
+  kids: {
+    hello:['أهلاً يا {name}! هيا نلعب ونتعلم 🎈','مرحباً يا بطل! جاهز للمغامرة؟ 🚀','أنا حكيم! لنتعلّم كلمات جديدة معاً 🦉'],
+    correct:['رائع يا {name}! 🌟','أحسنت يا بطل! 🏆','ممتاز! أنت ذكي جداً 🎉','واو! برافو عليك 👏','صحيح! 💖'],
+    wrong:['لا بأس، حاول مرة أخرى 💪','قريب جداً! استمع مرة ثانية 👂','الأخطاء تساعدنا نتعلّم 🌱'],
+    tip:['اضغط 🔊 لتسمع الكلمة','استمع جيداً ثم اختر 👂','جرّب الصوت البطيء 🐢','كل يوم كلمات جديدة! 🌈'],
+    done:['يا سلام! أنهيت المستوى 🎊','أنت نجم! ⭐']
+  },
+  young: {
+    hello:['أهلاً يا {name}! مستعد لمغامرة اليوم؟ 🎒','هيا نجمع النجوم والعملات! 🪙','مرحباً بعودتك يا بطل! 🦉'],
+    correct:['إجابة صحيحة! 🌟','عمل رائع يا {name}! 👏','أحسنت! واصل هكذا 🚀','ممتاز! 🎯'],
+    wrong:['لا تقلق، ستتذكرها المرة القادمة 💪','انتبه للحروف جيداً 👀','حاول مرة أخرى، أنت تستطيع!'],
+    tip:['استخدم 🐢 لسماع الكلمة ببطء','الكلمات التي تخطئ فيها ستعود للمراجعة 🔁','العب كل يوم لتحافظ على سلسلتك 🔥'],
+    done:['مستوى رائع! 🎉','تقدّم ممتاز! 🏅']
+  },
+  teens: {
+    hello:['يا هلا {name}! جاهز تكسر الرقم القياسي؟ 😎','كومبو جديد اليوم؟ 🔥','يلا نرفع مستواك! 🎧'],
+    correct:['نار! 🔥','بالضبط 😎','مستوى احترافي 💯','كومبو قوي! ⚡'],
+    wrong:['ولا يهمك، الجاية لك 💪','ركّز على النطق واسمعها ببطء 🐢','عادي، هذي فرصة تتعلّمها صح'],
+    tip:['المصطلحات ما تترجم حرفياً 💡','الإجابات المتتالية تضاعف نقاطك ⚡','جرّب تحدي اليوم لعملات إضافية 🪙'],
+    done:['أداء قوي! 🚀','كمّل كذا! 🔥']
+  },
+  adults: {
+    hello:['مرحباً {name}. لنكمل التعلّم.','أهلاً بك مجدداً. هدفك اليوم في متناولك.','جلسة قصيرة يومياً تصنع فرقاً كبيراً.'],
+    correct:['إجابة صحيحة.','أحسنت.','ممتاز، واصل.','دقيق جداً.'],
+    wrong:['لا بأس، راجع الإجابة الصحيحة.','سنعيد هذه الكلمة لاحقاً للمراجعة.','انتبه لسياق الجملة.'],
+    tip:['خصّص ١٠ دقائق يومياً لنتائج أفضل.','كرّر الجملة بصوت عالٍ بعد سماعها.','راجع الكلمات الضعيفة من دفتر «كلماتي».'],
+    done:['أحسنت، تقدّم ملحوظ.','جلسة موفقة.']
+  }
+};
+
+/** Badges. `test(p)` receives the profile. */
+const ACHIEVEMENTS = [
+  { id:'first',   icon:'🎯', name:'الخطوة الأولى',   desc:'أكمل أول مستوى',            test:p => p.stats.levels >= 1 },
+  { id:'w10',     icon:'🌱', name:'بذرة المعرفة',    desc:'تعلّم 10 كلمات',            test:p => learnedCount(p) >= 10 },
+  { id:'w50',     icon:'📗', name:'أول 50 كلمة',     desc:'تعلّم 50 كلمة',             test:p => learnedCount(p) >= 50 },
+  { id:'w100',    icon:'📚', name:'قارئ نهِم',        desc:'تعلّم 100 كلمة',            test:p => learnedCount(p) >= 100 },
+  { id:'perfect', icon:'💯', name:'مستوى مثالي',     desc:'أنهِ مستوى بلا أي خطأ',      test:p => p.stats.perfect >= 1 },
+  { id:'stars30', icon:'⭐', name:'جامع النجوم',     desc:'اجمع 30 نجمة',              test:p => totalStars(p) >= 30 },
+  { id:'boss',    icon:'👑', name:'قاهر الزعماء',    desc:'اهزم أول زعيم',             test:p => p.stats.boss >= 1 },
+  { id:'streak3', icon:'🔥', name:'حماس متواصل',     desc:'العب 3 أيام متتالية',        test:p => p.bestStreak >= 3 },
+  { id:'streak7', icon:'🏅', name:'أسبوع كامل',      desc:'سلسلة 7 أيام متتالية',       test:p => p.bestStreak >= 7 },
+  { id:'speak',   icon:'🎤', name:'المتحدّث',        desc:'انطق 10 كلمات بشكل صحيح',    test:p => p.stats.speak >= 10 },
+  { id:'combo',   icon:'⚡', name:'كومبو خارق',      desc:'10 إجابات صحيحة متتالية',    test:p => p.stats.bestCombo >= 10 },
+  { id:'daily',   icon:'📅', name:'بطل التحدي',      desc:'أكمل تحدياً يومياً',          test:p => p.stats.daily >= 1 },
+  { id:'review',  icon:'🔁', name:'المراجِع الذكي',  desc:'أكمل جلسة مراجعة ذكية',      test:p => p.stats.reviews >= 1 },
+  { id:'rich',    icon:'🪙', name:'جامع الكنوز',     desc:'اجمع 500 عملة',             test:p => p.coins >= 500 }
+];
+
+const AVATARS = ['🦊','🐼','🐯','🦁','🐸','🐵','🦄','🐙','🐨','🐰','🐧','🦖','🐱','🐶','🧑‍🚀','🧑‍🎓','👩‍💼','👨‍💼','🧕','🧔'];
+
+/** Shop: outfits and colours for Hakeem, bought with coins. */
+const SHOP = {
+  hats: [
+    { id:'cap',     name:'قبعة التخرّج', icon:'🎓', price:0 },
+    { id:'none',    name:'بدون قبعة',    icon:'🦉', price:0 },
+    { id:'party',   name:'قبعة الحفلة',  icon:'🥳', price:80 },
+    { id:'glasses', name:'نظارة ذكية',   icon:'🤓', price:100 },
+    { id:'phones',  name:'سماعات DJ',    icon:'🎧', price:120 },
+    { id:'crown',   name:'تاج الملوك',   icon:'👑', price:200 },
+    { id:'wizard',  name:'قبعة الساحر',  icon:'🧙', price:250 }
+  ],
+  colors: [
+    { id:'classic', name:'بنّي كلاسيكي', body:'#a26b45', belly:'#f7dfbd', dark:'#6e4229', price:0 },
+    { id:'sky',     name:'أزرق سماوي',  body:'#4f8fd6', belly:'#dcebfb', dark:'#2c5e99', price:90 },
+    { id:'rose',    name:'وردي',        body:'#e0709e', belly:'#fde4ee', dark:'#a8436d', price:90 },
+    { id:'mint',    name:'نعناعي',      body:'#3fae8c', belly:'#d9f5ea', dark:'#23775d', price:90 },
+    { id:'night',   name:'ليلي',        body:'#5b4b8a', belly:'#e3dcf7', dark:'#372a5f', price:150 },
+    { id:'snow',    name:'ثلجي',        body:'#e8edf3', belly:'#ffffff', dark:'#a9b4c2', price:150 },
+    { id:'gold',    name:'ذهبي',        body:'#d9a521', belly:'#fff1c4', dark:'#9c7210', price:300 }
+  ],
+  hintPrice: 15
+};
+
+/** Daily quests: three are picked each day (deterministically from the date). */
+const QUESTS = [
+  { id:'correct', icon:'✅', name:'أجب إجابات صحيحة',      target:{ kids:10, def:15 } },
+  { id:'levels',  icon:'🗺️', name:'أكمل مستويات',           target:{ def:2 } },
+  { id:'stars',   icon:'⭐', name:'اجمع نجوماً',             target:{ def:6 } },
+  { id:'combo',   icon:'⚡', name:'حقّق سلسلة إجابات صحيحة', target:{ kids:4, def:6 } },
+  { id:'speak',   icon:'🎤', name:'انطق كلمات بشكل صحيح',   target:{ def:3 } },
+  { id:'words',   icon:'🆕', name:'تعلّم كلمات جديدة',        target:{ def:5 } },
+  { id:'review',  icon:'🔁', name:'أكمل جلسة مراجعة ذكية',   target:{ def:1 } }
+];
+const QUEST_REWARD = { coins:30, xp:20 };
+
+/* =========================================================
+   2. SMALL HELPERS
+   ========================================================= */
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const rand = n => Math.floor(Math.random() * n);
+const pick = a => a[rand(a.length)];
+const shuffle = a => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = rand(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const sum = a => a.reduce((s, x) => s + x, 0);
+const pad2 = n => String(n).padStart(2, '0');
+const todayKey = (d = new Date()) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const dayKeyOffset = off => todayKey(new Date(Date.now() + off * 864e5));
+/** ISO week key, e.g. "2026-W44" — used for the weekly leaderboard. */
+function weekKey(d = new Date()) {
+  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const day = t.getUTCDay() || 7;
+  t.setUTCDate(t.getUTCDate() + 4 - day);
+  const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+  return t.getUTCFullYear() + '-W' + Math.ceil(((t - y0) / 864e5 + 1) / 7);
+}
+const fmtMin = secs => { const m = Math.round(secs / 60); return m < 60 ? `${m} د` : `${Math.floor(m / 60)} س ${m % 60} د`; };
+/** Regex matching a word/phrase inside a sentence, not glued to other letters. */
+const wordRegex = w => new RegExp('(?<![A-Za-z])' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![A-Za-z])', 'i');
+const reducedMotion = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* =========================================================
+   3. STORAGE (localStorage wrapped in try/catch; works without it)
+   ========================================================= */
+const STORE_KEY = 'hakeem.v1';
+const Store = {
+  data: { profiles: [], currentId: null },
+  ok: true,
+  load() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (raw) {
+        const d = JSON.parse(raw);
+        if (d && Array.isArray(d.profiles)) { this.data = d; d.profiles.forEach(migrateProfile); }
+      }
+    } catch (e) { this.ok = false; }
+  },
+  save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(this.data)); }
+    catch (e) { this.ok = false; }
+  }
+};
+const save = () => Store.save();
+
+const DEFAULT_SETTINGS = { speed:'normal', sound:true, music:false, theme:'auto', timer:null, goal:10, arHints:true, vibrate:true };
+
+function newProfile(name, avatar, age) {
+  return {
+    id: 'p' + Date.now().toString(36) + rand(1e4), name, avatar, age, created: Date.now(),
+    xp: 0, coins: 0, streak: 0, bestStreak: 0, lastDay: null,
+    daily: {},                                  // { 'YYYY-MM-DD': secondsPlayed }
+    week: { key: weekKey(), xp: 0 },            // weekly leaderboard XP
+    settings: { ...DEFAULT_SETTINGS },
+    stats: { levels:0, perfect:0, boss:0, speak:0, daily:0, bestCombo:0, reviews:0, answers:0, correct:0 },
+    ach: {},                                    // unlocked achievements { id: timestamp }
+    groups: {},                                 // per-age-group progress (kept separately)
+    owl: { hat:'cap', color:'classic', owned:['cap', 'none', 'classic'] },   // shop items
+    quests: null                                // today's quests { day, list:[{id,target,n,claimed}] }
+  };
+}
+/** Fill in fields added in later versions so older saves keep working. */
+function migrateProfile(p) {
+  p.settings = { ...DEFAULT_SETTINGS, ...(p.settings || {}) };
+  p.owl = p.owl || { hat:'cap', color:'classic', owned:['cap', 'none', 'classic'] };
+  if (!('quests' in p)) p.quests = null;
+}
+/** Current profile. */
+const P = () => Store.data.profiles.find(p => p.id === Store.data.currentId) || null;
+/** Progress bucket for the profile's current age group. */
+function G(p = P()) {
+  if (!p.groups[p.age]) p.groups[p.age] = { stars:{}, words:{}, placement:0, placed:false, dailyDone:null };
+  return p.groups[p.age];
+}
+const settings = () => (P() ? P().settings : DEFAULT_SETTINGS);
+const AG = () => AGE_GROUPS[P() ? P().age : 'young'];
+function timerOn() {
+  const p = P(), g = AGE_GROUPS[p.age];
+  if (!g.timer) return false;
+  return p.settings.timer == null ? g.timerDefault : p.settings.timer;
+}
+
+/* ---------- progression ---------- */
+const LEVELS_PER_WORLD = 6; // 5 levels + 1 boss
+const worldsOf = () => WORLDS[P().age];
+const isDone = (w, l, gp = G()) => (gp.stars[w + '-' + l] || 0) > 0;
+function isUnlocked(w, l, gp = G()) {
+  if (w < gp.placement) return true;
+  if (w === gp.placement && l === 0) return true;
+  if (w === 0 && l === 0) return true;
+  if (l > 0) return isDone(w, l - 1, gp);
+  return isDone(w - 1, LEVELS_PER_WORLD - 1, gp);
+}
+/** First unlocked-but-unfinished node: where the player should go next. */
+function currentNode() {
+  const ws = worldsOf();
+  for (let w = 0; w < ws.length; w++)
+    for (let l = 0; l < LEVELS_PER_WORLD; l++)
+      if (isUnlocked(w, l) && !isDone(w, l)) return [w, l];
+  return [ws.length - 1, LEVELS_PER_WORLD - 1];
+}
+function totalStars(p) {
+  return sum(Object.values(p.groups).map(g => sum(Object.values(g.stars))));
+}
+function levelInfo(xp) {
+  let lvl = 1, need = 100, rest = xp;
+  while (rest >= need) { rest -= need; lvl++; need = 100 + (lvl - 1) * 50; }
+  return { lvl, cur: rest, need };
+}
+function addXP(x) {
+  const p = P();
+  const before = levelInfo(p.xp).lvl;
+  p.xp += x;
+  if (p.week.key !== weekKey()) p.week = { key: weekKey(), xp: 0 };
+  p.week.xp += x;
+  const after = levelInfo(p.xp).lvl;
+  if (after > before) {
+    setTimeout(() => { Sound.fanfare(); toast(`🎉 ترقية! وصلت إلى المستوى ${after}`); Confetti.burst(80); }, 400);
+  }
+}
+const displayStreak = p => (p.lastDay === todayKey() || p.lastDay === dayKeyOffset(-1)) ? p.streak : 0;
+function touchStreak() {
+  const p = P(), t = todayKey();
+  if (p.lastDay === t) return;
+  p.streak = p.lastDay === dayKeyOffset(-1) ? p.streak + 1 : 1;
+  p.bestStreak = Math.max(p.bestStreak, p.streak);
+  p.lastDay = t;
+  if (p.streak > 1) setTimeout(() => toast(`🔥 سلسلة ${p.streak} أيام متتالية!`), 600);
+}
+
+/* ---------- smart review (simple spaced repetition, Leitner boxes) ---------- */
+const SRS_INTERVALS = [0, 5 * 60e3, 30 * 60e3, 6 * 3600e3, 24 * 3600e3, 3 * 24 * 3600e3, 7 * 24 * 3600e3];
+function srsMark(word, ok) {
+  const words = G().words;
+  const r = words[word.key] || (words[word.key] = { c:0, w:0, box:0, due:0, seen:0 });
+  r.seen = Date.now();
+  if (ok) { r.c++; r.box = Math.min(SRS_INTERVALS.length - 1, r.box + 1); }
+  else { r.w++; r.box = 0; }
+  r.due = Date.now() + SRS_INTERVALS[r.box];
+}
+const isWeak = r => !!r && r.w > 0 && (r.box < 2 || r.w > r.c);
+function learnedCount(p) {
+  return sum(Object.values(p.groups).map(g => Object.values(g.words).filter(r => r.c > 0).length));
+}
+/** Words due for review, weakest first. */
+function dueWords(limit = 12) {
+  const gp = G(), now = Date.now();
+  return Object.entries(gp.words)
+    .filter(([, r]) => r.due <= now && (r.w > 0 || r.box < 3))
+    .sort((a, b) => (isWeak(b[1]) - isWeak(a[1])) || (a[1].box - b[1].box))
+    .map(([k]) => VOCAB_BY_KEY.get(k)).filter(Boolean).slice(0, limit);
+}
+
+/* =========================================================
+   4. AUDIO — speech synthesis, Web Audio SFX, background music
+   ========================================================= */
+/** Android app bridge (see MainActivity.java). Absent in a normal browser. */
+const Native = window.HakeemNative || null;
+
+const Speech = {
+  supported: !!Native || 'speechSynthesis' in window,
+  en: null, en2: null, ar: null,
+  seq: 0, cbs: {},
+  init() {
+    if (Native) {
+      // Android TextToSpeech: voices are chosen natively; we only record what exists
+      this.en = 'native';
+      this.en2 = Native.hasAltVoice() ? 'alt' : null;
+      this.ar = Native.hasLang('ar') ? 'native-ar' : null;
+      return;
+    }
+    if (!this.supported) return;
+    const load = () => {
+      const vs = speechSynthesis.getVoices();
+      const enUS = vs.filter(v => /^en[-_]US/i.test(v.lang));
+      const enAll = enUS.length ? enUS : vs.filter(v => /^en/i.test(v.lang));
+      const prefer = [/Google US English/i, /Samantha/i, /Aria/i, /Jenny/i, /Zira/i, /Natural/i];
+      this.en = prefer.map(r => enAll.find(v => r.test(v.name))).find(Boolean) || enAll[0] || null;
+      const male = [/David/i, /Guy/i, /Alex/i, /Daniel/i, /Fred/i, /Male/i];
+      this.en2 = male.map(r => enAll.find(v => r.test(v.name) && v !== this.en)).find(Boolean)
+              || enAll.find(v => v !== this.en) || null;
+      this.ar = vs.find(v => /^ar/i.test(v.lang)) || null;
+    };
+    load();
+    speechSynthesis.addEventListener ? speechSynthesis.addEventListener('voiceschanged', load) : (speechSynthesis.onvoiceschanged = load);
+  },
+  rate(slow) {
+    if (slow || settings().speed === 'slow') return 0.6;
+    return P() && P().age === 'kids' ? 0.85 : 0.95;
+  },
+  /** Speak text. opts: {slow, lang, alt (second voice), pitch, queue, onend} */
+  say(text, opts = {}) {
+    let done = false;
+    const end = () => { if (!done) { done = true; opts.onend && opts.onend(); } };
+    if (!this.supported || !text) { setTimeout(end, 400); return; }
+    const rate = opts.rate || this.rate(opts.slow);
+    if (Native) {
+      const id = String(++this.seq);
+      this.cbs[id] = end;
+      try { Native.speak(text, opts.lang || 'en-US', rate, opts.pitch || 1, !!opts.alt, !!opts.queue, id); }
+      catch (e) { delete this.cbs[id]; setTimeout(end, 300); return; }
+      setTimeout(() => { delete this.cbs[id]; end(); }, 1500 + text.length * 140 / rate);
+      return;
+    }
+    try {
+      if (!opts.queue) speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = opts.lang || 'en-US';
+      const v = u.lang.startsWith('ar') ? this.ar : (opts.alt && this.en2) || this.en;
+      if (v) u.voice = v;
+      u.rate = rate;
+      u.pitch = opts.pitch || 1;
+      u.onend = end; u.onerror = end;
+      speechSynthesis.speak(u);
+      // safety net: some engines never fire onend
+      setTimeout(end, 1500 + text.length * 140 / u.rate);
+    } catch (e) { setTimeout(end, 300); }
+  },
+  /** Arabic instruction (kids/young, if an Arabic voice exists), then the English audio. */
+  hintThen(arText, thenFn) {
+    const p = P();
+    if (p && ['kids','young'].includes(p.age) && p.settings.arHints && this.ar && arText) {
+      this.say(arText.replace(/[^؀-ۿ\s،؟]/g, ''), { lang:'ar-SA', rate:1, onend: () => setTimeout(thenFn, 150) });
+    } else thenFn();
+  },
+  cancel() {
+    try { Native ? Native.stop() : this.supported && speechSynthesis.cancel(); } catch (e) {}
+  }
+};
+// callbacks from MainActivity
+window.hakeemTtsDone = id => { const cb = Speech.cbs[id]; delete Speech.cbs[id]; cb && cb(); };
+window.hakeemNativeReady = () => Speech.init();
+
+/** Speech recognition: browser Web Speech API, or Android's SpeechRecognizer via the bridge. */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const Recog = {
+  h: null, cur: null,
+  available() { try { return Native ? Native.srAvailable() : !!SR; } catch (e) { return false; } },
+  /** handlers: { onresult(alternatives[]), onerror(code), onend() } */
+  start(h) {
+    this.stop();
+    this.h = h;
+    if (Native) { Native.srStart(); return; }
+    const rec = new SR();
+    rec.lang = 'en-US'; rec.interimResults = false; rec.maxAlternatives = 5;
+    rec.onresult = e => this.h === h && h.onresult([...e.results[0]].map(a => a.transcript));
+    rec.onerror = e => this.h === h && h.onerror(e.error);
+    rec.onend = () => { if (this.h === h) { this.h = null; this.cur = null; h.onend(); } };
+    this.cur = rec;
+    rec.start();
+  },
+  stop() {
+    const was = this.h; this.h = null;
+    if (Native) { if (was) try { Native.srStop(); } catch (e) {} return; }
+    if (this.cur) { try { this.cur.abort(); } catch (e) {} this.cur = null; }
+  },
+  get active() { return !!this.h; }
+};
+window.hakeemSR = (type, data) => {
+  const h = Recog.h; if (!h) return;
+  if (type === 'result') h.onresult(data || []);
+  else if (type === 'error') h.onerror(data);
+  else if (type === 'end') { Recog.h = null; h.onend(); }
+};
+
+/** Short vibration feedback (Android app bridge or the Vibration API). */
+function buzz(pattern) {
+  if (!P() || settings().vibrate === false) return;
+  try { Native ? Native.vibrate(Array.isArray(pattern) ? pattern[0] : pattern) : navigator.vibrate && navigator.vibrate(pattern); } catch (e) {}
+}
+
+const Sound = {
+  ctx: null,
+  ensure() {
+    try {
+      if (!this.ctx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        this.ctx = new AC();
+      }
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+    } catch (e) { return null; }
+    return this.ctx;
+  },
+  /** One enveloped oscillator note. */
+  tone(f, d, type = 'sine', vol = .15, delay = 0, slide = null) {
+    if (!settings().sound) return;
+    const c = this.ensure(); if (!c) return;
+    const t = c.currentTime + delay;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t);
+    if (slide) o.frequency.exponentialRampToValueAtTime(slide, t + d);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g).connect(c.destination);
+    o.start(t); o.stop(t + d + 0.05);
+  },
+  click()   { this.tone(620, .06, 'triangle', .08); },
+  flip()    { this.tone(420, .08, 'triangle', .1, 0, 640); },
+  correct(combo = 0) {
+    const k = Math.pow(2, Math.min(combo, 10) / 12);   // each combo step = one semitone higher
+    this.tone(660 * k, .12, 'sine', .16); this.tone(880 * k, .16, 'sine', .16, .1); this.tone(1320 * k, .25, 'triangle', .08, .2);
+  },
+  pop()     { this.tone(300, .08, 'sine', .18, 0, 900); this.tone(1200, .06, 'triangle', .06, .04); },
+  chest()   { [392, 523, 659, 784, 1047, 1319].forEach((f, i) => this.tone(f, .18, 'triangle', .12, i * .07)); },
+  wrong()   { this.tone(220, .3, 'sawtooth', .07, 0, 110); this.tone(180, .3, 'square', .04, .05, 90); },
+  coin()    { this.tone(988, .08, 'square', .05); this.tone(1319, .18, 'square', .05, .08); },
+  star(i)   { this.tone(880 + i * 220, .2, 'triangle', .14); this.tone(1760 + i * 440, .15, 'sine', .05, .05); },
+  fanfare() {
+    [523, 659, 784, 1047].forEach((f, i) => this.tone(f, .22, 'triangle', .14, i * .12));
+    [523, 659, 784].forEach(f => this.tone(f * 2, .6, 'sine', .07, .5));
+  }
+};
+
+/** Soft generative background music (pentatonic over a I–vi–IV–V loop). */
+const Music = {
+  id: null, step: 0, out: null,
+  chords: [[261.63, 329.63, 392.00], [220.00, 261.63, 329.63], [174.61, 220.00, 261.63], [196.00, 246.94, 293.66]],
+  note(f, d, vol, type) {
+    const c = Sound.ctx, t = c.currentTime;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.05);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g).connect(this.out); o.start(t); o.stop(t + d + .05);
+  },
+  start() {
+    if (this.id) return;
+    const c = Sound.ensure(); if (!c) return;
+    this.out = c.createGain(); this.out.gain.value = 0.5; this.out.connect(c.destination);
+    this.id = setInterval(() => {
+      if (document.hidden) return;
+      const ch = this.chords[Math.floor(this.step / 8) % 4];
+      if (this.step % 8 === 0) this.note(ch[0] / 2, 3.2, .05, 'sine');
+      if (Math.random() < .6) this.note(pick(ch) * (Math.random() < .5 ? 1 : 2), 1.1, .03, 'triangle');
+      this.step++;
+    }, 420);
+  },
+  stop() { clearInterval(this.id); this.id = null; if (this.out) { try { this.out.disconnect(); } catch (e) {} this.out = null; } },
+  sync() { (P() && settings().music) ? this.start() : this.stop(); }
+};
+
+/* =========================================================
+   5. HAKEEM THE OWL, TOASTS, MODALS, CONFETTI
+   ========================================================= */
+/** Hats/accessories drawn on top of the owl (ids match SHOP.hats). */
+const OWL_HATS = {
+  cap: `<g><path d="M28 28 L60 15 L92 28 L60 41 Z" fill="#1f1b3a"/><rect x="45" y="31" width="30" height="9" rx="2" fill="#1f1b3a"/>
+    <path d="M90 28 L92 44" stroke="#f5b301" stroke-width="2.2"/><circle cx="92" cy="46" r="3.2" fill="#f5b301"/></g>`,
+  none: '',
+  party: `<g><path d="M46 34 L60 -6 L74 34 Z" fill="#ec4899"/><path d="M50 24 L70 24 M53 14 L67 14" stroke="#fde047" stroke-width="4"/>
+    <circle cx="60" cy="-7" r="5" fill="#fde047"/></g>`,
+  glasses: `<g fill="none" stroke="#1f1b3a" stroke-width="3.2"><circle cx="44" cy="58" r="16"/><circle cx="76" cy="58" r="16"/><path d="M60 56 h0.1 M28 54 L20 50 M92 54 L100 50"/></g>
+    <g fill="#9bd3ff" opacity=".18"><circle cx="44" cy="58" r="15"/><circle cx="76" cy="58" r="15"/></g>`,
+  phones: `<g><path d="M20 66 Q18 20 60 18 Q102 20 100 66" fill="none" stroke="#1f1b3a" stroke-width="7" stroke-linecap="round"/>
+    <rect x="10" y="58" width="16" height="26" rx="7" fill="#7c3aed"/><rect x="94" y="58" width="16" height="26" rx="7" fill="#7c3aed"/></g>`,
+  crown: `<g><path d="M34 36 L36 10 L48 24 L60 4 L72 24 L84 10 L86 36 Z" fill="#f5b301" stroke="#b7791f" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="60" cy="24" r="3.5" fill="#ef4444"/><circle cx="45" cy="29" r="2.5" fill="#3b82f6"/><circle cx="75" cy="29" r="2.5" fill="#22c55e"/></g>`,
+  wizard: `<g><path d="M24 36 Q60 26 96 36 L70 -10 L58 0 Z" fill="#5b21b6"/><path d="M24 36 Q60 26 96 36" stroke="#fde047" stroke-width="3" fill="none"/>
+    <text x="56" y="22" font-size="11" fill="#fde047">★</text><text x="70" y="8" font-size="7" fill="#fde047">★</text></g>`
+};
+/** Inline SVG owl (wise = حكيم). Parts animate via CSS; look = {hat, color} from the shop. */
+function owlSVG(look) {
+  const o = look || (P() && P().owl) || { hat:'cap', color:'classic' };
+  const c = SHOP.colors.find(x => x.id === o.color) || SHOP.colors[0];
+  return `<svg class="owl" viewBox="0 0 120 132" aria-hidden="true" style="--owl-body:${c.body};--owl-belly:${c.belly};--owl-dark:${c.dark}">
+  <g fill="#f59e0b"><ellipse cx="46" cy="122" rx="10" ry="4.5"/><ellipse cx="74" cy="122" rx="10" ry="4.5"/></g>
+  <ellipse class="wing wing-l" cx="22" cy="82" rx="12" ry="27" fill="var(--owl-dark)"/>
+  <ellipse class="wing wing-r" cx="98" cy="82" rx="12" ry="27" fill="var(--owl-dark)"/>
+  <path d="M27 44 L20 22 L44 34 Z" fill="var(--owl-dark)"/><path d="M93 44 L100 22 L76 34 Z" fill="var(--owl-dark)"/>
+  <ellipse cx="60" cy="76" rx="40" ry="46" fill="var(--owl-body)"/>
+  <ellipse cx="60" cy="90" rx="26" ry="29" fill="var(--owl-belly)"/>
+  <g fill="none" stroke="var(--owl-body)" stroke-width="2" opacity=".45" stroke-linecap="round">
+    <path d="M47 90 q4 4 8 0 q4 4 8 0 q4 4 8 0"/><path d="M51 101 q4 4 8 0 q4 4 8 0"/></g>
+  <circle cx="44" cy="58" r="15" fill="#fff"/><circle cx="76" cy="58" r="15" fill="#fff"/>
+  <g class="pupils"><circle cx="46" cy="59" r="7" fill="#1f1530"/><circle cx="74" cy="59" r="7" fill="#1f1530"/>
+    <circle cx="48.5" cy="56" r="2.4" fill="#fff"/><circle cx="76.5" cy="56" r="2.4" fill="#fff"/></g>
+  <g fill="var(--owl-body)"><ellipse class="lid" cx="44" cy="58" rx="16" ry="16"/><ellipse class="lid" cx="76" cy="58" rx="16" ry="16"/></g>
+  <path d="M54 70 L66 70 L60 81 Z" fill="#f59e0b"/>
+  <g class="cheeks" fill="#ff8fab" opacity="0"><ellipse cx="29" cy="74" rx="6" ry="3.5"/><ellipse cx="91" cy="74" rx="6" ry="3.5"/></g>
+  ${OWL_HATS[o.hat] || ''}
+</svg>`;
+}
+
+const Mascot = {
+  el: null, bubble: null, t1: null, t2: null,
+  init() {
+    this.el = $('#mascot');
+    this.el.innerHTML = owlSVG() + '<div class="mascot-bubble" role="status"></div>';
+    this.bubble = $('.mascot-bubble', this.el);
+    const tap = () => { if (P()) this.say(pick(TIPS[P().age].tip), 'think'); };
+    this.el.addEventListener('click', tap);
+    this.el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tap(); } });
+  },
+  mood(m, ms = 1600) {
+    const el = this.el;
+    el.classList.remove('happy', 'sad', 'think', 'celebrate');
+    void el.offsetWidth;
+    el.classList.add(m);
+    clearTimeout(this.t1);
+    this.t1 = setTimeout(() => el.classList.remove(m), ms);
+  },
+  say(text, mood = 'happy', ms = 3200) {
+    this.bubble.textContent = text;
+    this.bubble.classList.add('show');
+    this.mood(mood, Math.min(ms, 2200));
+    clearTimeout(this.t2);
+    this.t2 = setTimeout(() => this.bubble.classList.remove('show'), ms);
+  },
+  visible(on) { this.el.classList.toggle('off', !on); if (!on) this.bubble.classList.remove('show'); },
+  /** Redraw after the outfit changes (keeps the bubble). */
+  refresh() { const svg = $('svg.owl', this.el); if (svg) svg.outerHTML = owlSVG(); }
+};
+const tip = kind => pick(TIPS[P() ? P().age : 'young'][kind]).replace('{name}', P() ? P().name : '');
+
+/* ---------- daily quests ---------- */
+/** Small deterministic PRNG so everyone gets the same quests on the same day. */
+function seeded(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+function questsToday() {
+  const p = P(), day = todayKey();
+  if (!p.quests || p.quests.day !== day) {
+    const rnd = seeded(+day.replace(/-/g, '') + p.age.length * 7);
+    const pool = QUESTS.filter(q => q.id !== 'speak' || Recog.available());
+    const chosen = pool.map(q => ({ q, r: rnd() })).sort((a, b) => a.r - b.r).slice(0, 3).map(x => x.q);
+    p.quests = { day, bonus: false, list: chosen.map(q => ({ id: q.id, target: q.target[p.age] || q.target.def, n: 0, claimed: false })) };
+  }
+  return p.quests;
+}
+/** Record progress. mode 'max' keeps the best value (e.g. combo). */
+function questEvent(id, n = 1, mode = 'add') {
+  const p = P(); if (!p) return;
+  questsToday().list.forEach(q => {
+    if (q.id !== id || q.n >= q.target) return;
+    q.n = Math.min(q.target, mode === 'max' ? Math.max(q.n, n) : q.n + n);
+    if (q.n >= q.target) {
+      const def = QUESTS.find(x => x.id === id);
+      setTimeout(() => { toast(`🎯 مهمة مكتملة: ${def.icon} ${def.name} — استلم جائزتك من الرئيسية`); Sound.coin(); }, 700);
+    }
+  });
+}
+
+function toast(html, ms = 2800) {
+  const t = document.createElement('div');
+  t.className = 'toast'; t.innerHTML = html;
+  const wrap = $('#toast-wrap');
+  // never stack more than 3: drop the oldest
+  while (wrap.children.length >= 3) wrap.firstElementChild.remove();
+  wrap.appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 300); }, ms);
+}
+
+/** Promise-based modal. Resolves true (ok) / false (cancel). */
+function modal({ title, text = '', html = '', ok = 'موافق', cancel = 'إلغاء', danger = false }) {
+  return new Promise(res => {
+    const root = $('#modal-root');
+    state.modalPrevFocus = document.activeElement;
+    root.innerHTML = `<div class="overlay"><div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="mt">
+      <h2 id="mt">${title}</h2>${text ? `<p>${text}</p>` : ''}${html}
+      <div class="modal-btns"><button class="btn ${danger ? 'btn-danger' : 'btn-primary'}" data-m="1">${ok}</button>
+      ${cancel ? `<button class="btn btn-ghost" data-m="0">${cancel}</button>` : ''}</div></div></div>`;
+    state.modalResolve = res;
+    $$('[data-m]', root).forEach(b => b.onclick = () => closeModal(b.dataset.m === '1'));
+    $('.overlay', root).addEventListener('click', e => { if (e.target.classList.contains('overlay') && cancel) closeModal(false); });
+    $('[data-m="1"]', root).focus();
+  });
+}
+function closeModal(v) {
+  $('#modal-root').innerHTML = '';
+  const r = state.modalResolve; state.modalResolve = null;
+  if (state.modalPrevFocus && state.modalPrevFocus.focus) try { state.modalPrevFocus.focus(); } catch (e) {}
+  r && r(v);
+}
+
+const Confetti = {
+  parts: [], running: false, cv: null, cx: null,
+  burst(n = 140) {
+    if (reducedMotion()) n = Math.min(n, 25);
+    const cv = this.cv || (this.cv = $('#confetti'));
+    this.cx = this.cx || cv.getContext('2d');
+    cv.width = innerWidth; cv.height = innerHeight;
+    const colors = ['#f43f5e', '#f59e0b', '#22c55e', '#3b82f6', '#a855f7', '#ec4899', '#facc15'];
+    for (let i = 0; i < n; i++) this.parts.push({
+      x: innerWidth / 2 + (Math.random() - .5) * innerWidth * .5, y: innerHeight * .35,
+      vx: (Math.random() - .5) * 14, vy: -Math.random() * 13 - 4,
+      w: 6 + Math.random() * 6, h: 4 + Math.random() * 6, c: pick(colors),
+      r: Math.random() * 6, vr: (Math.random() - .5) * .3
+    });
+    if (!this.running) { this.running = true; requestAnimationFrame(() => this.loop()); }
+  },
+  loop() {
+    const { cx, cv } = this;
+    cx.clearRect(0, 0, cv.width, cv.height);
+    this.parts = this.parts.filter(p => p.y < cv.height + 30);
+    for (const p of this.parts) {
+      p.vy += .32; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r); cx.fillStyle = p.c;
+      cx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); cx.restore();
+    }
+    if (this.parts.length) requestAnimationFrame(() => this.loop());
+    else { this.running = false; cx.clearRect(0, 0, cv.width, cv.height); }
+  }
+};
+
+/** Unlock + announce any newly earned badges. */
+function checkAchievements() {
+  const p = P(); if (!p) return;
+  ACHIEVEMENTS.forEach((a, i) => {
+    if (!p.ach[a.id] && a.test(p)) {
+      p.ach[a.id] = Date.now();
+      setTimeout(() => {
+        toast(`🏅 إنجاز جديد! <span class="emoji">${a.icon}</span> ${a.name}`, 3500);
+        Sound.coin(); Confetti.burst(60);
+      }, 900 + i * 250);
+    }
+  });
+  save();
+}
+
+/** Theme follows the profile's age group + light/dark setting. */
+function applyTheme() {
+  const p = P();
+  document.body.dataset.age = p ? p.age : 'young';
+  const t = p ? p.settings.theme : 'auto';
+  const dark = t === 'dark' || (t === 'auto' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  const meta = $('meta[name=theme-color]');
+  if (meta) meta.content = getComputedStyle(document.body).getPropertyValue('--primary').trim() || '#7c5cff';
+  // colour the Android status/navigation bars to match the page
+  if (Native && Native.setBars) try { Native.setBars(getComputedStyle(document.body).getPropertyValue('--bg1').trim(), !dark); } catch (e) {}
+}
+
+/* =========================================================
+   6. APP STATE + ROUTER
+   ========================================================= */
+const state = { screen:null, run:null, key:null, timerId:null, modalResolve:null, modalPrevFocus:null, lastPt:null };
+const Screens = {};
+const PLAY_SCREENS = ['play', 'intro'];
+
+function show(name, ...args) {
+  stopTimer(); stopRecognition(); Speech.cancel();
+  $('#feedback').className = 'feedback';
+  state.screen = name; state.key = null;
+  document.body.dataset.screen = name;
+  Mascot.visible(name !== 'splash');
+  Screens[name](...args);
+  window.scrollTo(0, 0);
+}
+function render(html) { $('#app').innerHTML = `<section class="screen">${html}</section>`; }
+function rerender() { const y = window.scrollY; Screens[state.screen](); window.scrollTo(0, y); }
+function topbar(title, back = 'menu', extra = '') {
+  return `<header class="topbar"><button class="icon-btn" data-go="${back}" aria-label="رجوع">→</button>
+    <h1 class="title">${title}</h1><div class="chips">${extra}</div></header>`;
+}
+function wordRow(w, extra = '') {
+  return `<div class="word-row"><span class="emoji">${w.emoji}</span><div class="wtxt"><b class="en">${esc(w.word)}</b><small>${esc(w.arabic)}</small>${extra}</div>
+    <button class="icon-btn sm" data-say="${esc(w.word)}" aria-label="استمع إلى ${esc(w.word)}">🔊</button></div>`;
+}
+const fmtTime = s => `${Math.floor(s / 60)}:${pad2(Math.floor(s % 60))}`;
+function pulse(sel) { const b = $(sel); if (!b) return; b.classList.add('playing'); setTimeout(() => b.classList.remove('playing'), 900); }
+function stopRecognition() { Recog.stop(); }
+/** Floating "+10 XP" near where the player tapped. */
+function floatGain(...lines) {
+  const pt = state.lastPt || { x: innerWidth / 2, y: innerHeight / 2 };
+  lines.forEach((txt, i) => {
+    const el = document.createElement('div');
+    el.className = 'float-gain'; el.textContent = txt;
+    el.style.left = Math.min(innerWidth - 70, Math.max(10, pt.x - 30)) + 'px';
+    el.style.top = (pt.y - 20 + i * 26) + 'px';
+    el.style.animationDelay = (i * .12) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1300);
+  });
+}
+/** Word of the day: one word per day from the levels the player has unlocked. */
+function wordOfDay() {
+  const ws = worldsOf();
+  let words = ws.flatMap((w, wi) => w.words.filter(x => isUnlocked(wi, x.level - 1)));
+  if (!words.length) words = ws[0].words;
+  return words[Math.floor(seeded(+todayKey().replace(/-/g, ''))() * words.length)];
+}
+
+/* =========================================================
+   7. SCREENS — splash, profiles, menu, map …
+   ========================================================= */
+Screens.splash = () => {
+  applyTheme();
+  render(`<div class="splash">
+    <div class="splash-owl owl-wrap" id="bigOwl">${owlSVG()}</div>
+    <h1 class="logo"><span>حكيم</span><i>|</i><span class="en">Hakeem</span></h1>
+    <p class="tagline">مغامرة ممتعة لتعلّم الإنجليزية بالصوت والصورة واللعب مع البومة الحكيمة 🦉</p>
+    <button class="btn btn-primary btn-big" id="start">ابدأ المغامرة 🚀</button>
+    ${Store.ok ? '' : '<p class="muted small">تنبيه: الحفظ غير متاح في هذا المتصفح، وسيضيع التقدّم عند الإغلاق.</p>'}
+  </div>`);
+  $('#bigOwl').onclick = () => { const o = $('#bigOwl'); o.classList.remove('celebrate'); void o.offsetWidth; o.classList.add('celebrate'); Sound.ensure(); Sound.star(1); };
+  $('#start').onclick = () => {
+    Sound.ensure(); Sound.fanfare();
+    Speech.say('Hello! I am Hakeem.');
+    show(Store.data.profiles.length ? 'profiles' : 'create');
+  };
+  $('#start').focus();
+};
+
+Screens.profiles = () => {
+  applyTheme();
+  const ps = Store.data.profiles;
+  render(`<div class="center-head"><h1>من سيتعلّم اليوم؟ 👋</h1><p class="muted">اختر ملفك أو أنشئ ملفاً جديداً</p></div>
+  <div class="profile-grid">
+    ${ps.map(p => { const g = AGE_GROUPS[p.age]; return `<button class="profile-card glass" data-pid="${p.id}">
+      <span class="avatar">${p.avatar}</span><b>${esc(p.name)}</b><span class="badge">${g.icon} ${g.ar}</span>
+      <small class="muted">المستوى ${levelInfo(p.xp).lvl} · ⭐ ${totalStars(p)}</small></button>`; }).join('')}
+    ${ps.length < 8 ? `<button class="profile-card glass add" data-go="create"><span class="avatar">➕</span><b>ملف جديد</b><small class="muted">لكل فرد من العائلة</small></button>` : ''}
+  </div>`);
+  $$('[data-pid]').forEach(b => b.onclick = () => { Sound.click(); selectProfile(b.dataset.pid); show('menu'); });
+  Mascot.say('أهلاً! أنا حكيم 🦉 من سيلعب معي؟', 'happy');
+};
+function selectProfile(id) { Store.data.currentId = id; save(); applyTheme(); Mascot.refresh(); Music.sync(); }
+
+Screens.create = () => {
+  let avatar = AVATARS[0], age = null;
+  const hasProfiles = Store.data.profiles.length > 0;
+  render(`${hasProfiles ? topbar('ملف جديد', 'profiles') : '<div class="center-head"><h1>لنتعرّف عليك! 🦉</h1><p class="muted">أنشئ ملفك لتبدأ المغامرة</p></div>'}
+  <div class="form-card glass">
+    <label for="pname">ما اسمك؟</label>
+    <input id="pname" class="text-input" maxlength="16" autocomplete="off" placeholder="اكتب اسمك هنا">
+    <label id="avl">اختر شخصيتك</label>
+    <div class="avatar-grid" role="group" aria-labelledby="avl">${AVATARS.map((a, i) => `<button type="button" data-av="${a}" aria-pressed="${i === 0}" aria-label="شخصية ${i + 1}">${a}</button>`).join('')}</div>
+    <label id="agl">كم عمرك؟</label>
+    <div class="age-grid" role="group" aria-labelledby="agl">${Object.values(AGE_GROUPS).map(g => `<button type="button" class="age-card" data-agegroup="${g.id}" aria-pressed="false">
+      <span class="emoji">${g.icon}</span><b>${g.ar}</b><small class="en">${g.en}</small><small>${g.range}</small></button>`).join('')}</div>
+    <button class="btn btn-primary btn-big" id="create" disabled>إنشاء الملف ✨</button>
+  </div>`);
+  const nameEl = $('#pname'), btn = $('#create');
+  const validate = () => { btn.disabled = !(nameEl.value.trim() && age); };
+  nameEl.oninput = validate;
+  $$('[data-av]').forEach(b => b.onclick = () => { avatar = b.dataset.av; $$('[data-av]').forEach(x => x.setAttribute('aria-pressed', x === b)); Sound.click(); });
+  $$('[data-agegroup]').forEach(b => b.onclick = () => {
+    age = b.dataset.agegroup;
+    $$('[data-agegroup]').forEach(x => x.setAttribute('aria-pressed', x === b));
+    document.body.dataset.age = age;   // live preview of the age-group theme
+    Sound.click(); validate();
+  });
+  btn.onclick = async () => {
+    if (btn.disabled) return;
+    const p = newProfile(nameEl.value.trim().slice(0, 16), avatar, age);
+    Store.data.profiles.push(p);
+    selectProfile(p.id);
+    Sound.fanfare(); Confetti.burst(80);
+    const yes = await modal({ title:'اختبار تحديد المستوى 🎯', text:'هل تريد اختباراً سريعاً (10 أسئلة) لنقترح عليك نقطة البداية المناسبة؟', ok:'نعم، لنبدأ', cancel:'لاحقاً' });
+    yes ? startRun('placement') : show('menu');
+  };
+  setTimeout(() => nameEl.focus(), 100);
+};
+
+Screens.menu = () => {
+  const p = P(); if (!p) return show('profiles');
+  applyTheme();
+  const g = AGE_GROUPS[p.age], gp = G(), li = levelInfo(p.xp);
+  const [cw, cl] = currentNode(), world = worldsOf()[cw];
+  const due = dueWords().length;
+  const todaySec = p.daily[todayKey()] || 0;
+  const goalPct = Math.min(100, Math.round(todaySec / 60 / p.settings.goal * 100));
+  const dailyDone = gp.dailyDone === todayKey();
+  const learned = Object.values(gp.words).filter(r => r.c > 0).length;
+  const acc = p.stats.answers ? Math.round(p.stats.correct / p.stats.answers * 100) : 0;
+  const weekSec = sum([...Array(7)].map((_, i) => p.daily[dayKeyOffset(-i)] || 0));
+  const tiles = [
+    ['words', '📒', 'كلماتي', `${learned} كلمة`],
+    ['review', '🔁', 'المراجعة الذكية', due ? `${due} للمراجعة` : 'لا شيء الآن', due],
+    ['shop', '🛍️', 'متجر حكيم', `🪙 ${p.coins}`],
+    ['achievements', '🏅', 'الإنجازات', `${Object.keys(p.ach).length}/${ACHIEVEMENTS.length}`],
+    p.age === 'teens' && ['leaderboard', '🏆', 'المتصدّرون', 'هذا الأسبوع'],
+    ['kids', 'young'].includes(p.age) ? ['parent', '👪', 'لوحة الوالدين', 'متابعة التقدّم'] : ['stats', '📊', 'إحصائياتي', 'تقدّمك بالتفصيل'],
+    ['settings', '⚙️', 'الإعدادات', 'الصوت والمظهر'],
+    ['profiles', '👥', 'تبديل اللاعب', `${Store.data.profiles.length} ملفات`]
+  ].filter(Boolean);
+  render(`
+  <header class="menu-head glass">
+    <div class="who"><span class="avatar sm">${p.avatar}</span><div><b>${esc(p.name)}</b><small>${g.icon} ${g.ar}</small></div></div>
+    <div class="row"><span class="chip" title="سلسلة الأيام">🔥 ${displayStreak(p)}</span><span class="chip" title="العملات">🪙 ${p.coins}</span></div>
+    <div class="xpline"><span>المستوى ${li.lvl}</span><div class="bar"><i style="width:${li.cur / li.need * 100}%"></i></div><small class="en">${li.cur}/${li.need} XP</small></div>
+  </header>
+  <button class="play-btn" data-go="map"><span class="pi">▶</span><span><b>العب</b><small>${world.icon} ${world.ar} — ${cl === 5 ? 'الزعيم 👑' : 'المستوى ' + (cl + 1)}</small></span></button>
+  ${['teens', 'adults'].includes(p.age) ? `<div class="stat-grid" style="margin-bottom:12px;grid-template-columns:repeat(3,1fr)">
+    <div class="stat"><b>${learned}</b><small>كلمة متعلَّمة</small></div>
+    <div class="stat"><b>${acc}%</b><small>الدقة</small></div>
+    <div class="stat"><b>${Math.round(weekSec / 60)}</b><small>دقيقة هذا الأسبوع</small></div></div>` : ''}
+  <div class="menu-row">
+    <button class="mini-card glass ${dailyDone ? 'done' : ''}" id="daily"><span class="emoji">📅</span><span><b>تحدي اليوم</b><small>${dailyDone ? 'أنجزته اليوم ✅ (العب للتدريب)' : '+50 XP و +50 🪙'}</small></span></button>
+    <div class="mini-card glass"><div class="ring" style="--p:${goalPct}" aria-hidden="true">${goalPct}%</div><span><b>هدف اليوم</b><small>${Math.floor(todaySec / 60)} من ${p.settings.goal} دقائق</small></span></div>
+  </div>
+  ${questsHTML()}
+  ${(() => { const w = wordOfDay(); return `<div class="mini-card glass wod"><span class="emoji">${w.emoji}</span>
+    <span class="wod-txt"><small>💡 كلمة اليوم</small><b class="en">${esc(w.word)}</b><small>${esc(w.arabic)}</small></span>
+    <button class="icon-btn" data-say="${esc(w.word)}" aria-label="استمع إلى كلمة اليوم">🔊</button></div>`; })()}
+  <div class="menu-grid">${tiles.map(([id, ic, name, sub, count]) => `<button class="tile-btn glass" data-go="${id}"><span class="emoji">${ic}</span><b>${name}</b><small class="muted">${sub}</small>${count ? `<span class="count">${count}</span>` : ''}</button>`).join('')}</div>`);
+  $('#daily').onclick = () => { Sound.click(); startRun('daily'); };
+  $$('[data-claim]').forEach(b => b.onclick = () => claimQuest(+b.dataset.claim));
+  Mascot.say(tip('hello'), 'happy');
+};
+
+function questsHTML() {
+  const qs = questsToday();
+  return `<div class="panel glass quests"><div class="row" style="justify-content:space-between"><b>🎯 مهام اليوم</b><small class="muted">تتجدّد كل يوم</small></div>
+    ${qs.list.map((q, i) => {
+      const def = QUESTS.find(x => x.id === q.id), done = q.n >= q.target;
+      return `<div class="quest ${q.claimed ? 'claimed' : ''}"><span class="emoji">${def.icon}</span>
+        <div class="qtxt"><b>${def.name}</b><div class="row" style="flex-wrap:nowrap"><div class="bar"><i style="width:${q.n / q.target * 100}%"></i></div><small class="en">${q.n}/${q.target}</small></div></div>
+        ${q.claimed ? '<span class="badge">✅</span>' : done ? `<button class="btn btn-primary claim" data-claim="${i}">استلم 🎁</button>` : `<span class="badge">+${QUEST_REWARD.coins} 🪙</span>`}</div>`;
+    }).join('')}</div>`;
+}
+function claimQuest(i) {
+  const p = P(), qs = questsToday(), q = qs.list[i];
+  if (!q || q.claimed || q.n < q.target) return;
+  q.claimed = true;
+  p.coins += QUEST_REWARD.coins; addXP(QUEST_REWARD.xp);
+  Sound.chest(); buzz(30); Confetti.burst(70);
+  toast(`🎁 +${QUEST_REWARD.coins} 🪙  و +${QUEST_REWARD.xp} XP`);
+  if (!qs.bonus && qs.list.every(x => x.claimed)) {
+    qs.bonus = true; p.coins += 50;
+    setTimeout(() => { toast('🏆 أنهيت كل مهام اليوم! مكافأة إضافية +50 🪙', 3500); Sound.fanfare(); Confetti.burst(140); }, 900);
+  }
+  save(); checkAchievements(); rerender();
+}
+
+/* ---------- shop ---------- */
+Screens.shop = () => {
+  const p = P(), o = p.owl;
+  const item = (kind, it) => {
+    const owned = o.owned.includes(it.id), on = o[kind] === it.id;
+    return `<button class="shop-item glass ${on ? 'equipped' : ''}" data-kind="${kind}" data-id="${it.id}" aria-pressed="${on}">
+      <span class="sw">${kind === 'color' ? `<i style="background:${it.body}"></i>` : `<span class="emoji">${it.icon}</span>`}</span>
+      <b>${it.name}</b><small>${on ? '✅ مُستخدَم' : owned ? 'اضغط للارتداء' : `🪙 ${it.price}`}</small></button>`;
+  };
+  render(topbar('🛍️ متجر حكيم', 'menu', `<span class="chip">🪙 ${p.coins}</span>`) + `
+    <div class="shop-preview glass"><div class="owl-wrap" id="preview">${owlSVG()}</div>
+      <p class="muted">اجمع العملات من الإجابات والمهام والصناديق لتزيين حكيم!</p></div>
+    <h2 class="section-title">🎩 القبعات والإكسسوارات</h2><div class="shop-grid">${SHOP.hats.map(it => item('hat', it)).join('')}</div>
+    <h2 class="section-title">🎨 ألوان الريش</h2><div class="shop-grid">${SHOP.colors.map(it => item('color', it)).join('')}</div>`);
+  $$('.shop-item').forEach(b => b.onclick = async () => {
+    const kind = b.dataset.kind, id = b.dataset.id;
+    const it = (kind === 'hat' ? SHOP.hats : SHOP.colors).find(x => x.id === id);
+    const prev = $('#preview');
+    prev.innerHTML = owlSVG({ ...o, [kind]: id });
+    prev.classList.remove('celebrate'); void prev.offsetWidth; prev.classList.add('celebrate');
+    if (!o.owned.includes(id)) {
+      if (p.coins < it.price) { toast(`تحتاج ${it.price - p.coins} 🪙 إضافية — أكمل المستويات والمهام لتجمع المزيد`); Sound.wrong(); return; }
+      const ok = await modal({ title:`شراء «${it.name}»؟`, text:`السعر: ${it.price} 🪙 — رصيدك: ${p.coins} 🪙`, ok:'شراء ✨', cancel:'ليس الآن' });
+      if (!ok) { prev.innerHTML = owlSVG(); return; }
+      p.coins -= it.price; o.owned.push(id);
+      Sound.chest(); Confetti.burst(90); buzz(30);
+    } else Sound.click();
+    o[kind] = id; save(); Mascot.refresh();
+    Mascot.say(kind === 'hat' ? 'شكلي رائع! شكراً لك 😍' : 'لون جميل! 🎨', 'celebrate');
+    rerender();
+  });
+};
+
+/* ---------- adventure map ---------- */
+const NODE_GAP = 112;
+const nodePos = (wi, l) => ({ x: 50 + 28 * Math.sin(l * 1.25 + wi * 1.7), y: 56 + l * NODE_GAP });
+Screens.map = () => {
+  const p = P(), ws = worldsOf(), gp = G();
+  const [cw, cl] = currentNode();
+  const H = 112 + 5 * NODE_GAP;
+  render(topbar('خريطة المغامرة 🗺️', 'menu', `<span class="chip">⭐ ${sum(Object.values(gp.stars))}/${ws.length * 18}</span>`) +
+    ws.map((w, wi) => {
+      const pts = [...Array(LEVELS_PER_WORLD)].map((_, l) => nodePos(wi, l));
+      let d = `M ${pts[0].x} ${pts[0].y}`;
+      for (let i = 1; i < pts.length; i++) { const a = pts[i - 1], b = pts[i], ym = (a.y + b.y) / 2; d += ` C ${a.x} ${ym}, ${b.x} ${ym}, ${b.x} ${b.y}`; }
+      const wStars = sum(pts.map((_, l) => gp.stars[wi + '-' + l] || 0));
+      const locked = !isUnlocked(wi, 0);
+      return `<section class="world ${locked ? 'locked' : ''}" style="--w:${w.color}" aria-label="${w.ar}">
+        <div class="world-head glass"><span class="emoji">${w.icon}</span><div><b>${w.ar}</b><span class="en">${w.name}</span></div>
+          <span class="chip ws">${locked ? '🔒 مقفل' : '⭐ ' + wStars + '/18'}</span></div>
+        <div class="path-wrap" style="height:${H}px">
+          <svg viewBox="0 0 100 ${H}" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" vector-effect="non-scaling-stroke"/></svg>
+          ${pts.map((pt, l) => {
+            const un = isUnlocked(wi, l), st = gp.stars[wi + '-' + l] || 0, boss = l === 5;
+            const cur = wi === cw && l === cl && un && !isDone(wi, l);
+            const label = (boss ? 'مستوى الزعيم' : 'المستوى ' + (l + 1)) + ' — ' + w.ar + (un ? `، ${st} نجوم` : ' (مقفل)');
+            return `<div class="node ${boss ? 'boss' : ''} ${un ? '' : 'locked'} ${cur ? 'current' : ''}" style="left:${pt.x}%;top:${pt.y}px">
+              ${cur ? `<span class="me" aria-hidden="true">${p.avatar}</span>` : ''}
+              <button class="node-btn" data-node="${wi}-${l}" ${un ? '' : 'disabled'} aria-label="${label}">${un ? (boss ? '👑' : l + 1) : '🔒'}</button>
+              <div class="nstars" aria-hidden="true">${[0, 1, 2].map(i => `<span class="${i < st ? '' : 'off'}">★</span>`).join('')}</div></div>`;
+          }).join('')}
+        </div></section>`;
+    }).join(''));
+  $$('[data-node]').forEach(b => b.onclick = () => { const [w, l] = b.dataset.node.split('-').map(Number); Sound.click(); startRun('level', { w, l }); });
+  const cur = $('.node.current');
+  if (cur) setTimeout(() => cur.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'center' }), 250);
+  Mascot.say(AG().id === 'adults' ? 'اختر المستوى التالي للمتابعة.' : 'اختر مستوى وابدأ المغامرة! 🗺️', 'happy', 2500);
+};
+
+/* ---------- notebook: My Words ---------- */
+Screens.words = () => {
+  const gp = G(); let tab = 'all', query = '';
+  const entries = Object.entries(gp.words).map(([k, r]) => ({ w: VOCAB_BY_KEY.get(k), r })).filter(e => e.w && (e.r.c > 0 || e.r.w > 0));
+  const weakN = entries.filter(e => isWeak(e.r)).length;
+  render(topbar('📒 كلماتي', 'menu', `<span class="chip">${entries.length} كلمة</span>`) + `
+    <div class="tabs" role="tablist">
+      <button role="tab" data-tab="all" aria-selected="true">الكل (${entries.length})</button>
+      <button role="tab" data-tab="learned" aria-selected="false">أتقنتها (${entries.length - weakN})</button>
+      <button role="tab" data-tab="weak" aria-selected="false">تحتاج مراجعة (${weakN})</button>
+    </div>
+    <input class="text-input" id="search" placeholder="ابحث بالإنجليزية أو العربية 🔎" style="margin-bottom:12px" aria-label="بحث">
+    <div id="list" class="word-list"></div>
+    <div class="row center" style="margin-top:16px"><button class="btn btn-primary" data-go="review">🔁 ابدأ مراجعة ذكية</button></div>`);
+  const draw = () => {
+    let es = entries;
+    if (tab === 'learned') es = es.filter(e => !isWeak(e.r));
+    if (tab === 'weak') es = es.filter(e => isWeak(e.r));
+    if (query) es = es.filter(e => e.w.word.toLowerCase().includes(query) || e.w.arabic.includes(query));
+    es = [...es].sort((a, b) => b.r.seen - a.r.seen);
+    $('#list').innerHTML = es.length ? es.map(e => `<div class="word-row"><span class="emoji">${e.w.emoji}</span>
+      <div class="wtxt"><b class="en">${esc(e.w.word)}</b><small>${esc(e.w.arabic)}</small>
+      ${AG().id !== 'kids' ? `<small class="en" style="display:block">${esc(e.w.exampleSentence)}</small>` : ''}</div>
+      ${isWeak(e.r) ? '<span class="badge weak">للمراجعة</span>' : '<span class="badge">✓</span>'}
+      <button class="icon-btn sm" data-say="${esc(e.w.word)}" aria-label="استمع إلى ${esc(e.w.word)}">🔊</button>
+      ${AG().id !== 'kids' ? `<button class="icon-btn sm" data-say="${esc(e.w.exampleSentence)}" aria-label="استمع للجملة">💬</button>` : ''}</div>`).join('')
+      : `<p class="center muted" style="padding:30px">${tab === 'weak' ? 'لا توجد كلمات ضعيفة 🎉' : 'لا توجد كلمات بعد. ابدأ اللعب لتملأ دفترك! 🎮'}</p>`;
+  };
+  $$('[data-tab]').forEach(b => b.onclick = () => { tab = b.dataset.tab; $$('[data-tab]').forEach(x => x.setAttribute('aria-selected', x === b)); draw(); });
+  $('#search').oninput = e => { query = e.target.value.trim().toLowerCase(); draw(); };
+  draw();
+};
+
+Screens.review = () => {
+  if (reviewPool().length < 2) {
+    toast('لا توجد كلمات للمراجعة بعد — العب بعض المستويات أولاً! 🎮');
+    return show('menu');
+  }
+  startRun('review');
+};
+
+Screens.achievements = () => {
+  const p = P();
+  render(topbar('🏅 الإنجازات', 'menu', `<span class="chip">${Object.keys(p.ach).length}/${ACHIEVEMENTS.length}</span>`) + `
+    <div class="stat-grid" style="margin-bottom:16px">
+      <div class="stat"><b>${learnedCount(p)}</b><small>كلمة متعلَّمة</small></div>
+      <div class="stat"><b>${totalStars(p)}</b><small>⭐ نجوم</small></div>
+      <div class="stat"><b>${p.bestStreak}</b><small>🔥 أفضل سلسلة</small></div>
+      <div class="stat"><b>${levelInfo(p.xp).lvl}</b><small>المستوى</small></div>
+    </div>
+    <div class="ach-grid">${ACHIEVEMENTS.map(a => `<div class="ach glass ${p.ach[a.id] ? '' : 'locked'}"><span class="emoji">${a.icon}</span><b>${a.name}</b><small>${a.desc}</small>
+      <small>${p.ach[a.id] ? '✅ ' + new Date(p.ach[a.id]).toLocaleDateString('ar') : '🔒'}</small></div>`).join('')}</div>`);
+};
+
+Screens.leaderboard = () => {
+  const wk = weekKey(), me = P();
+  const rows = Store.data.profiles.map(p => ({ p, xp: p.week && p.week.key === wk ? p.week.xp : 0 })).sort((a, b) => b.xp - a.xp);
+  render(topbar('🏆 متصدّرو الأسبوع', 'menu') + `<div class="panel glass">
+    <p class="muted small" style="margin-bottom:8px">ترتيب الملفات على هذا الجهاز حسب نقاط XP هذا الأسبوع، ويبدأ من جديد كل أسبوع.</p>
+    ${rows.map((r, i) => `<div class="lb-row ${r.p.id === me.id ? 'me' : ''}"><span class="rank">${['🥇', '🥈', '🥉'][i] || i + 1}</span>
+      <span class="avatar sm">${r.p.avatar}</span><div style="flex:1"><b>${esc(r.p.name)}</b><small class="muted" style="display:block">${AGE_GROUPS[r.p.age].icon} ${AGE_GROUPS[r.p.age].ar}</small></div>
+      <b class="en">${r.xp} XP</b></div>`).join('')}</div>
+    ${rows.length < 2 ? '<p class="center muted">أضف ملفات لأصدقائك أو عائلتك لتتنافسوا! 👥</p>' : ''}`);
+};
+
+/** Stats block shared by the adults/teens stats screen and the parent view. */
+function statsHTML(p) {
+  const gp = G(p);
+  const learned = Object.values(gp.words).filter(r => r.c > 0).length;
+  const total = sum(Object.values(p.daily)), today = p.daily[todayKey()] || 0;
+  const acc = p.stats.answers ? Math.round(p.stats.correct / p.stats.answers * 100) : 0;
+  const levels = Object.values(gp.stars).filter(s => s > 0).length;
+  const days = [...Array(7)].map((_, i) => ({
+    s: p.daily[dayKeyOffset(i - 6)] || 0,
+    label: new Date(Date.now() + (i - 6) * 864e5).toLocaleDateString('ar', { weekday: 'short' })
+  }));
+  const max = Math.max(60, ...days.map(d => d.s));
+  const weak = Object.entries(gp.words).filter(([, r]) => isWeak(r)).map(([k]) => VOCAB_BY_KEY.get(k)).filter(Boolean).slice(0, 12);
+  return `<div class="stat-grid">
+    <div class="stat"><b>${learned}</b><small>كلمة متعلَّمة</small></div>
+    <div class="stat"><b>${acc}%</b><small>دقة الإجابات</small></div>
+    <div class="stat"><b>${fmtMin(today)}</b><small>وقت اللعب اليوم</small></div>
+    <div class="stat"><b>${fmtMin(total)}</b><small>إجمالي وقت اللعب</small></div>
+    <div class="stat"><b>${levels}</b><small>مستويات مكتملة</small></div>
+    <div class="stat"><b>${displayStreak(p)} 🔥</b><small>سلسلة الأيام</small></div></div>
+  <div class="panel glass" style="margin-top:14px"><b>⏱️ دقائق اللعب — آخر 7 أيام</b>
+    <div class="chart">${days.map(d => `<div><i style="height:${Math.max(2, d.s / max * 100)}%" title="${Math.round(d.s / 60)} د"></i><small>${d.label}</small></div>`).join('')}</div></div>
+  <div class="panel glass"><b>⚠️ كلمات تحتاج مراجعة</b>${weak.length ? `<div class="word-list" style="margin-top:10px">${weak.map(w => wordRow(w)).join('')}</div>` : '<p class="muted">لا توجد كلمات ضعيفة حالياً 🎉</p>'}</div>`;
+}
+Screens.stats = () => {
+  const p = P();
+  render(topbar('📊 إحصائياتي', 'menu', `<span class="chip">🎯 ${p.settings.goal} د يومياً</span>`) + statsHTML(p));
+};
+Screens.parent = () => {
+  const a = 3 + rand(7), b = 3 + rand(7);
+  render(topbar('👪 لوحة الوالدين', 'menu') + `<div class="form-card glass">
+    <p>هذه الصفحة مخصّصة للوالدين. أجيبوا عن السؤال للمتابعة:</p>
+    <label for="gate" class="en" style="font-size:1.6rem">${a} × ${b} = ?</label>
+    <input id="gate" class="text-input en" inputmode="numeric" autocomplete="off">
+    <button class="btn btn-primary" id="gateGo">دخول</button></div>`);
+  const go = () => {
+    if (+$('#gate').value === a * b) {
+      const p = P();
+      render(topbar('👪 لوحة الوالدين', 'menu') + `<p class="muted" style="margin-bottom:12px">ملخص تقدّم <b>${esc(p.name)}</b> ${p.avatar} في فئة ${AGE_GROUPS[p.age].ar}</p>` + statsHTML(p));
+    } else { toast('إجابة غير صحيحة'); $('#gate').value = ''; }
+  };
+  $('#gateGo').onclick = go;
+  $('#gate').addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+  $('#gate').focus();
+};
+
+Screens.settings = () => {
+  const p = P(), s = p.settings, g = AGE_GROUPS[p.age];
+  const seg = (key, opts) => `<div class="seg" role="group">${opts.map(([v, l]) => `<button data-set="${key}" data-val="${v}" aria-pressed="${String(s[key]) === String(v)}">${l}</button>`).join('')}</div>`;
+  const sw = (key, on, label) => `<button class="switch" role="switch" data-toggle="${key}" aria-checked="${!!on}" aria-label="${label}"></button>`;
+  render(topbar('⚙️ الإعدادات', 'menu') + `
+  <div class="panel glass">
+    <div class="set-row"><div><b>الفئة العمرية</b><small>لكل فئة عوالمها وكلماتها وتقدّمها الخاص</small></div></div>
+    <div class="age-grid" style="margin:4px 0 8px">${Object.values(AGE_GROUPS).map(a => `<button class="age-card" data-agegroup="${a.id}" aria-pressed="${a.id === p.age}">
+      <span class="emoji">${a.icon}</span><b>${a.ar}</b><small>${a.range}</small></button>`).join('')}</div>
+    <div class="set-row"><div><b>سرعة الصوت</b><small>للكلمات والجمل الإنجليزية</small></div>${seg('speed', [['normal', 'عادي'], ['slow', 'بطيء 🐢']])}</div>
+    <div class="set-row"><div><b>المؤثرات الصوتية</b></div>${sw('sound', s.sound, 'المؤثرات الصوتية')}</div>
+    <div class="set-row"><div><b>الموسيقى الهادئة</b></div>${sw('music', s.music, 'الموسيقى')}</div>
+    <div class="set-row"><div><b>الاهتزاز</b><small>عند الإجابة الصحيحة والخاطئة</small></div>${sw('vibrate', s.vibrate !== false, 'الاهتزاز')}</div>
+    <div class="set-row"><div><b>المظهر</b></div>${seg('theme', [['auto', 'تلقائي'], ['light', 'فاتح ☀️'], ['dark', 'داكن 🌙']])}</div>
+    ${g.timer ? `<div class="set-row"><div><b>المؤقّت</b><small>${g.timer} ثانية لكل سؤال${p.age === 'young' ? ' (مؤقّت مريح)' : ''}</small></div>${sw('timer', timerOn(), 'المؤقت')}</div>` : ''}
+    <div class="set-row"><div><b>الهدف اليومي</b></div>${seg('goal', [[5, '5 د'], [10, '10 د'], [20, '20 د']])}</div>
+    ${['kids', 'young'].includes(p.age) ? `<div class="set-row"><div><b>تعليمات صوتية بالعربية</b><small>${Speech.ar ? 'متوفرة على جهازك' : 'لا يوجد صوت عربي على هذا الجهاز (تظهر التعليمات كتابةً)'}</small></div>${sw('arHints', s.arHints, 'التعليمات الصوتية بالعربية')}</div>` : ''}
+  </div>
+  <div class="panel glass">
+    <div class="set-row"><div><b>اختبار تحديد المستوى</b><small>نقترح لك نقطة بداية مناسبة</small></div><button class="btn btn-ghost" id="placement">🎯 ابدأ</button></div>
+    <div class="set-row"><div><b>تجربة الصوت</b><small>${Speech.supported ? (Speech.en ? esc(Speech.en.name) : 'الصوت الافتراضي') : 'النطق غير مدعوم في هذا المتصفح'}</small></div><button class="btn btn-ghost" id="testVoice">🔊 <span class="en">Hello!</span></button></div>
+  </div>
+  <div class="panel glass">
+    <div class="set-row"><div><b>الملفات الشخصية</b><small>${Store.data.profiles.length} ملفات على هذا الجهاز</small></div><button class="btn btn-ghost" data-go="profiles">👥 تبديل / إضافة</button></div>
+    <div class="set-row"><div><b>إعادة ضبط التقدّم</b><small>يحذف النجوم والكلمات والنقاط لهذا الملف</small></div><button class="btn btn-danger" id="reset">إعادة ضبط</button></div>
+    <div class="set-row"><div><b>حذف هذا الملف</b><small>${esc(p.name)}</small></div><button class="btn btn-danger" id="delProfile">حذف</button></div>
+  </div>
+  <p class="center muted small">حكيم | Hakeem — ${Store.ok ? 'يُحفظ تقدّمك على هذا الجهاز' : 'الحفظ غير متاح في هذا المتصفح'}</p>`);
+
+  $$('[data-set]').forEach(b => b.onclick = () => {
+    const key = b.dataset.set;
+    s[key] = key === 'goal' ? +b.dataset.val : b.dataset.val;
+    save(); Sound.click();
+    if (key === 'theme') applyTheme();
+    if (key === 'speed') Speech.say('This is the voice speed.');
+    rerender();
+  });
+  $$('[data-toggle]').forEach(b => b.onclick = () => {
+    const key = b.dataset.toggle;
+    s[key] = key === 'timer' ? !timerOn() : key === 'vibrate' ? s.vibrate === false : !s[key];
+    if (key === 'vibrate') buzz(40);
+    save();
+    if (key === 'music') Music.sync();
+    Sound.click(); rerender();
+  });
+  $$('[data-agegroup]').forEach(b => b.onclick = async () => {
+    const id = b.dataset.agegroup; if (id === p.age) return;
+    const ok = await modal({ title:`التبديل إلى «${AGE_GROUPS[id].ar}»؟`, text:'سيتغيّر المحتوى والتصميم. تقدّمك في الفئة الحالية محفوظ ويمكنك العودة إليه في أي وقت.', ok:'تبديل', cancel:'إلغاء' });
+    if (!ok) return;
+    p.age = id; G(); save(); applyTheme();
+    toast(`${AGE_GROUPS[id].icon} تم التبديل إلى ${AGE_GROUPS[id].ar}`);
+    rerender();
+  });
+  $('#placement').onclick = () => startRun('placement');
+  $('#testVoice').onclick = () => Speech.say('Hello! I am Hakeem, your English friend.');
+  $('#reset').onclick = async () => {
+    const ok = await modal({ title:'إعادة ضبط التقدّم؟ ⚠️', text:`سيتم حذف كل النجوم والكلمات والنقاط والإنجازات الخاصة بـ «${esc(p.name)}». لا يمكن التراجع عن ذلك.`, ok:'نعم، أعد الضبط', cancel:'إلغاء', danger:true });
+    if (!ok) return;
+    const fresh = newProfile(p.name, p.avatar, p.age);
+    Object.assign(p, { xp:0, coins:0, streak:0, bestStreak:0, lastDay:null, daily:{}, week:fresh.week, stats:fresh.stats, ach:{}, groups:{} });
+    save(); toast('تمت إعادة ضبط التقدّم'); show('menu');
+  };
+  $('#delProfile').onclick = async () => {
+    const ok = await modal({ title:'حذف الملف؟', text:`سيتم حذف ملف «${esc(p.name)}» وكل تقدّمه نهائياً.`, ok:'حذف', cancel:'إلغاء', danger:true });
+    if (!ok) return;
+    Store.data.profiles = Store.data.profiles.filter(x => x.id !== p.id);
+    Store.data.currentId = null; save(); Music.sync();
+    show(Store.data.profiles.length ? 'profiles' : 'create');
+  };
+};
+
+/* =========================================================
+   8. GAME ENGINE — building a run of questions
+   ========================================================= */
+const canSpell = w => /^[a-z]{3,10}$/i.test(w.word);
+const sentTokens = s => s.split(/\s+/).map(t => t.replace(/^[^\w']+|[^\w']+$/g, '')).filter(Boolean);
+const canBuild = (w, group) => { const n = sentTokens(w.exampleSentence).length; return n >= 3 && n <= (group === 'young' ? 8 : 11); };
+const canFill = w => wordRegex(w.word).test(w.exampleSentence);
+const FITS = { listen: () => true, look: () => true, truefalse: () => true, speak: () => true, spell: canSpell, fill: canFill, build: canBuild };
+
+/** Words available for smart review: due first, then weak, then recently seen. */
+function reviewPool() {
+  const gp = G();
+  const out = dueWords(10);
+  const extra = Object.entries(gp.words)
+    .filter(([k, r]) => r.c > 0 || r.w > 0)
+    .sort((a, b) => (isWeak(b[1]) - isWeak(a[1])) || (a[1].box - b[1].box))
+    .map(([k]) => VOCAB_BY_KEY.get(k)).filter(w => w && !out.includes(w));
+  while (out.length < 6 && extra.length) out.push(extra.shift());
+  return out;
+}
+
+function startRun(kind, opt = {}) {
+  const p = P(), g = AGE_GROUPS[p.age];
+  const practice = kind === 'placement' || kind === 'review';
+  const run = {
+    kind, group: p.age, w: opt.w || 0, l: opt.l || 0, idx: 0,
+    correct: 0, wrong: 0, skipped: 0, mistakes: [], combo: 0, bestCombo: 0, xp: 0, coins: 0,
+    ratios: [], start: Date.now(), hearts: practice ? Infinity : g.hearts, maxHearts: g.hearts,
+    seenModes: {}, placeLog: [], retry: []
+  };
+  run.questions = buildQuestions(run);
+  if (!run.questions.length) { toast('لا توجد أسئلة متاحة الآن'); return show('menu'); }
+  state.run = run;
+  // Introduce brand-new words before a regular level
+  if (kind === 'level' && run.l < 5) {
+    const fresh = WORLDS[run.group][run.w].words.filter(w => w.level === run.l + 1 && !(G().words[w.key] && G().words[w.key].c));
+    if (fresh.length) return show('intro', fresh);
+  }
+  show('play');
+}
+
+function buildQuestions(run) {
+  const g = AGE_GROUPS[run.group], ws = WORLDS[run.group];
+  if (run.kind === 'level') {
+    const w = ws[run.w], boss = run.l === 5;
+    const pool = boss ? w.words.map(x => ({ x, wt: 1 }))
+      : w.words.filter(x => x.level <= run.l + 1).map(x => ({ x, wt: x.level === run.l + 1 ? 3 : 1 }));
+    const modes = g.modes.filter(m => MODE_UNLOCK[m] <= run.l);
+    return composeRun(run, pool, modes, g.qCount + (boss ? 4 : 0), w.dialogues, boss ? 2 : 1);
+  }
+  if (run.kind === 'daily') {
+    let words = ws.flatMap((w, wi) => w.words.filter(x => isUnlocked(wi, x.level - 1)));
+    if (words.length < 6) words = ws[0].words.slice(0, 6);
+    return composeRun(run, words.map(x => ({ x, wt: 1 })), g.modes.filter(m => m !== 'dialogue'), g.qCount);
+  }
+  if (run.kind === 'review') {
+    const words = reviewPool();
+    const modes = g.modes.filter(m => ['listen', 'look', 'truefalse', 'spell', 'fill', 'speak'].includes(m));
+    return composeRun(run, words.map(x => ({ x, wt: 1 })), modes, Math.max(4, Math.min(10, words.length)));
+  }
+  // placement: 2 questions from each of the first five worlds, harder words
+  const qs = [];
+  for (let wi = 0; wi < Math.min(5, ws.length); wi++) {
+    shuffle(ws[wi].words.filter(x => x.level >= 2)).slice(0, 2).forEach((w, k) => {
+      const mode = run.group !== 'kids' && k === 1 && canFill(w) ? 'fill' : 'listen';
+      const q = makeQ(mode, w, run); q.placeWorld = wi; qs.push(q);
+    });
+  }
+  return qs;
+}
+
+/** Choose a varied sequence of modes, then pick words (weak & new words weighted up). */
+function composeRun(run, pool, modes, n, dialogues = [], maxDlg = 1) {
+  const g = AGE_GROUPS[run.group], gp = G();
+  if (!pool.length) return [];
+  pool.forEach(p => { if (isWeak(gp.words[p.x.key])) p.wt += 3; });
+  const core = modes.filter(m => !['match', 'dialogue', 'pop'].includes(m));
+  let bag = [];
+  const nextMode = prev => {
+    if (!bag.length) bag = shuffle(core);
+    let m = bag.pop();
+    if (m === prev && core.length > 1) { if (!bag.length) bag = shuffle(core); const alt = bag.pop(); bag.unshift(m); m = alt; }
+    return m;
+  };
+  const seq = [];
+  for (let i = 0; i < n; i++) seq.push(i === 0 && core.includes('listen') ? 'listen' : nextMode(seq[i - 1]));
+  if (modes.includes('match') && pool.length >= 2) seq[Math.floor(n / 2)] = 'match';
+  if (modes.includes('pop') && pool.length >= 3) seq[Math.floor(n * 0.75)] = 'pop';
+  const dl = shuffle(dialogues);
+  if (modes.includes('dialogue')) for (let k = 0; k < Math.min(maxDlg, dl.length); k++) seq[n - 2 - k * 3] = 'dialogue';
+
+  const used = new Map(); let last = null, dIdx = 0;
+  const takeWord = fit => {
+    const cands = pool.filter(p => (p.x !== last || pool.length === 1) && fit(p.x, run.group));
+    if (!cands.length) return null;
+    const wts = cands.map(p => p.wt / (1 + 2 * (used.get(p.x) || 0)));
+    let r = Math.random() * sum(wts);
+    for (let i = 0; i < cands.length; i++) { r -= wts[i]; if (r <= 0) return cands[i].x; }
+    return cands[cands.length - 1].x;
+  };
+  return seq.map(mode => {
+    if (mode === 'dialogue') return { mode, dlg: dl[dIdx++], order: shuffle([0, 1, 2, 3]) };
+    if (mode === 'match' || mode === 'pop') {
+      const uniq = [];
+      shuffle(pool.map(p => p.x)).forEach(x => { if (!uniq.some(u => u.emoji === x.emoji)) uniq.push(x); });
+      return { mode, words: uniq.slice(0, mode === 'pop' ? 3 : g.pairs) };
+    }
+    let w = takeWord(FITS[mode]);
+    if (!w) { mode = 'listen'; w = takeWord(FITS.listen) || pool[0].x; }
+    used.set(w, (used.get(w) || 0) + 1); last = w;
+    return makeQ(mode, w, run);
+  });
+}
+
+function makeQ(mode, w, run) {
+  const q = { mode, word: w };
+  if (mode === 'listen' || mode === 'look') q.opts = shuffle([w, ...distractors(w, 3, run.group)]);
+  if (mode === 'truefalse') { q.truth = Math.random() < .5; q.said = q.truth ? w : distractors(w, 1, run.group)[0]; }
+  if (mode === 'fill') q.opts = shuffle([w, ...distractors(w, 3, run.group, true)]);
+  if (mode === 'spell') {
+    const letters = w.word.toLowerCase().split('');
+    let s, tries = 0;
+    do { s = shuffle(letters); } while (s.join('') === letters.join('') && tries++ < 10);
+    q.letters = s.map((ch, i) => ({ id: i, ch }));
+  }
+  if (mode === 'build') {
+    q.tokens = sentTokens(w.exampleSentence);
+    let s, tries = 0;
+    do { s = shuffle(q.tokens.map((t, i) => ({ id: i, t }))); } while (s.map(o => o.t).join(' ') === q.tokens.join(' ') && tries++ < 10);
+    q.bank = s;
+  }
+  return q;
+}
+
+/** Wrong options: same world first (different emoji), then the rest of the age group. */
+function distractors(w, k, group, sameShape = false) {
+  const multi = x => /\s/.test(x.word);
+  const c = shuffle(WORLDS[group][w.worldIndex].words.filter(x => x !== w && x.emoji !== w.emoji && x.word.toLowerCase() !== w.word.toLowerCase()));
+  if (sameShape) c.sort((a, b) => (multi(a) !== multi(w)) - (multi(b) !== multi(w)));
+  const out = [];
+  for (const x of c) { if (out.length >= k) break; if (!out.some(o => o.emoji === x.emoji)) out.push(x); }
+  if (out.length < k) {
+    const extra = shuffle(WORLDS[group].flatMap(x => x.words).filter(x => x !== w && x.emoji !== w.emoji && !out.some(o => o.emoji === x.emoji || o.word === x.word)));
+    out.push(...extra.slice(0, k - out.length));
+  }
+  return out;
+}
+
+/* ---------- intro: meet the new words ---------- */
+Screens.intro = words => {
+  const run = state.run; let i = 0;
+  const draw = () => {
+    const w = words[i], last = i === words.length - 1;
+    render(`<div class="game-top"><button class="icon-btn" id="quit" aria-label="خروج">✕</button><div class="bar"><i style="width:${i / words.length * 100}%"></i></div></div>
+      <p class="prompt">🆕 كلمات جديدة <span class="en">(${i + 1}/${words.length})</span></p>
+      <div class="learn-card glass"><span class="big-emoji emoji">${w.emoji}</span><b class="en word">${esc(w.word)}</b><span class="ar">${esc(w.arabic)}</span>
+        <div class="speak-row" style="margin-top:10px"><button class="speak-btn" data-say="${esc(w.word)}" aria-label="استمع">🔊</button>
+        <button class="speak-btn slow" data-say-slow="${esc(w.word)}" aria-label="استمع ببطء">🐢</button></div>
+        ${run.group !== 'kids' ? `<p class="example"><span class="en">${esc(w.exampleSentence)}</span><button class="icon-btn sm" data-say="${esc(w.exampleSentence)}" aria-label="استمع للجملة">🔊</button></p>` : ''}
+      </div>
+      <div class="row center"><button class="btn btn-ghost" id="skipIntro">تخطَّ</button><button class="btn btn-primary btn-big" id="nextW">${last ? 'ابدأ التحدي 🚀' : 'التالي ←'}</button></div>`);
+    $('#quit').onclick = quitRun;
+    $('#skipIntro').onclick = () => show('play');
+    $('#nextW').onclick = () => { Sound.click(); if (last) show('play'); else { i++; draw(); } };
+    setTimeout(() => { if (state.screen === 'intro') Speech.say(w.word); }, 350);
+    $('#nextW').focus({ preventScroll: true });
+  };
+  draw();
+  state.key = e => { if (e.key === 'r' || e.key === 'R') Speech.say(words[i].word); };
+  Mascot.say(run.group === 'adults' ? 'تعرّف على الكلمات الجديدة قبل البدء.' : 'كلمات جديدة! استمع وكرّرها بصوت عالٍ 🔊', 'think');
+};
+
+/* ---------- play screen + HUD ---------- */
+const comboMult = c => c >= 6 ? 3 : c >= 3 ? 2 : 1;
+Screens.play = () => {
+  const run = state.run;
+  const tag = { level: run.l === 5 ? '👑 مستوى الزعيم' : `${WORLDS[run.group][run.w].icon} المستوى ${run.l + 1}`,
+                daily: '📅 تحدي اليوم', review: '🔁 مراجعة ذكية', placement: '🎯 تحديد المستوى' }[run.kind];
+  render(`<div class="game-top"><button class="icon-btn" id="quit" aria-label="خروج">✕</button>
+      <div class="bar" role="progressbar" aria-label="التقدّم"><i id="prog"></i></div><span id="hearts" class="hearts" aria-label="القلوب"></span></div>
+    <div class="hud-sub"><span class="kind-tag" id="kindTag" data-tag="${tag}">${tag}</span><span id="combo" class="combo" aria-live="polite"></span>
+      <button class="hint-btn" id="hintBtn" aria-label="تلميح">💡<small>${run.group === 'kids' ? 'مجاني' : SHOP.hintPrice + ' 🪙'}</small></button></div>
+    <div id="timer" class="timer hidden" aria-hidden="true"><i></i></div>
+    <div id="stage" class="stage"></div>`);
+  $('#quit').onclick = quitRun;
+  $('#hintBtn').onclick = useHint;
+  renderQ();
+};
+function updateHint() {
+  const run = state.run, b = $('#hintBtn'); if (!b || !run) return;
+  const q = run.questions[run.idx];
+  b.disabled = !q || !q.hint || run.answered;
+}
+/** 💡 Hint: free for little ones, costs coins for everyone else. */
+function useHint() {
+  const run = state.run, q = run && run.questions[run.idx], p = P();
+  if (!q || !q.hint || run.answered) return;
+  const free = run.group === 'kids';
+  if (!free && p.coins < SHOP.hintPrice) { toast(`تحتاج ${SHOP.hintPrice} 🪙 لاستخدام التلميح`); Sound.wrong(); return; }
+  if (q.hint() === false) return;
+  if (!free) { p.coins -= SHOP.hintPrice; floatGain(`-${SHOP.hintPrice} 🪙`); }
+  Sound.coin(); save(); updateHint();
+}
+/** Hint for option-based modes: hide two wrong answers. */
+const fiftyFifty = (q, btns, right) => () => {
+  shuffle(btns.map((b, j) => j).filter(j => !right(j) && !btns[j].disabled)).slice(0, 2)
+    .forEach(j => { btns[j].disabled = true; btns[j].classList.add('dim'); });
+  q.hint = null;
+};
+function updateHud() {
+  const run = state.run, pr = $('#prog'); if (!pr) return;
+  pr.style.width = (run.idx / run.questions.length * 100) + '%';
+  $('#hearts').textContent = Number.isFinite(run.hearts)
+    ? '❤️'.repeat(Math.max(0, run.hearts)) + '🤍'.repeat(Math.max(0, run.maxHearts - run.hearts))
+    : (run.kind === 'placement' || run.kind === 'review') ? '' : '💖 ∞';
+  $('#combo').textContent = AGE_GROUPS[run.group].combo && run.combo >= 2 ? `⚡ ${run.combo} كومبو ×${comboMult(run.combo)}` : '';
+}
+function renderQ() {
+  const run = state.run, q = run.questions[run.idx], idx = run.idx;
+  run.answered = false; run.qStart = Date.now();
+  updateHud();
+  const stage = $('#stage'); stage.innerHTML = '';
+  stage.classList.remove('q-in'); void stage.offsetWidth; stage.classList.add('q-in');
+  const tagEl = $('#kindTag'); tagEl.textContent = q.retry ? '🔁 جولة التصحيح' : tagEl.dataset.tag;
+  const pr = MODE_PROMPTS[q.mode];
+  const prompt = (run.group === 'kids' && pr.kids) || pr.def;
+  const first = !run.seenModes[q.mode]; run.seenModes[q.mode] = true;
+  q.alive = () => state.run === run && run.idx === idx && state.screen === 'play' && !run.answered;
+  MODES[q.mode](q, stage, run, prompt, first);
+  updateHint();
+  if (timerOn() && run.kind !== 'placement' && ['listen', 'look', 'truefalse', 'fill', 'spell', 'build'].includes(q.mode)) {
+    const base = AGE_GROUPS[run.group].timer;
+    startTimer(q.mode === 'spell' || q.mode === 'build' ? Math.round(base * 1.5) : base);
+  }
+}
+function startTimer(sec) {
+  const el = $('#timer'); if (!el) return;
+  el.classList.remove('hidden');
+  const bar = el.firstElementChild;
+  bar.style.transition = 'none'; bar.style.width = '100%'; void bar.offsetWidth;
+  bar.style.transition = `width ${sec}s linear`; bar.style.width = '0%';
+  clearTimeout(state.timerId);
+  state.timerId = setTimeout(() => {
+    const run = state.run, q = run && run.questions[run.idx];
+    if (!q || run.answered || state.screen !== 'play') return;
+    q.reveal && q.reveal();
+    answer(false, { timeout: true });
+  }, sec * 1000);
+}
+function stopTimer() {
+  clearTimeout(state.timerId);
+  const el = $('#timer');
+  if (el) { const bar = el.firstElementChild, w = getComputedStyle(bar).width; bar.style.transition = 'none'; bar.style.width = w; }
+}
+
+/* ---------- answering + feedback ---------- */
+const SPEED_LIMIT = { listen: 8, look: 8, truefalse: 6, fill: 12, spell: 15, build: 22 };   // seconds for a "fast" answer
+const qWords = q => (q.mode === 'match' || q.mode === 'pop') ? q.words : q.mode === 'dialogue' ? [] : [q.word];
+// remember where the player last tapped (for the floating +XP)
+document.addEventListener('pointerdown', e => { state.lastPt = { x: e.clientX, y: e.clientY }; }, true);
+
+function answer(ok, extra = {}) {
+  const run = state.run; if (!run || run.answered) return;
+  run.answered = true; stopTimer(); stopRecognition();
+  const q = run.questions[run.idx], p = P(), g = AGE_GROUPS[run.group];
+  const secs = (Date.now() - run.qStart) / 1000;
+  const retry = !!q.retry;   // correction-round questions don't affect stars or hearts
+  if (extra.skip) run.skipped++;
+  else if (ok) {
+    if (!retry) run.correct++;
+    run.combo++;
+    run.bestCombo = Math.max(run.bestCombo, run.combo);
+    p.stats.bestCombo = Math.max(p.stats.bestCombo, run.combo);
+    const xp = retry ? Math.ceil(g.xp / 2) : g.xp * (g.combo ? comboMult(run.combo) : 1);
+    addXP(xp); run.xp += xp; p.coins += g.coins; run.coins += g.coins;
+    if (q.mode === 'speak') { p.stats.speak++; questEvent('speak'); }
+    if (SPEED_LIMIT[q.mode] && !retry) run.ratios.push(secs / (SPEED_LIMIT[q.mode] * (run.group === 'kids' ? 2 : 1)));
+    questEvent('correct'); questEvent('combo', run.combo, 'max');
+    Sound.correct(run.combo); buzz(18);
+    floatGain(`+${xp} XP`, `+${g.coins} 🪙`);
+  } else {
+    if (!retry) {
+      run.wrong++;
+      if (Number.isFinite(run.hearts)) run.hearts--;
+      run.mistakes.push(...(q.mode === 'dialogue' ? [{ dlg: q.dlg }] : qWords(q)));
+      if (run.kind === 'level' || run.kind === 'daily')
+        qWords(q).forEach(w => { if (!run.retry.includes(w) && run.retry.length < 3) run.retry.push(w); });
+    }
+    run.combo = 0;
+    Sound.wrong(); buzz([40, 60, 40]);
+  }
+  if (!extra.skip) {
+    p.stats.answers++; if (ok) p.stats.correct++;
+    qWords(q).forEach(w => {
+      const fresh = !(G().words[w.key] && G().words[w.key].c);
+      srsMark(w, ok);
+      if (ok && fresh) questEvent('words');
+    });
+  }
+  if (run.kind === 'placement') run.placeLog.push({ w: q.placeWorld, ok: ok && !extra.skip });
+  touchStreak(); save(); updateHud();
+  if (ok && g.combo && run.combo >= 3) { const c = $('#combo'); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }
+  // Hakeem reacts; his line is shown inside the feedback panel so it never covers it
+  extra.tip = tip(extra.skip ? 'tip' : ok ? 'correct' : 'wrong');
+  Mascot.mood(extra.skip ? 'think' : !ok ? 'sad' : run.combo >= 5 ? 'celebrate' : 'happy', 2000);
+  showFeedback(ok, q, extra);
+  updateHint();
+  checkAchievements();
+}
+
+function showFeedback(ok, q, extra) {
+  const fb = $('#feedback'), run = state.run;
+  let title = extra.skip ? (extra.practice ? '👏 أحسنت على التدريب!' : '⏭️ تم التخطّي')
+    : ok ? '✅ ' + pick(['إجابة صحيحة!', 'رائع!', 'ممتاز!', 'أحسنت!'])
+    : q.mode === 'match' ? '😅 محاولات كثيرة! راجع الأزواج:'
+    : q.mode === 'pop' ? '🎈 طارت بالونات كثيرة! راجع الكلمات:'
+    : extra.timeout ? '⏰ انتهى الوقت! الإجابة الصحيحة:' : '❌ الإجابة الصحيحة:';
+  if (extra.score != null) title += ` <span class="en">(${extra.score}%)</span>`;
+  let body = '';
+  if (q.mode === 'dialogue') {
+    const d = q.dlg;
+    body = `<p class="en" style="font-weight:700">${esc(d.q)}</p><p class="fb-sent"><span class="en">➜ ${esc(d.options[d.answer])}</span></p>
+      <div class="dlg-lines" style="margin-bottom:10px">${dlgLinesHTML(d)}</div>
+      <button class="btn btn-ghost" id="fbReplay" style="margin-bottom:10px">🔊 أعد الحوار</button>`;
+  } else if (q.mode === 'match' || q.mode === 'pop') {
+    body = `<div class="row" style="margin-bottom:10px">${q.words.map(w => `<button class="chip" data-say="${esc(w.word)}"><span class="emoji">${w.emoji}</span> <span class="en">${esc(w.word)}</span> · ${esc(w.arabic)}</button>`).join('')}</div>`;
+  } else {
+    const w = q.word;
+    body = `<div class="fb-word"><span class="emoji">${w.emoji}</span><div><b class="en">${esc(w.word)}</b><span>${esc(w.arabic)}</span></div>
+      <button class="icon-btn" data-say="${esc(w.word)}" aria-label="استمع للكلمة">🔊</button><button class="icon-btn" data-say-slow="${esc(w.word)}" aria-label="استمع ببطء">🐢</button></div>
+      ${q.mode === 'truefalse' && !q.truth ? `<p class="fb-sent">🔊 الكلمة التي سمعتها: <span class="en">&nbsp;${esc(q.said.word)}&nbsp;</span> (${esc(q.said.arabic)})</p>` : ''}
+      ${run.group !== 'kids' ? `<div class="fb-sent"><span class="en">${esc(w.exampleSentence)}</span><button class="icon-btn sm" data-say="${esc(w.exampleSentence)}" aria-label="استمع للجملة">🔊</button></div>` : ''}`;
+  }
+  const lastQ = (run.idx === run.questions.length - 1 && (!run.retry.length || run.retryDone)) || (Number.isFinite(run.hearts) && run.hearts <= 0);
+  fb.className = 'feedback show ' + (extra.skip ? 'skip' : ok ? 'ok' : 'no');
+  Mascot.bubble.classList.remove('show');
+  fb.innerHTML = `<div class="fb-title">${title}</div>${extra.tip ? `<p class="fb-tip">🦉 ${esc(extra.tip)}</p>` : ''}${body}<button class="btn btn-primary btn-wide" id="nextQ">${lastQ ? 'إنهاء 🏁' : 'متابعة ←'}</button>`;
+  $('#nextQ').onclick = nextQ;
+  if (q.mode === 'dialogue') $('#fbReplay').onclick = () => playDialogue(q.dlg);
+  setTimeout(() => { const b = $('#nextQ'); b && b.focus({ preventScroll: true }); }, 60);
+  state.key = e => { if (e.key === 'Enter') nextQ(); };
+  // audio reinforcement: hear the correct word / full sentence
+  if (!extra.skip && q.word) {
+    const text = (q.mode === 'fill' || q.mode === 'build') ? q.word.exampleSentence : q.word.word;
+    if (q.mode !== 'speak' || !ok) setTimeout(() => { if (fb.classList.contains('show')) Speech.say(text); }, ok ? 250 : 500);
+  }
+}
+
+function nextQ() {
+  const run = state.run, fb = $('#feedback');
+  if (!run || !fb || !fb.classList.contains('show')) return;
+  fb.classList.remove('show'); Speech.cancel(); state.key = null;
+  if (Number.isFinite(run.hearts) && run.hearts <= 0) return show('fail');
+  run.idx++;
+  // Correction round: words answered wrongly come back once before the results
+  if (run.idx >= run.questions.length && run.retry.length && !run.retryDone) {
+    run.retryDone = true;
+    const modes = AGE_GROUPS[run.group].modes.includes('look') ? ['look', 'listen'] : ['listen', 'truefalse'];
+    run.retry.forEach((w, i) => { const q = makeQ(modes[i % 2], w, run); q.retry = true; run.questions.push(q); });
+    toast('🔁 جولة التصحيح: لنجرّب الكلمات التي أخطأت فيها مرة أخرى!');
+    Mascot.say(run.group === 'adults' ? 'لنراجع ما أخطأت فيه.' : 'لا تقلق، لنجرّبها مرة أخرى! 💪', 'think');
+  }
+  if (run.idx >= run.questions.length) return finishRun();
+  renderQ();
+}
+
+async function quitRun() {
+  const run = state.run;
+  const ok = await modal({ title:'الخروج من المستوى؟', text:'سيضيع تقدّمك في هذه الجولة (ستحتفظ بالنقاط التي جمعتها).', ok:'خروج', cancel:'متابعة اللعب', danger:true });
+  if (ok) { state.run = null; show(run && run.kind === 'level' ? 'map' : 'menu'); }
+}
+
+function finishRun() {
+  const run = state.run, p = P(), gp = G();
+  const answered = run.correct + run.wrong;
+  run.acc = answered ? run.correct / answered : 1;
+  const avgRatio = run.ratios.length ? sum(run.ratios) / run.ratios.length : 0;
+  run.stars = run.acc >= 0.9 ? (avgRatio <= 1 ? 3 : 2) : run.acc >= 0.7 ? 2 : 1;
+  run.time = (Date.now() - run.start) / 1000;
+  if (run.kind === 'level') {
+    const k = run.w + '-' + run.l, prev = gp.stars[k] || 0;
+    gp.stars[k] = Math.max(prev, run.stars);
+    const bonus = run.stars * 10 + (run.l === 5 ? 30 : 0), coins = run.stars * 5;
+    addXP(bonus); run.xp += bonus; p.coins += coins; run.coins += coins;
+    p.stats.levels++;
+    if (answered && !run.wrong) p.stats.perfect++;
+    if (run.l === 5) p.stats.boss++;
+    run.worldComplete = run.l === 5 && !prev;
+    run.firstClear = !prev;
+    questEvent('levels'); questEvent('stars', run.stars);
+  } else if (run.kind === 'daily' && gp.dailyDone !== todayKey()) {
+    gp.dailyDone = todayKey(); p.stats.daily++;
+    addXP(50); run.xp += 50; p.coins += 50; run.coins += 50; run.bonus = true;
+  } else if (run.kind === 'review') { p.stats.reviews++; questEvent('review'); }
+  save();
+  show('results');
+  checkAchievements();
+}
+
+function mistakesHTML(list) {
+  const seen = new Set();
+  const items = list.filter(x => { const k = x.dlg ? x.dlg.q : x.key; if (seen.has(k)) return false; seen.add(k); return true; });
+  if (!items.length) return '<p class="chip">🎯 لا أخطاء — عمل رائع!</p>';
+  return `<div style="width:100%;text-align:start"><h2 class="section-title">📝 راجع أخطاءك</h2><div class="word-list">${items.map(x => x.dlg
+    ? `<div class="word-row"><span class="emoji">💬</span><div class="wtxt"><b class="en">${esc(x.dlg.q)}</b><small class="en">➜ ${esc(x.dlg.options[x.dlg.answer])}</small></div></div>`
+    : wordRow(x)).join('')}</div></div>`;
+}
+
+Screens.results = () => {
+  const run = state.run, ws = WORLDS[run.group];
+  if (run.kind === 'placement') return placementResults(run);
+  const head = { 3: 'أداء مثالي! 🌟', 2: 'عمل رائع! 👏', 1: 'أحسنت! يمكنك التحسّن 💪' }[run.stars];
+  let next = null;
+  if (run.kind === 'level') {
+    let nw = run.w, nl = run.l + 1;
+    if (nl >= LEVELS_PER_WORLD) { nw++; nl = 0; }
+    if (nw < ws.length && isUnlocked(nw, nl)) next = { w: nw, l: nl };
+  }
+  render(`<div class="results glass">
+    <div class="owl-wrap celebrate" style="width:110px;height:122px">${owlSVG()}</div>
+    <h1>${run.kind === 'level' ? head : run.kind === 'daily' ? 'أنهيت تحدي اليوم! 📅' : 'أنهيت المراجعة! 🔁'}</h1>
+    ${run.worldComplete ? `<p class="chip">🏆 أكملت عالم ${ws[run.w].ar}!</p>` : ''}
+    ${run.kind === 'level' ? `<div class="big-stars" role="img" aria-label="${run.stars} من 3 نجوم"><span>★</span><span>★</span><span>★</span></div>` : ''}
+    <div class="stat-grid">
+      <div class="stat"><b>${Math.round(run.acc * 100)}%</b><small>الدقة</small></div>
+      <div class="stat"><b>+${run.xp}</b><small>XP</small></div>
+      <div class="stat"><b>+${run.coins}</b><small>🪙 عملات</small></div>
+      <div class="stat"><b>${fmtTime(run.time)}</b><small>الوقت</small></div>
+    </div>
+    ${run.bonus ? '<p class="chip">🎁 مكافأة التحدي: +50 XP و +50 🪙</p>' : ''}
+    ${run.kind === 'level' && !run.chestOpened ? '<button class="chest" id="chest"><span class="emoji">🎁</span><small>اضغط لفتح صندوق الكنز!</small></button>' : ''}
+    ${mistakesHTML(run.mistakes)}
+    <div class="row center">
+      ${next ? `<button class="btn btn-primary btn-big" id="nextLevel">${next.l === 0 ? 'العالم التالي 🌍' : 'المستوى التالي ←'}</button>` : ''}
+      <button class="btn btn-ghost" id="retry">🔄 إعادة</button>
+      <button class="btn btn-ghost" data-go="${run.kind === 'level' ? 'map' : 'menu'}">${run.kind === 'level' ? '🗺️ الخريطة' : '🏠 الرئيسية'}</button>
+    </div></div>`);
+  $$('.big-stars span').forEach((s, i) => { if (i < run.stars) setTimeout(() => { s.classList.add('on'); Sound.star(i); }, 600 + i * 450); });
+  Sound.fanfare();
+  if (run.stars >= 2 || run.kind !== 'level') setTimeout(() => Confetti.burst(), 300);
+  Mascot.say(tip('done'), 'celebrate');
+  $('#retry').onclick = () => startRun(run.kind, { w: run.w, l: run.l });
+  if (next) { $('#nextLevel').onclick = () => startRun('level', next); $('#nextLevel').focus(); }
+  const chest = $('#chest');
+  if (chest) chest.onclick = () => {
+    if (run.chestOpened) return;
+    run.chestOpened = true;
+    // variable reward: more stars → bigger chest; replays give half
+    const coins = Math.max(3, Math.round((run.stars * 6 + 4 + rand(12)) * (run.firstClear ? 1 : .5)));
+    P().coins += coins; run.coins += coins; save();
+    chest.classList.add('open');
+    chest.innerHTML = `<span class="emoji">🪙</span><b class="en">+${coins}</b><small>عملات من الصندوق!</small>`;
+    Sound.chest(); buzz(40); Confetti.burst(90);
+    const st = $$('.stat b')[2]; if (st) st.textContent = '+' + run.coins;
+    checkAchievements();
+  };
+};
+
+Screens.fail = () => {
+  const run = state.run;
+  render(`<div class="results glass">
+    <div class="owl-wrap sad" style="width:110px;height:122px">${owlSVG()}</div>
+    <h1>نفدت القلوب 💔</h1><p class="muted">لا تستسلم! كل محاولة تجعلك أقوى.</p>
+    ${mistakesHTML(run.mistakes)}
+    <div class="row center"><button class="btn btn-primary btn-big" id="retry">🔄 حاول مجدداً</button>
+    <button class="btn btn-ghost" data-go="${run.kind === 'level' ? 'map' : 'menu'}">العودة</button></div></div>`);
+  $('#retry').onclick = () => startRun(run.kind, { w: run.w, l: run.l });
+  $('#retry').focus();
+  Mascot.say(tip('wrong'), 'sad');
+};
+
+function placementResults(run) {
+  const ws = WORLDS[run.group], gp = G();
+  let k = 0;
+  for (let wi = 0; wi < ws.length; wi++) {
+    const log = run.placeLog.filter(x => x.w === wi);
+    if (log.length && log.every(x => x.ok)) k++; else break;
+  }
+  gp.placement = Math.max(gp.placement, Math.min(k, ws.length - 1));
+  gp.placed = true; save();
+  const w = ws[gp.placement];
+  render(`<div class="results glass">
+    <div class="owl-wrap celebrate" style="width:110px;height:122px">${owlSVG()}</div>
+    <h1>نتيجة تحديد المستوى 🎯</h1>
+    <p>أجبت عن <b>${run.correct}</b> من ${run.questions.length} إجابات صحيحة.</p>
+    <div class="mini-card glass"><span class="emoji">${w.icon}</span><span><b>ننصحك بالبدء من: ${w.ar}</b><small class="en">${w.name}</small></span></div>
+    <p class="muted">${gp.placement > 0 ? `فتحنا لك ${gp.placement === 1 ? 'العالم الأول' : gp.placement + ' عوالم'} يمكنك العودة إليها متى شئت.` : 'لنبدأ من البداية ونبني أساساً قوياً! 💪'}</p>
+    <div class="row center"><button class="btn btn-primary btn-big" data-go="map">إلى الخريطة 🗺️</button><button class="btn btn-ghost" data-go="menu">الرئيسية</button></div></div>`);
+  Sound.fanfare(); Confetti.burst(80);
+  Mascot.say(tip('done'), 'celebrate');
+}
+
+/* =========================================================
+   9. GAME MODES — each renders into the stage and calls answer()
+   ========================================================= */
+const MODES = {};
+const optClasses = (btns, isRight, chosen) => btns.forEach((b, j) => {
+  b.disabled = true;
+  b.classList.add(isRight(j) ? 'correct' : j === chosen ? 'wrong' : 'dim');
+});
+
+/* 1) Listen & Pick */
+MODES.listen = (q, st, run, prompt, first) => {
+  const label = run.group === 'teens' || run.group === 'adults';
+  st.innerHTML = `<p class="prompt">${prompt}</p>
+    <div class="speak-row"><button class="speak-btn" id="play" aria-label="استمع للكلمة">🔊</button><button class="speak-btn slow" id="slow" aria-label="استمع ببطء">🐢</button></div>
+    <div class="options">${q.opts.map((o, i) => `<button class="opt" data-i="${i}" aria-label="الخيار ${i + 1}${label ? ': ' + esc(o.arabic) : ''}">
+      <span class="kbd">${i + 1}</span><span class="emoji">${o.emoji}</span>${label ? `<span class="lbl">${esc(o.arabic)}</span>` : ''}</button>`).join('')}</div>`;
+  const play = slow => { Speech.say(q.word.word, { slow }); pulse('#play'); };
+  $('#play').onclick = () => play(false);
+  $('#slow').onclick = () => play(true);
+  const btns = $$('.opt', st), right = j => q.opts[j] === q.word;
+  const choose = i => { if (run.answered || btns[i].disabled) return; optClasses(btns, right, i); answer(right(i)); };
+  btns.forEach((b, i) => b.onclick = () => choose(i));
+  q.reveal = () => optClasses(btns, right, -1);
+  q.hint = fiftyFifty(q, btns, right);
+  state.key = e => { const n = +e.key; if (n >= 1 && n <= 4) choose(n - 1); else if (e.key === 'r' || e.key === 'R') play(false); };
+  setTimeout(() => Speech.hintThen(first ? prompt : null, () => { if (q.alive()) play(false); }), 300);
+};
+
+/* 8) See & Choose: picture → English word */
+MODES.look = (q, st, run, prompt) => {
+  const long = q.opts.some(o => o.word.length > 13);
+  st.innerHTML = `<p class="prompt">${prompt}</p><span class="big-emoji emoji">${q.word.emoji}</span>
+    <div class="options ${long ? 'list' : ''}">${q.opts.map((o, i) => `<button class="opt text en" data-i="${i}"><span class="kbd">${i + 1}</span>${esc(o.word)}</button>`).join('')}</div>`;
+  const btns = $$('.opt', st), right = j => q.opts[j] === q.word;
+  const choose = i => { if (run.answered || btns[i].disabled) return; optClasses(btns, right, i); answer(right(i)); };
+  btns.forEach((b, i) => b.onclick = () => choose(i));
+  q.reveal = () => optClasses(btns, right, -1);
+  q.hint = fiftyFifty(q, btns, right);
+  state.key = e => { const n = +e.key; if (n >= 1 && n <= 4) choose(n - 1); };
+};
+
+/* 9) True or False: does the word you hear match the picture? */
+MODES.truefalse = (q, st, run, prompt, first) => {
+  st.innerHTML = `<p class="prompt">${prompt}</p><span class="big-emoji emoji">${q.word.emoji}</span>
+    <div class="speak-row"><button class="speak-btn" id="play" aria-label="استمع">🔊</button>
+      ${run.group !== 'kids' ? `<b class="en tf-word">${esc(q.said.word)}</b>` : ''}</div>
+    <div class="tf-row"><button class="tf yes" id="tfYes"><span class="emoji">✅</span>صح</button><button class="tf no" id="tfNo"><span class="emoji">❌</span>خطأ</button></div>`;
+  const play = () => { Speech.say(q.said.word); pulse('#play'); };
+  const yes = $('#tfYes'), no = $('#tfNo');
+  const mark = chosen => {
+    yes.disabled = no.disabled = true;
+    (q.truth ? yes : no).classList.add('correct');
+    if (chosen && chosen !== (q.truth ? yes : no)) chosen.classList.add('wrong');
+  };
+  const choose = saidYes => { if (run.answered) return; mark(saidYes ? yes : no); answer(saidYes === q.truth); };
+  $('#play').onclick = play;
+  yes.onclick = () => choose(true); no.onclick = () => choose(false);
+  q.reveal = () => mark(null);
+  state.key = e => { if (e.key === '1') choose(true); else if (e.key === '2') choose(false); else if (e.key === 'r' || e.key === 'R') play(); };
+  setTimeout(() => Speech.hintThen(first ? prompt : null, () => { if (q.alive()) play(); }), 300);
+};
+
+/* 10) Word Balloons: hear a word, pop the matching balloon before it flies away */
+MODES.pop = (q, st, run, prompt, first) => {
+  const targets = q.words, dur = { kids: 9, young: 7.5 }[run.group] || 6.5;
+  let t = 0, misses = 0, opts = [];
+  st.innerHTML = `<p class="prompt">${prompt}</p>
+    <div class="speak-row"><button class="speak-btn slow" id="play" aria-label="استمع">🔊</button><span class="chip" id="popCount"></span></div>
+    <div class="pop-field" id="field"></div>`;
+  const field = $('#field');
+  const say = () => { Speech.say(targets[t].word); pulse('#play'); };
+  const spawn = () => {
+    if (!q.alive()) return;
+    const target = targets[t];
+    opts = shuffle([target, ...distractors(target, run.group === 'kids' ? 2 : 3, run.group)]);
+    $('#popCount').textContent = `🎈 ${t + 1} / ${targets.length}`;
+    field.innerHTML = opts.map((o, i) => `<button class="balloon" style="left:${4 + i * (88 / opts.length) + rand(5)}%;animation-duration:${dur + rand(15) / 10}s;animation-delay:${(i * .3 + rand(4) / 10).toFixed(1)}s;--hue:${(i * 83 + rand(40)) % 360}" aria-label="بالون ${i + 1}">
+      <span class="emoji">${o.emoji}</span></button>`).join('');
+    const bs = $$('.balloon', field);
+    bs.forEach((b, i) => b.onclick = () => {
+      if (!q.alive() || b.classList.contains('popped')) return;
+      if (opts[i] === target) {
+        b.classList.add('popped'); bs.forEach(x => x.disabled = true);
+        Sound.pop(); buzz(20); t++;
+        if (t >= targets.length) setTimeout(() => answer(run.group === 'kids' || misses <= 2, { misses }), 450);
+        else setTimeout(() => { spawn(); say(); }, 600);
+      } else {
+        misses++; Sound.wrong(); buzz([30, 40, 30]);
+        b.classList.remove('wrongb'); void b.offsetWidth; b.classList.add('wrongb');
+      }
+    });
+    const tb = bs[opts.indexOf(target)];
+    tb.addEventListener('animationend', e => {
+      if (e.target !== tb || e.animationName !== 'rise' || !q.alive() || tb.classList.contains('popped')) return;
+      misses++;
+      Mascot.say('طار البالون! استمع وحاول مرة أخرى 🎈', 'sad', 1800);
+      spawn(); say();
+    });
+  };
+  $('#play').onclick = say;
+  q.hint = () => { const i = opts.indexOf(targets[t]); const b = $$('.balloon', field)[i]; if (!b) return false; b.classList.add('glow'); };
+  state.key = e => {
+    if (e.key === 'r' || e.key === 'R') say();
+    else { const n = +e.key; const bs = $$('.balloon', field); if (n >= 1 && n <= bs.length) bs[n - 1].click(); }
+  };
+  spawn();
+  setTimeout(() => Speech.hintThen(first ? prompt : null, () => { if (q.alive()) say(); }), 300);
+};
+
+/* 6) Fill the Gap */
+MODES.fill = (q, st, run, prompt) => {
+  const s = q.word.exampleSentence, m = wordRegex(q.word.word).exec(s);
+  const long = q.opts.some(o => o.word.length > 13);
+  st.innerHTML = `<p class="prompt">${prompt}</p>
+    ${run.group === 'young' ? `<span class="emoji" style="font-size:4rem">${q.word.emoji}</span>` : ''}
+    <p class="sentence glass en">${esc(s.slice(0, m.index))}<span class="blank" id="blank">?</span>${esc(s.slice(m.index + m[0].length))}</p>
+    <div class="options ${long ? 'list' : ''}">${q.opts.map((o, i) => `<button class="opt text en" data-i="${i}"><span class="kbd">${i + 1}</span>${esc(o.word)}</button>`).join('')}</div>`;
+  const btns = $$('.opt', st), right = j => q.opts[j] === q.word, blank = $('#blank');
+  const choose = i => {
+    if (run.answered || btns[i].disabled) return;
+    const ok = right(i);
+    blank.textContent = ok ? m[0] : q.opts[i].word;
+    blank.classList.add(ok ? 'ok' : 'no');
+    optClasses(btns, right, i); answer(ok);
+  };
+  btns.forEach((b, i) => b.onclick = () => choose(i));
+  q.reveal = () => { blank.textContent = m[0]; blank.classList.add('ok'); optClasses(btns, right, -1); };
+  q.hint = fiftyFifty(q, btns, right);
+  state.key = e => { const n = +e.key; if (n >= 1 && n <= 4) choose(n - 1); };
+};
+
+/** Pointer-based drag & drop that also works for touch; a plain tap/click calls tap(). */
+function makeDraggable(el, { tap, drop }) {
+  el.addEventListener('pointerdown', e => {
+    if (e.button > 0) return;
+    const sx = e.clientX, sy = e.clientY, pid = e.pointerId;
+    let ghost = null, moved = false;
+    const move = ev => {
+      if (ev.pointerId !== pid) return;
+      if (!moved && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 8) {
+        moved = true;
+        const r = el.getBoundingClientRect();
+        ghost = el.cloneNode(true); ghost.classList.add('drag-ghost');
+        ghost.style.width = r.width + 'px'; ghost.style.height = r.height + 'px';
+        document.body.appendChild(ghost); el.classList.add('dragging');
+      }
+      if (moved) {
+        ev.preventDefault();
+        ghost.style.left = (ev.clientX - ghost.offsetWidth / 2) + 'px';
+        ghost.style.top = (ev.clientY - ghost.offsetHeight / 2) + 'px';
+      }
+    };
+    const up = ev => {
+      if (ev.pointerId !== pid) return;
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+      if (!moved) return;
+      ghost.remove(); el.classList.remove('dragging');
+      el._dragged = true; setTimeout(() => { el._dragged = false; }, 60);
+      if (ev.type === 'pointerup') drop(document.elementFromPoint(ev.clientX, ev.clientY), ev);
+    };
+    window.addEventListener('pointermove', move, { passive: false });
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+  });
+  el.addEventListener('click', () => { if (!el._dragged) tap(); });
+}
+
+/* 2) See & Spell */
+MODES.spell = (q, st, run, prompt) => {
+  const target = q.word.word.toLowerCase(), slots = Array(target.length).fill(null);
+  const chOf = id => q.letters[q.letters.findIndex(l => l.id === id)].ch;
+  st.innerHTML = `<p class="prompt">${prompt}</p><span class="big-emoji emoji">${q.word.emoji}</span>
+    <p class="hint-ar">${esc(q.word.arabic)} <button class="icon-btn sm" id="play" aria-label="استمع">🔊</button></p>
+    <div class="slots" id="slots" aria-label="خانات الحروف"></div><div class="bank" id="bank" aria-label="الحروف"></div>
+    <div class="row center"><button class="btn btn-ghost" id="clear">↺ مسح</button><button class="btn btn-primary" id="check" disabled>تحقّق ✓</button></div>`;
+  const slotsEl = $('#slots'), bankEl = $('#bank'), checkBtn = $('#check');
+  const place = (id, at) => { if (at == null) at = slots.indexOf(null); if (at >= 0) slots[at] = id; };
+  const draw = () => {
+    slotsEl.innerHTML = slots.map((id, i) => id == null ? `<div class="slot" data-slot="${i}"></div>`
+      : `<button class="tile" data-slot="${i}" data-id="${id}" aria-label="${chOf(id)} — اضغط للإزالة">${chOf(id)}</button>`).join('');
+    bankEl.innerHTML = q.letters.map(l => slots.includes(l.id) ? `<span class="tile placeholder" aria-hidden="true">${l.ch}</span>`
+      : `<button class="tile" data-id="${l.id}">${l.ch}</button>`).join('');
+    checkBtn.disabled = slots.includes(null);
+    $$('button.tile', st).forEach(bind);
+  };
+  const bind = t => {
+    const id = +t.dataset.id, from = t.dataset.slot != null ? +t.dataset.slot : null;
+    makeDraggable(t, {
+      tap() { if (run.answered) return; Sound.click(); if (from != null) slots[from] = null; else place(id); draw(); },
+      drop(target) {
+        if (run.answered) return;
+        const s = target && target.closest('[data-slot]');
+        if (s && slotsEl.contains(s)) {
+          const to = +s.dataset.slot;
+          if (from != null) [slots[to], slots[from]] = [slots[from], slots[to]]; else slots[to] = id;
+        } else if (target && target.closest('#bank')) { if (from != null) slots[from] = null; }
+        else if (target && target.closest('#slots') && from == null) place(id);
+        Sound.click(); draw();
+      }
+    });
+  };
+  const check = () => {
+    if (run.answered || slots.includes(null)) return;
+    const ok = slots.map(chOf).join('') === target;
+    slotsEl.classList.add(ok ? 'ok' : 'no');
+    if (!ok) slotsEl.insertAdjacentHTML('afterend', `<p class="en" style="font-size:1.6rem;font-weight:800;color:var(--good)">${esc(target)}</p>`);
+    $$('#bank button, #slots button, #clear, #check', st).forEach(b => b.disabled = true);
+    answer(ok);
+  };
+  $('#play').onclick = () => Speech.say(q.word.word);
+  $('#clear').onclick = () => { slots.fill(null); draw(); };
+  checkBtn.onclick = check;
+  q.reveal = () => {
+    slotsEl.innerHTML = target.split('').map(c => `<span class="tile">${c}</span>`).join('');
+    slotsEl.classList.add('ok'); bankEl.innerHTML = '';
+  };
+  q.hint = () => {
+    const i = slots.findIndex((id, k) => id == null || chOf(id) !== target[k]);
+    if (i < 0) return false;
+    for (let k = i; k < slots.length; k++) if (slots[k] != null && chOf(slots[k]) !== target[k]) slots[k] = null;
+    let l = q.letters.find(x => x.ch === target[i] && !slots.includes(x.id));
+    if (!l) { const k = slots.findIndex((id, j) => j > i && id != null && chOf(id) === target[i]); l = q.letters.find(x => x.id === slots[k]); slots[k] = null; }
+    slots[i] = l.id; draw();
+    $$('#slots .tile')[i].classList.add('hinted');
+  };
+  state.key = e => {
+    if (run.answered) return;
+    if (e.key === 'Backspace') { for (let i = slots.length - 1; i >= 0; i--) if (slots[i] != null) { slots[i] = null; break; } draw(); }
+    else if (e.key === 'Enter') check();
+    else if (/^[a-z]$/i.test(e.key)) {
+      const l = q.letters.find(x => x.ch === e.key.toLowerCase() && !slots.includes(x.id));
+      if (l) { place(l.id); Sound.click(); draw(); }
+    }
+  };
+  draw();
+};
+
+/* 5) Build the Sentence */
+MODES.build = (q, st, run, prompt) => {
+  const placed = [], tokOf = id => q.bank.find(b => b.id === id).t;
+  st.innerHTML = `<p class="prompt">${prompt}</p>
+    <div class="speak-row"><span class="emoji" style="font-size:3.4rem">${q.word.emoji}</span>
+      <button class="speak-btn slow" id="play" aria-label="استمع للجملة">🔊</button><button class="speak-btn slow" id="slow" aria-label="استمع ببطء">🐢</button></div>
+    <div class="build-line" id="line" aria-label="الجملة"></div><div class="bank" id="bank" aria-label="الكلمات"></div>
+    <div class="row center"><button class="btn btn-ghost" id="clear">↺ مسح</button><button class="btn btn-primary" id="check" disabled>تحقّق ✓</button></div>`;
+  const line = $('#line'), bank = $('#bank'), checkBtn = $('#check');
+  const insertIndex = (x, y) => {
+    const tiles = $$('[data-pos]', line);
+    for (const t of tiles) {
+      const r = t.getBoundingClientRect();
+      if (y < r.top || (y <= r.bottom && x < r.left + r.width / 2)) return +t.dataset.pos;
+    }
+    return tiles.length;
+  };
+  const draw = () => {
+    line.innerHTML = placed.map((id, i) => `<button class="tile word" data-id="${id}" data-pos="${i}">${esc(tokOf(id))}</button>`).join('');
+    line.classList.toggle('empty', !placed.length);
+    bank.innerHTML = q.bank.map(b => placed.includes(b.id) ? `<span class="tile word placeholder" aria-hidden="true">${esc(b.t)}</span>`
+      : `<button class="tile word" data-id="${b.id}">${esc(b.t)}</button>`).join('');
+    checkBtn.disabled = placed.length !== q.bank.length;
+    $$('button.tile', st).forEach(bind);
+  };
+  const bind = t => {
+    const id = +t.dataset.id, inLine = t.dataset.pos != null;
+    makeDraggable(t, {
+      tap() { if (run.answered) return; Sound.click(); inLine ? placed.splice(placed.indexOf(id), 1) : placed.push(id); draw(); },
+      drop(target, ev) {
+        if (run.answered) return;
+        if (target && target.closest('#line')) {
+          let at = insertIndex(ev.clientX, ev.clientY);
+          if (inLine) { const cur = placed.indexOf(id); placed.splice(cur, 1); if (at > cur) at--; }
+          placed.splice(at, 0, id);
+        } else if (target && target.closest('#bank') && inLine) placed.splice(placed.indexOf(id), 1);
+        Sound.click(); draw();
+      }
+    });
+  };
+  const check = () => {
+    if (run.answered || placed.length !== q.bank.length) return;
+    const ok = placed.map(tokOf).join(' ').toLowerCase() === q.tokens.join(' ').toLowerCase();
+    line.classList.add(ok ? 'ok' : 'no');
+    if (!ok) line.insertAdjacentHTML('afterend', `<p class="en" style="font-size:1.2rem;font-weight:800;color:var(--good);text-align:center">${esc(q.word.exampleSentence)}</p>`);
+    $$('#bank button, #line button, #clear, #check', st).forEach(b => b.disabled = true);
+    answer(ok);
+  };
+  $('#play').onclick = () => { Speech.say(q.word.exampleSentence); pulse('#play'); };
+  $('#slow').onclick = () => Speech.say(q.word.exampleSentence, { slow: true });
+  $('#clear').onclick = () => { placed.length = 0; draw(); };
+  checkBtn.onclick = check;
+  q.reveal = () => { line.innerHTML = q.tokens.map(t => `<span class="tile word">${esc(t)}</span>`).join(''); line.classList.remove('empty'); line.classList.add('ok'); bank.innerHTML = ''; };
+  q.hint = () => {
+    let i = 0;
+    while (i < placed.length && tokOf(placed[i]).toLowerCase() === q.tokens[i].toLowerCase()) i++;
+    if (i >= q.tokens.length) return false;
+    placed.length = i;
+    const b = q.bank.find(x => !placed.includes(x.id) && x.t.toLowerCase() === q.tokens[i].toLowerCase());
+    placed.push(b.id); draw();
+  };
+  state.key = e => {
+    if (run.answered) return;
+    if (e.key === 'Backspace') { placed.pop(); draw(); }
+    else if (e.key === 'Enter') check();
+    else if (e.key === 'r' || e.key === 'R') Speech.say(q.word.exampleSentence);
+    else { const n = +e.key; const free = q.bank.filter(b => !placed.includes(b.id)); if (n >= 1 && n <= free.length) { placed.push(free[n - 1].id); Sound.click(); draw(); } }
+  };
+  draw();
+};
+
+/* 4) Match Pairs (memory cards) */
+MODES.match = (q, st, run, prompt, first) => {
+  const cards = shuffle([...q.words.map((w, i) => ({ w, i, img: true })), ...q.words.map((w, i) => ({ w, i, img: false }))]);
+  st.innerHTML = `<p class="prompt">${prompt}</p>
+    <div class="memory ${cards.length > 6 ? 'c4' : ''}">${cards.map((c, k) => `<button class="mcard" data-k="${k}" aria-label="بطاقة ${k + 1}">
+      <span class="inner"><span class="face back" aria-hidden="true">🦉</span><span class="face front ${c.img ? 'img' : ''}">${c.img ? c.w.emoji : esc(c.w.word)}</span></span></button>`).join('')}</div>`;
+  const els = $$('.mcard', st);
+  let open = [], lock = false, matched = 0, misses = 0;
+  const flip = k => {
+    const el = els[k], c = cards[k];
+    if (lock || run.answered || el.classList.contains('flipped') || el.classList.contains('matched')) return;
+    el.classList.add('flipped'); Sound.flip();
+    el.setAttribute('aria-label', c.img ? `صورة: ${c.w.arabic}` : c.w.word);
+    if (!c.img || run.group === 'kids') Speech.say(c.w.word);
+    open.push(k);
+    if (open.length < 2) return;
+    lock = true;
+    const [a, b] = open.map(i => cards[i]);
+    if (a.i === b.i && a.img !== b.img) {
+      setTimeout(() => {
+        open.forEach(i => { els[i].classList.remove('flipped'); els[i].classList.add('matched'); els[i].disabled = true; });
+        open = []; lock = false; matched++;
+        Sound.tone(880, .12, 'sine', .12); Sound.tone(1175, .16, 'sine', .12, .08);
+        if (matched === q.words.length) setTimeout(() => answer(run.group === 'kids' || misses <= q.words.length + 1, { misses }), 400);
+      }, 350);
+    } else {
+      misses++;
+      open.forEach(i => els[i].classList.add('miss'));
+      setTimeout(() => { open.forEach(i => els[i].classList.remove('flipped', 'miss')); open = []; lock = false; }, 950);
+    }
+  };
+  els.forEach((el, k) => el.onclick = () => flip(k));
+  q.hint = () => {
+    if (lock) return false;
+    lock = true;
+    els.forEach(e => { if (!e.classList.contains('matched')) e.classList.add('flipped'); });
+    setTimeout(() => { els.forEach((e, k) => { if (!e.classList.contains('matched') && !open.includes(k)) e.classList.remove('flipped'); }); lock = false; }, 1400);
+    q.hint = null;
+  };
+  state.key = e => { const n = +e.key; if (n >= 1 && n <= els.length) flip(n - 1); };
+  if (first) setTimeout(() => Speech.hintThen(prompt, () => {}), 300);
+};
+
+/* 3) Speak It (SpeechRecognition with graceful fallback) */
+const NUM_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const normSpeech = s => s.toLowerCase().replace(/\b(10|[0-9])\b/g, d => NUM_WORDS[+d]).replace(/'/g, '').replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim();
+function lev(a, b) {
+  if (!a.length) return b.length; if (!b.length) return a.length;
+  let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i];
+    for (let j = 1; j <= b.length; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    prev = cur;
+  }
+  return prev[b.length];
+}
+/** Pronunciation score 0..1 from what the recognizer heard vs the target. */
+function similarity(heard, target) {
+  const a = normSpeech(heard), b = normSpeech(target);
+  if (!a) return 0;
+  if (a === b) return 1;
+  if ((' ' + a + ' ').includes(' ' + b + ' ')) return 0.95;
+  return Math.max(0, 1 - lev(a, b) / Math.max(a.length, b.length));
+}
+
+MODES.speak = (q, st, run, prompt, first) => {
+  const w = q.word, pass = AGE_GROUPS[run.group].speakPass;
+  let tries = 0;
+  st.innerHTML = `<p class="prompt">${prompt}</p>
+    <div class="speak-card glass"><span class="big-emoji emoji">${w.emoji}</span><b class="en word">${esc(w.word)}</b><span class="muted">${esc(w.arabic)}</span>
+      <div class="row center" style="margin-top:8px"><button class="btn btn-ghost" id="hear">🔊 استمع أولاً</button><button class="btn btn-ghost" id="hearSlow" aria-label="استمع ببطء">🐢</button></div></div>
+    <div id="micArea" class="stack" style="align-items:center;width:100%"></div>
+    <button class="btn btn-ghost" id="skipSpeak">تخطَّ ⏭️</button>`;
+  $('#hear').onclick = () => Speech.say(w.word);
+  $('#hearSlow').onclick = () => Speech.say(w.word, { slow: true });
+  $('#skipSpeak').onclick = () => answer(false, { skip: true });
+  const area = $('#micArea');
+  const fallback = reason => {
+    stopRecognition();
+    area.innerHTML = `<p class="center muted">${reason}</p><p class="center"><b>استمع ثم كرّر الكلمة بصوت عالٍ 🗣️</b></p>
+      <button class="btn btn-primary btn-big" id="saidIt">قلتها! ✅</button>`;
+    $('#saidIt').onclick = () => answer(true, { skip: true, practice: true });
+    state.key = e => { if (e.key === 'r' || e.key === 'R') Speech.say(w.word); };
+  };
+  if (!Recog.available()) fallback('ميزة التعرّف على الصوت غير متوفرة على هذا الجهاز أو المتصفح.');
+  else {
+    area.innerHTML = `<button class="mic" id="mic" aria-label="اضغط وتحدّث">🎤</button>
+      <p class="heard" id="heard">اضغط على الميكروفون وقل الكلمة</p>
+      <div class="score-meter hidden" id="meter"><div class="bar"><i id="scoreBar" style="width:0"></i></div><span class="en" id="scoreTxt">0%</span></div>`;
+    const heard = $('#heard'), mic = $('#mic'), LISTEN = 'أنا أستمع... 👂';
+    mic.onclick = () => {
+      if (run.answered) return;
+      if (Recog.active) { Recog.stop(); mic.classList.remove('rec'); heard.textContent = 'اضغط على الميكروفون وقل الكلمة'; return; }
+      Speech.cancel();
+      let got = false;
+      mic.classList.add('rec'); heard.textContent = LISTEN;
+      try {
+        Recog.start({
+          onresult: alts => {
+            got = true; mic.classList.remove('rec');
+            if (!alts.length || run.answered) return;
+            const best = alts.map(t => ({ t, s: similarity(t, w.word) })).sort((a, b) => b.s - a.s)[0];
+            const score = Math.round(best.s * 100);
+            $('#meter').classList.remove('hidden');
+            $('#scoreBar').style.width = score + '%'; $('#scoreTxt').textContent = score + '%';
+            heard.innerHTML = `سمعتُ: <span class="en">"${esc(best.t)}"</span>`;
+            if (score >= pass) answer(true, { score });
+            else {
+              tries++; Sound.wrong(); buzz([30, 40, 30]);
+              heard.innerHTML += `<br><small>${score >= pass - 20 ? 'قريب جداً! 👌' : 'حاول مرة أخرى 💪'} — المحاولة ${tries}</small>`;
+              Mascot.say(tries >= 2 ? 'استمع ببطء 🐢 ثم حاول، أو تخطَّ السؤال' : 'قريب! حاول مرة أخرى 💪', 'sad');
+            }
+          },
+          onerror: err => {
+            if (['not-allowed', 'service-not-allowed', 'audio-capture', 'network'].includes(err))
+              fallback(err === 'audio-capture' ? 'لم نجد ميكروفوناً متصلاً.' : err === 'network' ? 'التعرّف على الصوت يحتاج اتصالاً بالإنترنت.' : 'لم يُسمح باستخدام الميكروفون.');
+            else if (err === 'no-speech') heard.textContent = 'لم أسمع شيئاً، حاول مرة أخرى 🎤';
+            else if (err === 'busy') heard.textContent = 'الميكروفون مشغول، حاول بعد لحظة';
+          },
+          onend: () => {
+            mic.classList.remove('rec');
+            if (!got && heard.textContent === LISTEN) heard.textContent = 'لم أسمع شيئاً، حاول مرة أخرى 🎤';
+          }
+        });
+      } catch (e) { fallback('تعذّر تشغيل الميكروفون.'); }
+    };
+    state.key = e => {
+      if (e.key === 'm' || e.key === 'M' || e.key === ' ') { e.preventDefault(); mic.click(); }
+      else if (e.key === 'r' || e.key === 'R') Speech.say(w.word);
+    };
+  }
+  setTimeout(() => Speech.hintThen(first ? prompt : null, () => { if (q.alive()) Speech.say(w.word); }), 300);
+};
+
+/* 7) Dialogue Listening (teens / adults) */
+function dlgLinesHTML(d) {
+  const colors = ['var(--primary)', 'var(--primary-2)'];
+  return d.lines.map(([who, txt], i) => `<div class="bubble-line ${i % 2 ? 'b' : ''}" data-line="${i}">
+    <span class="who-av" style="background:${colors[i % 2]}" aria-hidden="true">${esc(who[0])}</span><p class="en"><small>${esc(who)}</small>${esc(txt)}</p></div>`).join('');
+}
+let dlgToken = 0;
+function playDialogue(d, slow = false) {
+  const tok = ++dlgToken, speakers = [...new Set(d.lines.map(l => l[0]))];
+  const step = i => {
+    if (tok !== dlgToken) return;
+    $$('.bubble-line').forEach(b => b.classList.toggle('active', +b.dataset.line === i));
+    if (i >= d.lines.length) return;
+    const [who, txt] = d.lines[i], second = speakers.indexOf(who) === 1;
+    Speech.say(txt, { slow, queue: i > 0, alt: second, pitch: second ? 0.85 : 1.1,
+      onend: () => setTimeout(() => step(i + 1), 350) });
+  };
+  Speech.cancel(); step(0);
+}
+MODES.dialogue = (q, st, run, prompt, first) => {
+  const d = q.dlg;
+  st.innerHTML = `<p class="prompt">${prompt}</p>
+    <div class="dlg glass"><div class="row center">
+      <button class="btn btn-primary" id="dplay">▶ استمع للحوار</button><button class="btn btn-ghost" id="dslow">🐢 ببطء</button>
+      <button class="btn btn-ghost" id="dtext" aria-expanded="false">📝 النص</button></div>
+      <div class="dlg-lines hidden" id="dlines">${dlgLinesHTML(d)}</div></div>
+    <p class="question en">${esc(d.q)}</p><p class="hint-ar">${esc(d.qAr)}</p>
+    <div class="options list">${q.order.map((oi, i) => `<button class="opt text en" data-i="${i}"><span class="kbd">${i + 1}</span>${esc(d.options[oi])}</button>`).join('')}</div>`;
+  $('#dplay').onclick = () => playDialogue(d);
+  $('#dslow').onclick = () => playDialogue(d, true);
+  $('#dtext').onclick = e => { const hidden = $('#dlines').classList.toggle('hidden'); e.currentTarget.setAttribute('aria-expanded', String(!hidden)); };
+  const btns = $$('.opt', st), right = j => q.order[j] === d.answer;
+  const choose = i => { if (run.answered || btns[i].disabled) return; optClasses(btns, right, i); $('#dlines').classList.remove('hidden'); answer(right(i)); };
+  q.hint = fiftyFifty(q, btns, right);
+  btns.forEach((b, i) => b.onclick = () => choose(i));
+  state.key = e => { const n = +e.key; if (n >= 1 && n <= 4) choose(n - 1); else if (e.key === 'r' || e.key === 'R') playDialogue(d); };
+  setTimeout(() => Speech.hintThen(first ? prompt : null, () => { if (q.alive()) playDialogue(d); }), 400);
+};
+
+/* =========================================================
+   10. GLOBAL EVENTS + INIT
+   ========================================================= */
+// 🔊 buttons and navigation anywhere in the app
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-say],[data-say-slow],[data-go]');
+  if (!t || t.disabled) return;
+  if (t.dataset.go) { Sound.click(); show(t.dataset.go); }
+  else if (t.dataset.say != null) Speech.say(t.dataset.say);
+  else Speech.say(t.dataset.saySlow, { slow: true });
+});
+
+// Keyboard support: each screen/mode installs state.key
+document.addEventListener('keydown', e => {
+  if ($('#modal-root').firstChild) { if (e.key === 'Escape') closeModal(false); return; }
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.target.matches && e.target.matches('input,textarea,select')) return;
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.closest && e.target.closest('button,[role=button]')) return;
+  if (e.key === 'Escape' && (state.screen === 'play' || state.screen === 'intro')) { quitRun(); return; }
+  if (state.key) state.key(e);
+});
+
+// Time played (only while actively learning) + daily goal
+let saveTick = 0;
+setInterval(() => {
+  const p = P();
+  if (!p || document.hidden || !PLAY_SCREENS.includes(state.screen)) return;
+  const k = todayKey(), before = p.daily[k] || 0, goal = p.settings.goal * 60;
+  p.daily[k] = before + 5;
+  if (before < goal && p.daily[k] >= goal) { toast('🎯 حققت هدفك اليومي! أحسنت'); Sound.fanfare(); }
+  if (++saveTick % 6 === 0) save();
+}, 5000);
+
+document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
+window.addEventListener('pagehide', save);
+window.addEventListener('resize', () => { const c = $('#confetti'); if (Confetti.running) { c.width = innerWidth; c.height = innerHeight; } });
+
+/** Android back button: true = handled inside the game, false = let the app exit. */
+window.hakimBack = () => {
+  if ($('#modal-root').firstChild) { closeModal(false); return true; }
+  if (state.screen === 'play' || state.screen === 'intro') { quitRun(); return true; }
+  const run = state.run;
+  const parent = {
+    map: 'menu', words: 'menu', achievements: 'menu', settings: 'menu', stats: 'menu', parent: 'menu',
+    leaderboard: 'menu', shop: 'menu', fail: 'map',
+    results: run && run.kind === 'level' ? 'map' : 'menu',
+    create: Store.data.profiles.length ? 'profiles' : null,
+    profiles: P() ? 'menu' : null
+  }[state.screen];
+  if (parent) { show(parent); return true; }
+  return false;
+};
+window.hakimPause = () => { save(); Speech.cancel(); stopRecognition(); Music.stop(); };
+window.hakimResume = () => { Music.sync(); };
+
+function init() {
+  Store.load();
+  try { localStorage.setItem('hakeem.test', '1'); localStorage.removeItem('hakeem.test'); } catch (e) { Store.ok = false; }
+  // prune play-time history older than ~90 days
+  const cutoff = dayKeyOffset(-90);
+  Store.data.profiles.forEach(p => Object.keys(p.daily || {}).forEach(k => { if (k < cutoff) delete p.daily[k]; }));
+  Speech.init();
+  Mascot.init();
+  if (window.matchMedia) {
+    const mq = matchMedia('(prefers-color-scheme: dark)');
+    mq.addEventListener ? mq.addEventListener('change', applyTheme) : mq.addListener && mq.addListener(applyTheme);
+  }
+  show('splash');
+}
+init();
+</script>
+</body>
+</html>
