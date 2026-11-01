@@ -19,7 +19,7 @@
   --font-en:'Baloo 2','Cairo',system-ui,sans-serif;
   --emoji-font:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji','Twemoji Mozilla',sans-serif;
   --good:#16a34a; --bad:#dc2626; --gold:#f5b301;
-  --owl-body:#a26b45; --owl-belly:#f7dfbd; --owl-dark:#6e4229;
+  --buddy-body:#8b5cf6; --buddy-dark:#5b21b6;
 }
 body{
   --primary:#7c5cff; --primary-2:#ff6fb5; --accent:#2ec4ff;
@@ -128,7 +128,7 @@ body[data-age=adults] .btn-primary{background:var(--primary);box-shadow:none}
    4. SPLASH / PROFILES
    ========================================================= */
 .splash{min-height:82vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
-.splash-owl{width:min(220px,55vw);animation:floaty 3s ease-in-out infinite}
+.splash-buddy{width:min(220px,55vw);animation:floaty 3s ease-in-out infinite}
 .logo{font-size:clamp(2.2rem,8vw,3.4rem);font-weight:800;display:flex;gap:14px;align-items:baseline}
 .logo .en{background:linear-gradient(135deg,var(--primary),var(--primary-2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .logo i{font-style:normal;opacity:.35}
@@ -383,21 +383,24 @@ body[data-age=kids] .opt .emoji{font-size:clamp(4rem,18vw,5.6rem)}
 #mascot{position:fixed;left:10px;bottom:12px;width:74px;height:82px;z-index:60;cursor:pointer;animation:floaty 3.2s ease-in-out infinite;transition:width .3s,height .3s}
 #mascot.off{display:none}
 body[data-screen=play] #mascot{width:64px;height:70px}
-.owl{width:100%;height:100%;overflow:visible;display:block}
-.owl .lid{transform-box:fill-box;transform-origin:center top;transform:scaleY(0);animation:blink 4.5s infinite}
+.buddy{width:100%;height:100%;overflow:visible;display:block}
+.buddy .lid{transform-box:fill-box;transform-origin:center top;transform:scaleY(0);animation:blink 4.5s infinite}
 @keyframes blink{0%,92%,100%{transform:scaleY(0)}95%{transform:scaleY(1)}}
-.owl .pupils{transition:transform .3s}
-.owl .cheeks{transition:opacity .3s}
-.owl .wing{transform-box:fill-box}
-.owl .wing-l{transform-origin:right top} .owl .wing-r{transform-origin:left top}
-.owl-wrap.happy .owl,.owl-wrap.celebrate .owl{animation:hop .5s ease 2}
-.owl-wrap.happy .cheeks,.owl-wrap.celebrate .cheeks{opacity:.8}
-.owl-wrap.celebrate .wing-l{animation:flapL .2s ease-in-out 8 alternate}
-.owl-wrap.celebrate .wing-r{animation:flapR .2s ease-in-out 8 alternate}
-.owl-wrap.think .pupils{transform:translate(3px,-4px)}
-.owl-wrap.think .owl{transform:rotate(-6deg);transition:transform .3s}
-.owl-wrap.sad .pupils{transform:translateY(4px)}
-.owl-wrap.sad .owl{transform:rotate(5deg);transition:transform .3s}
+.buddy .pupils{transition:transform .3s}
+.buddy .cheeks{transition:opacity .3s}
+.buddy .wing{transform-box:fill-box}
+.buddy .wing-l{transform-origin:right top} .buddy .wing-r{transform-origin:left top}
+.buddy-wrap.happy .buddy,.buddy-wrap.celebrate .buddy{animation:hop .5s ease 2}
+.buddy-wrap.happy .cheeks,.buddy-wrap.celebrate .cheeks{opacity:.8}
+.buddy-wrap.celebrate .wing-l{animation:flapL .2s ease-in-out 8 alternate}
+.buddy-wrap.celebrate .wing-r{animation:flapR .2s ease-in-out 8 alternate}
+.buddy-wrap.think .pupils{transform:translate(3px,-4px)}
+.buddy-wrap.think .buddy{transform:rotate(-6deg);transition:transform .3s}
+.buddy-wrap.sad .pupils{transform:translateY(4px)}
+.buddy-wrap.sad .buddy{transform:rotate(5deg);transition:transform .3s}
+.buddy .mouth{transform-box:fill-box;transform-origin:center;transition:transform .3s}
+.buddy-wrap.sad .mouth{transform:scaleY(-1) translateY(-3px)}
+.buddy-wrap.happy .mouth,.buddy-wrap.celebrate .mouth{transform:scale(1.25)}
 @keyframes hop{50%{transform:translateY(-14px)}}
 @keyframes flapL{to{transform:rotate(-35deg)}}
 @keyframes flapR{to{transform:rotate(35deg)}}
@@ -474,7 +477,7 @@ html[data-theme=dark] .pop-field{background:linear-gradient(180deg,rgba(30,58,13
 .wod b{font-size:1.4rem;display:block}
 
 .shop-preview{display:flex;align-items:center;gap:14px;padding:14px;margin-bottom:6px}
-.shop-preview .owl-wrap{width:110px;height:122px;flex-shrink:0}
+.shop-preview .buddy-wrap{width:110px;height:122px;flex-shrink:0}
 .shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
 .shop-item{padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;border:2px solid transparent}
 .shop-item .sw{height:48px;display:grid;place-items:center}
@@ -505,7 +508,7 @@ html[data-theme=dark] .pop-field{background:linear-gradient(180deg,rgba(30,58,13
 <body data-age="young">
 <div id="bg-deco" aria-hidden="true"><i></i><i></i><i></i></div>
 <main id="app"></main>
-<div id="mascot" class="owl-wrap off" role="button" tabindex="0" aria-label="حكيم البومة — اضغط لنصيحة"></div>
+<div id="mascot" class="buddy-wrap off" role="button" tabindex="0" aria-label="حكيم — اضغط لنصيحة"></div>
 <div id="feedback" class="feedback" role="status" aria-live="assertive"></div>
 <div id="toast-wrap" aria-live="polite"></div>
 <div id="modal-root"></div>
@@ -846,14 +849,14 @@ defineWorlds('adults', [
 /** Hakeem's lines, with tone adjusted per age group. */
 const TIPS = {
   kids: {
-    hello:['أهلاً يا {name}! هيا نلعب ونتعلم 🎈','مرحباً يا بطل! جاهز للمغامرة؟ 🚀','أنا حكيم! لنتعلّم كلمات جديدة معاً 🦉'],
+    hello:['أهلاً يا {name}! هيا نلعب ونتعلم 🎈','مرحباً يا بطل! جاهز للمغامرة؟ 🚀','أنا حكيم! لنتعلّم كلمات جديدة معاً 💬'],
     correct:['رائع يا {name}! 🌟','أحسنت يا بطل! 🏆','ممتاز! أنت ذكي جداً 🎉','واو! برافو عليك 👏','صحيح! 💖'],
     wrong:['لا بأس، حاول مرة أخرى 💪','قريب جداً! استمع مرة ثانية 👂','الأخطاء تساعدنا نتعلّم 🌱'],
     tip:['اضغط 🔊 لتسمع الكلمة','استمع جيداً ثم اختر 👂','جرّب الصوت البطيء 🐢','كل يوم كلمات جديدة! 🌈'],
     done:['يا سلام! أنهيت المستوى 🎊','أنت نجم! ⭐']
   },
   young: {
-    hello:['أهلاً يا {name}! مستعد لمغامرة اليوم؟ 🎒','هيا نجمع النجوم والعملات! 🪙','مرحباً بعودتك يا بطل! 🦉'],
+    hello:['أهلاً يا {name}! مستعد لمغامرة اليوم؟ 🎒','هيا نجمع النجوم والعملات! 🪙','مرحباً بعودتك يا بطل! 💬'],
     correct:['إجابة صحيحة! 🌟','عمل رائع يا {name}! 👏','أحسنت! واصل هكذا 🚀','ممتاز! 🎯'],
     wrong:['لا تقلق، ستتذكرها المرة القادمة 💪','انتبه للحروف جيداً 👀','حاول مرة أخرى، أنت تستطيع!'],
     tip:['استخدم 🐢 لسماع الكلمة ببطء','الكلمات التي تخطئ فيها ستعود للمراجعة 🔁','العب كل يوم لتحافظ على سلسلتك 🔥'],
@@ -895,11 +898,11 @@ const ACHIEVEMENTS = [
 
 const AVATARS = ['🦊','🐼','🐯','🦁','🐸','🐵','🦄','🐙','🐨','🐰','🐧','🦖','🐱','🐶','🧑‍🚀','🧑‍🎓','👩‍💼','👨‍💼','🧕','🧔'];
 
-/** Shop: outfits and colours for Hakeem, bought with coins. */
+/** Shop: outfits and colours for Hakeem (the speech-bubble character), bought with coins. */
 const SHOP = {
   hats: [
     { id:'cap',     name:'قبعة التخرّج', icon:'🎓', price:0 },
-    { id:'none',    name:'بدون قبعة',    icon:'🦉', price:0 },
+    { id:'none',    name:'بدون قبعة',    icon:'💬', price:0 },
     { id:'party',   name:'قبعة الحفلة',  icon:'🥳', price:80 },
     { id:'glasses', name:'نظارة ذكية',   icon:'🤓', price:100 },
     { id:'phones',  name:'سماعات DJ',    icon:'🎧', price:120 },
@@ -907,13 +910,13 @@ const SHOP = {
     { id:'wizard',  name:'قبعة الساحر',  icon:'🧙', price:250 }
   ],
   colors: [
-    { id:'classic', name:'بنّي كلاسيكي', body:'#a26b45', belly:'#f7dfbd', dark:'#6e4229', price:0 },
-    { id:'sky',     name:'أزرق سماوي',  body:'#4f8fd6', belly:'#dcebfb', dark:'#2c5e99', price:90 },
-    { id:'rose',    name:'وردي',        body:'#e0709e', belly:'#fde4ee', dark:'#a8436d', price:90 },
-    { id:'mint',    name:'نعناعي',      body:'#3fae8c', belly:'#d9f5ea', dark:'#23775d', price:90 },
-    { id:'night',   name:'ليلي',        body:'#5b4b8a', belly:'#e3dcf7', dark:'#372a5f', price:150 },
-    { id:'snow',    name:'ثلجي',        body:'#e8edf3', belly:'#ffffff', dark:'#a9b4c2', price:150 },
-    { id:'gold',    name:'ذهبي',        body:'#d9a521', belly:'#fff1c4', dark:'#9c7210', price:300 }
+    { id:'classic', name:'بنفسجي',     body:'#8b5cf6', dark:'#5b21b6', price:0 },
+    { id:'sky',     name:'أزرق سماوي', body:'#38bdf8', dark:'#0369a1', price:90 },
+    { id:'rose',    name:'وردي',       body:'#f472b6', dark:'#be185d', price:90 },
+    { id:'mint',    name:'نعناعي',     body:'#34d399', dark:'#047857', price:90 },
+    { id:'night',   name:'ليلي',       body:'#4f46e5', dark:'#1e1b4b', price:150 },
+    { id:'snow',    name:'ثلجي',       body:'#f1f5f9', dark:'#64748b', price:150 },
+    { id:'gold',    name:'ذهبي',       body:'#fbbf24', dark:'#b45309', price:300 }
   ],
   hintPrice: 15
 };
@@ -991,14 +994,15 @@ function newProfile(name, avatar, age) {
     stats: { levels:0, perfect:0, boss:0, speak:0, daily:0, bestCombo:0, reviews:0, answers:0, correct:0 },
     ach: {},                                    // unlocked achievements { id: timestamp }
     groups: {},                                 // per-age-group progress (kept separately)
-    owl: { hat:'cap', color:'classic', owned:['cap', 'none', 'classic'] },   // shop items
+    look: { hat:'cap', color:'classic', owned:['cap', 'none', 'classic'] },  // shop items
     quests: null                                // today's quests { day, list:[{id,target,n,claimed}] }
   };
 }
 /** Fill in fields added in later versions so older saves keep working. */
 function migrateProfile(p) {
   p.settings = { ...DEFAULT_SETTINGS, ...(p.settings || {}) };
-  p.owl = p.owl || { hat:'cap', color:'classic', owned:['cap', 'none', 'classic'] };
+  p.look = p.look || p.owl || { hat:'cap', color:'classic', owned:['cap', 'none', 'classic'] };   // field was `owl` before v1.2
+  delete p.owl;
   if (!('quests' in p)) p.quests = null;
 }
 /** Current profile. */
@@ -1281,8 +1285,8 @@ const Music = {
 /* =========================================================
    5. HAKEEM THE OWL, TOASTS, MODALS, CONFETTI
    ========================================================= */
-/** Hats/accessories drawn on top of the owl (ids match SHOP.hats). */
-const OWL_HATS = {
+/** Hats/accessories drawn on top of the character (ids match SHOP.hats). */
+const HATS = {
   cap: `<g><path d="M28 28 L60 15 L92 28 L60 41 Z" fill="#1f1b3a"/><rect x="45" y="31" width="30" height="9" rx="2" fill="#1f1b3a"/>
     <path d="M90 28 L92 44" stroke="#f5b301" stroke-width="2.2"/><circle cx="92" cy="46" r="3.2" fill="#f5b301"/></g>`,
   none: '',
@@ -1297,26 +1301,25 @@ const OWL_HATS = {
   wizard: `<g><path d="M24 36 Q60 26 96 36 L70 -10 L58 0 Z" fill="#5b21b6"/><path d="M24 36 Q60 26 96 36" stroke="#fde047" stroke-width="3" fill="none"/>
     <text x="56" y="22" font-size="11" fill="#fde047">★</text><text x="70" y="8" font-size="7" fill="#fde047">★</text></g>`
 };
-/** Inline SVG owl (wise = حكيم). Parts animate via CSS; look = {hat, color} from the shop. */
-function owlSVG(look) {
-  const o = look || (P() && P().owl) || { hat:'cap', color:'classic' };
+/** Hakeem: a friendly speech-bubble character (matches the app icon). Parts animate via CSS;
+    look = {hat, color} from the shop. */
+function buddySVG(look) {
+  const o = look || (P() && P().look) || { hat:'cap', color:'classic' };
   const c = SHOP.colors.find(x => x.id === o.color) || SHOP.colors[0];
-  return `<svg class="owl" viewBox="0 0 120 132" aria-hidden="true" style="--owl-body:${c.body};--owl-belly:${c.belly};--owl-dark:${c.dark}">
-  <g fill="#f59e0b"><ellipse cx="46" cy="122" rx="10" ry="4.5"/><ellipse cx="74" cy="122" rx="10" ry="4.5"/></g>
-  <ellipse class="wing wing-l" cx="22" cy="82" rx="12" ry="27" fill="var(--owl-dark)"/>
-  <ellipse class="wing wing-r" cx="98" cy="82" rx="12" ry="27" fill="var(--owl-dark)"/>
-  <path d="M27 44 L20 22 L44 34 Z" fill="var(--owl-dark)"/><path d="M93 44 L100 22 L76 34 Z" fill="var(--owl-dark)"/>
-  <ellipse cx="60" cy="76" rx="40" ry="46" fill="var(--owl-body)"/>
-  <ellipse cx="60" cy="90" rx="26" ry="29" fill="var(--owl-belly)"/>
-  <g fill="none" stroke="var(--owl-body)" stroke-width="2" opacity=".45" stroke-linecap="round">
-    <path d="M47 90 q4 4 8 0 q4 4 8 0 q4 4 8 0"/><path d="M51 101 q4 4 8 0 q4 4 8 0"/></g>
-  <circle cx="44" cy="58" r="15" fill="#fff"/><circle cx="76" cy="58" r="15" fill="#fff"/>
-  <g class="pupils"><circle cx="46" cy="59" r="7" fill="#1f1530"/><circle cx="74" cy="59" r="7" fill="#1f1530"/>
-    <circle cx="48.5" cy="56" r="2.4" fill="#fff"/><circle cx="76.5" cy="56" r="2.4" fill="#fff"/></g>
-  <g fill="var(--owl-body)"><ellipse class="lid" cx="44" cy="58" rx="16" ry="16"/><ellipse class="lid" cx="76" cy="58" rx="16" ry="16"/></g>
-  <path d="M54 70 L66 70 L60 81 Z" fill="#f59e0b"/>
-  <g class="cheeks" fill="#ff8fab" opacity="0"><ellipse cx="29" cy="74" rx="6" ry="3.5"/><ellipse cx="91" cy="74" rx="6" ry="3.5"/></g>
-  ${OWL_HATS[o.hat] || ''}
+  return `<svg class="buddy" viewBox="0 0 120 132" aria-hidden="true" style="--buddy-body:${c.body};--buddy-dark:${c.dark}">
+  <ellipse class="wing wing-l" cx="12" cy="82" rx="9" ry="15" fill="var(--buddy-dark)"/>
+  <ellipse class="wing wing-r" cx="108" cy="82" rx="9" ry="15" fill="var(--buddy-dark)"/>
+  <path d="M42 26 H78 A32 32 0 0 1 110 58 V80 A32 32 0 0 1 78 112 H52 L28 128 L34 109 A32 32 0 0 1 10 80 V58 A32 32 0 0 1 42 26Z"
+    fill="var(--buddy-body)" stroke="var(--buddy-dark)" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="36" cy="40" rx="14" ry="6" fill="#fff" opacity=".4" transform="rotate(-24 36 40)"/>
+  <circle cx="44" cy="60" r="13" fill="#fff" stroke="var(--buddy-dark)" stroke-width="1.5"/>
+  <circle cx="76" cy="60" r="13" fill="#fff" stroke="var(--buddy-dark)" stroke-width="1.5"/>
+  <g class="pupils"><circle cx="45.5" cy="61" r="6.5" fill="#1f1530"/><circle cx="74.5" cy="61" r="6.5" fill="#1f1530"/>
+    <circle cx="47.5" cy="58.5" r="2.2" fill="#fff"/><circle cx="76.5" cy="58.5" r="2.2" fill="#fff"/></g>
+  <g fill="var(--buddy-body)"><ellipse class="lid" cx="44" cy="60" rx="14" ry="14"/><ellipse class="lid" cx="76" cy="60" rx="14" ry="14"/></g>
+  <path class="mouth" d="M49 83 Q60 95 71 83" fill="none" stroke="#1f1530" stroke-width="3.5" stroke-linecap="round"/>
+  <g class="cheeks" fill="#ff8fab" opacity="0"><ellipse cx="28" cy="78" rx="6" ry="3.5"/><ellipse cx="92" cy="78" rx="6" ry="3.5"/></g>
+  ${HATS[o.hat] || ''}
 </svg>`;
 }
 
@@ -1324,7 +1327,7 @@ const Mascot = {
   el: null, bubble: null, t1: null, t2: null,
   init() {
     this.el = $('#mascot');
-    this.el.innerHTML = owlSVG() + '<div class="mascot-bubble" role="status"></div>';
+    this.el.innerHTML = buddySVG() + '<div class="mascot-bubble" role="status"></div>';
     this.bubble = $('.mascot-bubble', this.el);
     const tap = () => { if (P()) this.say(pick(TIPS[P().age].tip), 'think'); };
     this.el.addEventListener('click', tap);
@@ -1347,7 +1350,7 @@ const Mascot = {
   },
   visible(on) { this.el.classList.toggle('off', !on); if (!on) this.bubble.classList.remove('show'); },
   /** Redraw after the outfit changes (keeps the bubble). */
-  refresh() { const svg = $('svg.owl', this.el); if (svg) svg.outerHTML = owlSVG(); }
+  refresh() { const svg = $('svg.buddy', this.el); if (svg) svg.outerHTML = buddySVG(); }
 };
 const tip = kind => pick(TIPS[P() ? P().age : 'young'][kind]).replace('{name}', P() ? P().name : '');
 
@@ -1523,13 +1526,13 @@ function wordOfDay() {
 Screens.splash = () => {
   applyTheme();
   render(`<div class="splash">
-    <div class="splash-owl owl-wrap" id="bigOwl">${owlSVG()}</div>
+    <div class="splash-buddy buddy-wrap" id="bigBuddy">${buddySVG()}</div>
     <h1 class="logo"><span>حكيم</span><i>|</i><span class="en">Hakeem</span></h1>
-    <p class="tagline">مغامرة ممتعة لتعلّم الإنجليزية بالصوت والصورة واللعب مع البومة الحكيمة 🦉</p>
+    <p class="tagline">مغامرة ممتعة لتعلّم الإنجليزية بالصوت والصورة واللعب مع صديقك حكيم 💬</p>
     <button class="btn btn-primary btn-big" id="start">ابدأ المغامرة 🚀</button>
     ${Store.ok ? '' : '<p class="muted small">تنبيه: الحفظ غير متاح في هذا المتصفح، وسيضيع التقدّم عند الإغلاق.</p>'}
   </div>`);
-  $('#bigOwl').onclick = () => { const o = $('#bigOwl'); o.classList.remove('celebrate'); void o.offsetWidth; o.classList.add('celebrate'); Sound.ensure(); Sound.star(1); };
+  $('#bigBuddy').onclick = () => { const o = $('#bigBuddy'); o.classList.remove('celebrate'); void o.offsetWidth; o.classList.add('celebrate'); Sound.ensure(); Sound.star(1); };
   $('#start').onclick = () => {
     Sound.ensure(); Sound.fanfare();
     Speech.say('Hello! I am Hakeem.');
@@ -1549,14 +1552,14 @@ Screens.profiles = () => {
     ${ps.length < 8 ? `<button class="profile-card glass add" data-go="create"><span class="avatar">➕</span><b>ملف جديد</b><small class="muted">لكل فرد من العائلة</small></button>` : ''}
   </div>`);
   $$('[data-pid]').forEach(b => b.onclick = () => { Sound.click(); selectProfile(b.dataset.pid); show('menu'); });
-  Mascot.say('أهلاً! أنا حكيم 🦉 من سيلعب معي؟', 'happy');
+  Mascot.say('أهلاً! أنا حكيم 💬 من سيلعب معي؟', 'happy');
 };
 function selectProfile(id) { Store.data.currentId = id; save(); applyTheme(); Mascot.refresh(); Music.sync(); }
 
 Screens.create = () => {
   let avatar = AVATARS[0], age = null;
   const hasProfiles = Store.data.profiles.length > 0;
-  render(`${hasProfiles ? topbar('ملف جديد', 'profiles') : '<div class="center-head"><h1>لنتعرّف عليك! 🦉</h1><p class="muted">أنشئ ملفك لتبدأ المغامرة</p></div>'}
+  render(`${hasProfiles ? topbar('ملف جديد', 'profiles') : '<div class="center-head"><h1>لنتعرّف عليك! 👋</h1><p class="muted">أنشئ ملفك لتبدأ المغامرة</p></div>'}
   <div class="form-card glass">
     <label for="pname">ما اسمك؟</label>
     <input id="pname" class="text-input" maxlength="16" autocomplete="off" placeholder="اكتب اسمك هنا">
@@ -1662,7 +1665,7 @@ function claimQuest(i) {
 
 /* ---------- shop ---------- */
 Screens.shop = () => {
-  const p = P(), o = p.owl;
+  const p = P(), o = p.look;
   const item = (kind, it) => {
     const owned = o.owned.includes(it.id), on = o[kind] === it.id;
     return `<button class="shop-item glass ${on ? 'equipped' : ''}" data-kind="${kind}" data-id="${it.id}" aria-pressed="${on}">
@@ -1670,20 +1673,20 @@ Screens.shop = () => {
       <b>${it.name}</b><small>${on ? '✅ مُستخدَم' : owned ? 'اضغط للارتداء' : `🪙 ${it.price}`}</small></button>`;
   };
   render(topbar('🛍️ متجر حكيم', 'menu', `<span class="chip">🪙 ${p.coins}</span>`) + `
-    <div class="shop-preview glass"><div class="owl-wrap" id="preview">${owlSVG()}</div>
+    <div class="shop-preview glass"><div class="buddy-wrap" id="preview">${buddySVG()}</div>
       <p class="muted">اجمع العملات من الإجابات والمهام والصناديق لتزيين حكيم!</p></div>
     <h2 class="section-title">🎩 القبعات والإكسسوارات</h2><div class="shop-grid">${SHOP.hats.map(it => item('hat', it)).join('')}</div>
-    <h2 class="section-title">🎨 ألوان الريش</h2><div class="shop-grid">${SHOP.colors.map(it => item('color', it)).join('')}</div>`);
+    <h2 class="section-title">🎨 الألوان</h2><div class="shop-grid">${SHOP.colors.map(it => item('color', it)).join('')}</div>`);
   $$('.shop-item').forEach(b => b.onclick = async () => {
     const kind = b.dataset.kind, id = b.dataset.id;
     const it = (kind === 'hat' ? SHOP.hats : SHOP.colors).find(x => x.id === id);
     const prev = $('#preview');
-    prev.innerHTML = owlSVG({ ...o, [kind]: id });
+    prev.innerHTML = buddySVG({ ...o, [kind]: id });
     prev.classList.remove('celebrate'); void prev.offsetWidth; prev.classList.add('celebrate');
     if (!o.owned.includes(id)) {
       if (p.coins < it.price) { toast(`تحتاج ${it.price - p.coins} 🪙 إضافية — أكمل المستويات والمهام لتجمع المزيد`); Sound.wrong(); return; }
       const ok = await modal({ title:`شراء «${it.name}»؟`, text:`السعر: ${it.price} 🪙 — رصيدك: ${p.coins} 🪙`, ok:'شراء ✨', cancel:'ليس الآن' });
-      if (!ok) { prev.innerHTML = owlSVG(); return; }
+      if (!ok) { prev.innerHTML = buddySVG(); return; }
       p.coins -= it.price; o.owned.push(id);
       Sound.chest(); Confetti.burst(90); buzz(30);
     } else Sound.click();
@@ -2247,7 +2250,7 @@ function showFeedback(ok, q, extra) {
   const lastQ = (run.idx === run.questions.length - 1 && (!run.retry.length || run.retryDone)) || (Number.isFinite(run.hearts) && run.hearts <= 0);
   fb.className = 'feedback show ' + (extra.skip ? 'skip' : ok ? 'ok' : 'no');
   Mascot.bubble.classList.remove('show');
-  fb.innerHTML = `<div class="fb-title">${title}</div>${extra.tip ? `<p class="fb-tip">🦉 ${esc(extra.tip)}</p>` : ''}${body}<button class="btn btn-primary btn-wide" id="nextQ">${lastQ ? 'إنهاء 🏁' : 'متابعة ←'}</button>`;
+  fb.innerHTML = `<div class="fb-title">${title}</div>${extra.tip ? `<p class="fb-tip">💬 ${esc(extra.tip)}</p>` : ''}${body}<button class="btn btn-primary btn-wide" id="nextQ">${lastQ ? 'إنهاء 🏁' : 'متابعة ←'}</button>`;
   $('#nextQ').onclick = nextQ;
   if (q.mode === 'dialogue') $('#fbReplay').onclick = () => playDialogue(q.dlg);
   setTimeout(() => { const b = $('#nextQ'); b && b.focus({ preventScroll: true }); }, 60);
@@ -2330,7 +2333,7 @@ Screens.results = () => {
     if (nw < ws.length && isUnlocked(nw, nl)) next = { w: nw, l: nl };
   }
   render(`<div class="results glass">
-    <div class="owl-wrap celebrate" style="width:110px;height:122px">${owlSVG()}</div>
+    <div class="buddy-wrap celebrate" style="width:110px;height:122px">${buddySVG()}</div>
     <h1>${run.kind === 'level' ? head : run.kind === 'daily' ? 'أنهيت تحدي اليوم! 📅' : 'أنهيت المراجعة! 🔁'}</h1>
     ${run.worldComplete ? `<p class="chip">🏆 أكملت عالم ${ws[run.w].ar}!</p>` : ''}
     ${run.kind === 'level' ? `<div class="big-stars" role="img" aria-label="${run.stars} من 3 نجوم"><span>★</span><span>★</span><span>★</span></div>` : ''}
@@ -2372,7 +2375,7 @@ Screens.results = () => {
 Screens.fail = () => {
   const run = state.run;
   render(`<div class="results glass">
-    <div class="owl-wrap sad" style="width:110px;height:122px">${owlSVG()}</div>
+    <div class="buddy-wrap sad" style="width:110px;height:122px">${buddySVG()}</div>
     <h1>نفدت القلوب 💔</h1><p class="muted">لا تستسلم! كل محاولة تجعلك أقوى.</p>
     ${mistakesHTML(run.mistakes)}
     <div class="row center"><button class="btn btn-primary btn-big" id="retry">🔄 حاول مجدداً</button>
@@ -2393,7 +2396,7 @@ function placementResults(run) {
   gp.placed = true; save();
   const w = ws[gp.placement];
   render(`<div class="results glass">
-    <div class="owl-wrap celebrate" style="width:110px;height:122px">${owlSVG()}</div>
+    <div class="buddy-wrap celebrate" style="width:110px;height:122px">${buddySVG()}</div>
     <h1>نتيجة تحديد المستوى 🎯</h1>
     <p>أجبت عن <b>${run.correct}</b> من ${run.questions.length} إجابات صحيحة.</p>
     <div class="mini-card glass"><span class="emoji">${w.icon}</span><span><b>ننصحك بالبدء من: ${w.ar}</b><small class="en">${w.name}</small></span></div>
@@ -2718,7 +2721,7 @@ MODES.match = (q, st, run, prompt, first) => {
   const cards = shuffle([...q.words.map((w, i) => ({ w, i, img: true })), ...q.words.map((w, i) => ({ w, i, img: false }))]);
   st.innerHTML = `<p class="prompt">${prompt}</p>
     <div class="memory ${cards.length > 6 ? 'c4' : ''}">${cards.map((c, k) => `<button class="mcard" data-k="${k}" aria-label="بطاقة ${k + 1}">
-      <span class="inner"><span class="face back" aria-hidden="true">🦉</span><span class="face front ${c.img ? 'img' : ''}">${c.img ? c.w.emoji : esc(c.w.word)}</span></span></button>`).join('')}</div>`;
+      <span class="inner"><span class="face back" aria-hidden="true">💬</span><span class="face front ${c.img ? 'img' : ''}">${c.img ? c.w.emoji : esc(c.w.word)}</span></span></button>`).join('')}</div>`;
   const els = $$('.mcard', st);
   let open = [], lock = false, matched = 0, misses = 0;
   const flip = k => {

@@ -18,7 +18,7 @@
   --ink:#1b1240;--ink-2:#251a55;--ink-3:#2f2268;
   --violet:#7c3aed;--pink:#ec4899;--gold:#f5b301;--gold-2:#ffd166;--orange:#f97316;
   --text:#f4f1ff;--muted:#b9b2dc;--line:rgba(255,255,255,.12);
-  --owl-body:#a26b45;--owl-belly:#f7dfbd;--owl-dark:#6e4229;
+  --buddy-body:#8b5cf6;--buddy-dark:#5b21b6;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:var(--ink)}
@@ -32,10 +32,10 @@ body{
 main{max-width:600px;margin:0 auto;padding:36px 16px 40px;text-align:center}
 .en{font-family:'Baloo 2','Cairo',sans-serif;direction:ltr;unicode-bidi:isolate}
 
-/* the owl, same drawing as in the game */
-.owl{width:150px;height:auto;display:block;margin:0 auto;overflow:visible;filter:drop-shadow(0 14px 24px rgba(0,0,0,.35));animation:floaty 3.2s ease-in-out infinite}
-.owl .lid{transform-box:fill-box;transform-origin:center top;transform:scaleY(0);animation:blink 4.5s infinite}
-.owl .wing-l{transform-box:fill-box;transform-origin:right top;animation:wave 4.5s ease-in-out infinite}
+/* Hakeem, the speech-bubble character — same drawing as in the game */
+.buddy{width:150px;height:auto;display:block;margin:0 auto;overflow:visible;filter:drop-shadow(0 0 18px rgba(167,139,250,.55)) drop-shadow(0 14px 24px rgba(0,0,0,.35));animation:floaty 3.2s ease-in-out infinite}
+.buddy .lid{transform-box:fill-box;transform-origin:center top;transform:scaleY(0);animation:blink 4.5s infinite}
+.buddy .wing-l{transform-box:fill-box;transform-origin:right top;animation:wave 4.5s ease-in-out infinite}
 @keyframes floaty{50%{transform:translateY(-10px)}}
 @keyframes blink{0%,92%,100%{transform:scaleY(0)}95%{transform:scaleY(1)}}
 @keyframes wave{0%,70%,100%{transform:rotate(0)}78%,90%{transform:rotate(-28deg)}84%{transform:rotate(-12deg)}}
@@ -71,36 +71,34 @@ li{margin:6px 0}
 code{direction:ltr;display:block;text-align:left;font-size:11px;word-break:break-all;color:var(--muted);background:var(--ink);border-radius:8px;padding:8px;margin-top:6px}
 footer{margin-top:32px;font-size:13px;color:var(--muted)}
 @media (max-width:380px){.feats{grid-template-columns:1fr}}
-@media (prefers-reduced-motion:reduce){.owl,.owl .lid,.owl .wing-l{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.buddy,.buddy .lid,.buddy .wing-l{animation:none!important}}
 </style>
 </head>
 <body>
 <main>
-  <svg class="owl" viewBox="0 0 120 132" aria-hidden="true">
-    <g fill="#f59e0b"><ellipse cx="46" cy="122" rx="10" ry="4.5"/><ellipse cx="74" cy="122" rx="10" ry="4.5"/></g>
-    <ellipse class="wing-l" cx="22" cy="82" rx="12" ry="27" fill="var(--owl-dark)"/>
-    <ellipse cx="98" cy="82" rx="12" ry="27" fill="var(--owl-dark)"/>
-    <path d="M27 44 L20 22 L44 34 Z" fill="var(--owl-dark)"/><path d="M93 44 L100 22 L76 34 Z" fill="var(--owl-dark)"/>
-    <ellipse cx="60" cy="76" rx="40" ry="46" fill="var(--owl-body)"/>
-    <ellipse cx="60" cy="90" rx="26" ry="29" fill="var(--owl-belly)"/>
-    <g fill="none" stroke="var(--owl-body)" stroke-width="2" opacity=".45" stroke-linecap="round">
-      <path d="M47 90 q4 4 8 0 q4 4 8 0 q4 4 8 0"/><path d="M51 101 q4 4 8 0 q4 4 8 0"/></g>
-    <circle cx="44" cy="58" r="15" fill="#fff"/><circle cx="76" cy="58" r="15" fill="#fff"/>
-    <circle cx="46" cy="59" r="7" fill="#1f1530"/><circle cx="74" cy="59" r="7" fill="#1f1530"/>
-    <circle cx="48.5" cy="56" r="2.4" fill="#fff"/><circle cx="76.5" cy="56" r="2.4" fill="#fff"/>
-    <g fill="var(--owl-body)"><ellipse class="lid" cx="44" cy="58" rx="16" ry="16"/><ellipse class="lid" cx="76" cy="58" rx="16" ry="16"/></g>
-    <path d="M54 70 L66 70 L60 81 Z" fill="#f59e0b"/>
-    <g fill="#ff8fab" opacity=".75"><ellipse cx="29" cy="74" rx="6" ry="3.5"/><ellipse cx="91" cy="74" rx="6" ry="3.5"/></g>
+  <svg class="buddy" viewBox="0 0 120 132" aria-hidden="true">
+    <ellipse class="wing-l" cx="12" cy="82" rx="9" ry="15" fill="var(--buddy-dark)"/>
+    <ellipse cx="108" cy="82" rx="9" ry="15" fill="var(--buddy-dark)"/>
+    <path d="M42 26 H78 A32 32 0 0 1 110 58 V80 A32 32 0 0 1 78 112 H52 L28 128 L34 109 A32 32 0 0 1 10 80 V58 A32 32 0 0 1 42 26Z"
+      fill="var(--buddy-body)" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
+    <ellipse cx="36" cy="40" rx="14" ry="6" fill="#fff" opacity=".4" transform="rotate(-24 36 40)"/>
+    <circle cx="44" cy="60" r="13" fill="#fff" stroke="var(--buddy-dark)" stroke-width="1.5"/>
+    <circle cx="76" cy="60" r="13" fill="#fff" stroke="var(--buddy-dark)" stroke-width="1.5"/>
+    <circle cx="45.5" cy="61" r="6.5" fill="#1f1530"/><circle cx="74.5" cy="61" r="6.5" fill="#1f1530"/>
+    <circle cx="47.5" cy="58.5" r="2.2" fill="#fff"/><circle cx="76.5" cy="58.5" r="2.2" fill="#fff"/>
+    <g fill="var(--buddy-body)"><ellipse class="lid" cx="44" cy="60" rx="14" ry="14"/><ellipse class="lid" cx="76" cy="60" rx="14" ry="14"/></g>
+    <path d="M47 83 Q60 97 73 83" fill="none" stroke="#1f1530" stroke-width="3.5" stroke-linecap="round"/>
+    <g fill="#ff8fab" opacity=".8"><ellipse cx="28" cy="78" rx="6" ry="3.5"/><ellipse cx="92" cy="78" rx="6" ry="3.5"/></g>
     <path d="M28 28 L60 15 L92 28 L60 41 Z" fill="#1f1b3a"/><rect x="45" y="31" width="30" height="9" rx="2" fill="#1f1b3a"/>
     <path d="M90 28 L92 44" stroke="#f5b301" stroke-width="2.2"/><circle cx="92" cy="46" r="3.2" fill="#f5b301"/>
   </svg>
   <h1 class="brand"><span>حكيم</span><i>|</i><span class="en">Hakeem</span></h1>
-  <p class="tag">مغامرة ممتعة لتعلّم الإنجليزية بالصوت والصورة واللعب مع البومة الحكيمة</p>
+  <p class="tag">مغامرة ممتعة لتعلّم الإنجليزية بالصوت والصورة واللعب مع صديقك حكيم</p>
 
   <div class="stats"><span>386 كلمة وعبارة</span><span>10 أنماط لعب</span><span>4 فئات عمرية</span><span>مجانية</span></div>
 
   <a class="btn primary" href="hakeem.apk" download="hakeem.apk">⬇ تحميل لأندرويد</a>
-  <p class="meta">الإصدار 1.1 · 0.6 ميغابايت · أندرويد 7 فما فوق</p>
+  <p class="meta">الإصدار 1.2 · 0.6 ميغابايت · أندرويد 7 فما فوق</p>
   <a class="btn secondary" href="play/">▶ العب الآن من المتصفح</a>
 
   <div class="shots" aria-label="صور من اللعبة">
@@ -132,7 +130,7 @@ footer{margin-top:32px;font-size:13px;color:var(--muted)}
       <li>💬 حوارات قصيرة للاستماع والفهم</li>
       <li>🔁 مراجعة ذكية للكلمات الصعبة</li>
       <li>🎯 مهام يومية وصندوق كنز</li>
-      <li>🛍️ متجر لتزيين البومة حكيم</li>
+      <li>🛍️ متجر لتزيين حكيم بالقبعات والألوان</li>
     </ul>
   </section>
 
@@ -150,7 +148,7 @@ footer{margin-top:32px;font-size:13px;color:var(--muted)}
   <section>
     <h2>التحقق من الملف</h2>
     <p class="note">بصمة SHA-256 للملف الرسمي:</p>
-    <code>6b02cb98d4116f1937e526597be70d5dbbd420210280b6a4c49dbf7a5a00925a</code>
+    <code>1267d1bc7b7fd6b56fd47b8644a3ec500ee5d6f9315ce1b09b422f63b7c2e74c</code>
   </section>
 
   <footer>© 2026 حكيم | Hakeem</footer>
