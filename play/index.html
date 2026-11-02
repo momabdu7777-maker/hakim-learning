@@ -493,6 +493,36 @@ html[data-theme=dark] .pop-field{background:linear-gradient(180deg,rgba(30,58,13
 .chest.open{animation:pop .45s ease}
 @keyframes chestWiggle{0%,60%,100%{transform:rotate(0)}70%{transform:rotate(-8deg) scale(1.05)}80%{transform:rotate(8deg) scale(1.05)}90%{transform:rotate(-4deg)}}
 
+/* =========================================================
+   11. HAKEEM REELS
+   ========================================================= */
+body[data-screen=reels] #app{padding-bottom:0}
+body[data-screen=reels] .topbar{margin-bottom:6px}
+body[data-screen=reels] .topbar .title{font-size:1.1rem;white-space:nowrap}
+.reels{height:calc(100vh - 86px);height:calc(100dvh - 86px);overflow-y:auto;scroll-snap-type:y mandatory;margin:0 -16px;padding:0 16px;overscroll-behavior:contain;scrollbar-width:none}
+.reels::-webkit-scrollbar{display:none}
+.reel{min-height:calc(100vh - 86px);min-height:calc(100dvh - 86px);scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:6px 0 18px}
+.reel-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.reel-head b{font-family:var(--font-en);font-size:1.3rem;direction:ltr}
+.reel-head .reel-n{margin-inline-start:auto;font-family:var(--font-en)}
+.reel-video{position:relative;width:100%;aspect-ratio:16/9;border-radius:var(--radius);overflow:hidden;background:#000;box-shadow:var(--shadow)}
+.reel-video video{width:100%;height:100%;display:block;object-fit:contain;background:#000}
+.reel-play{position:absolute;inset:0;margin:auto;width:78px;height:78px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:2rem;display:grid;place-items:center;backdrop-filter:blur(4px)}
+.reel-msg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:16px;background:rgba(0,0,0,.72);color:#fff;font-weight:700}
+.reel-cap{padding:12px 16px;text-align:center;min-height:104px;display:flex;flex-direction:column;justify-content:center;gap:2px;cursor:pointer}
+.cap-en{font-size:1.3rem;font-weight:800;line-height:1.5}
+.cap-en.pop{animation:pop .35s}
+.cap-ar{color:var(--muted);font-weight:700}
+.reels.no-ar .cap-ar{visibility:hidden}
+#reelAr[aria-pressed=false]{opacity:.45;text-decoration:line-through}
+.reel-actions{display:flex;justify-content:center;gap:14px}
+.reel-actions .liked{animation:bump .4s}
+.reel-quiz{padding:14px;display:flex;flex-direction:column;gap:8px;align-items:center}
+.reel-quiz .options{max-width:none}
+.reel-credit{font-size:.72rem;color:var(--muted);text-align:center}
+.credits p{margin-bottom:10px;font-size:.9rem;line-height:1.6}
+.credits a{color:var(--primary)}
+
 @media (max-width:420px){
   .menu-row{grid-template-columns:1fr}
   .opt{min-height:104px}
@@ -893,7 +923,9 @@ const ACHIEVEMENTS = [
   { id:'combo',   icon:'⚡', name:'كومبو خارق',      desc:'10 إجابات صحيحة متتالية',    test:p => p.stats.bestCombo >= 10 },
   { id:'daily',   icon:'📅', name:'بطل التحدي',      desc:'أكمل تحدياً يومياً',          test:p => p.stats.daily >= 1 },
   { id:'review',  icon:'🔁', name:'المراجِع الذكي',  desc:'أكمل جلسة مراجعة ذكية',      test:p => p.stats.reviews >= 1 },
-  { id:'rich',    icon:'🪙', name:'جامع الكنوز',     desc:'اجمع 500 عملة',             test:p => p.coins >= 500 }
+  { id:'rich',    icon:'🪙', name:'جامع الكنوز',     desc:'اجمع 500 عملة',             test:p => p.coins >= 500 },
+  { id:'reels5',  icon:'🎬', name:'مشاهد نشيط',      desc:'شاهد 5 ريلز وأجب عنها',      test:p => Object.keys((p.reels || {}).done || {}).length >= 5 },
+  { id:'reels15', icon:'🍿', name:'عاشق الريلز',     desc:'شاهد كل الريلز',             test:p => Object.keys((p.reels || {}).done || {}).length >= REELS.length }
 ];
 
 const AVATARS = ['🦊','🐼','🐯','🦁','🐸','🐵','🦄','🐙','🐨','🐰','🐧','🦖','🐱','🐶','🧑‍🚀','🧑‍🎓','👩‍💼','👨‍💼','🧕','🧔'];
@@ -929,9 +961,138 @@ const QUESTS = [
   { id:'combo',   icon:'⚡', name:'حقّق سلسلة إجابات صحيحة', target:{ kids:4, def:6 } },
   { id:'speak',   icon:'🎤', name:'انطق كلمات بشكل صحيح',   target:{ def:3 } },
   { id:'words',   icon:'🆕', name:'تعلّم كلمات جديدة',        target:{ def:5 } },
-  { id:'review',  icon:'🔁', name:'أكمل جلسة مراجعة ذكية',   target:{ def:1 } }
+  { id:'review',  icon:'🔁', name:'أكمل جلسة مراجعة ذكية',   target:{ def:1 } },
+  { id:'reels',   icon:'🎬', name:'شاهد ريلز حكيم وأجب عنها', target:{ def:2 } }
 ];
 const QUEST_REWARD = { coins:30, xp:20 };
+
+/* ---------- Hakeem Reels: short cartoon clips (open licences) with timed English narration ----------
+   Clips are cut from Blender Foundation open movies and streamed from the game's website.
+   cues: [secondsFromStart, english, arabic]; quiz.answer is the index of the right option. */
+const REEL_FILMS = {
+  bbb:  { title:'Big Buck Bunny', by:'Blender Foundation', year:2008, license:'CC BY 3.0',
+          licenseUrl:'https://creativecommons.org/licenses/by/3.0/', source:'https://peach.blender.org/' },
+  cam1: { title:'Caminandes 1: Llama Drama', by:'Pablo Vazquez, Beorn Leonard, Francesco Siddi (Blender Foundation)', year:2013, license:'CC BY 3.0',
+          licenseUrl:'https://creativecommons.org/licenses/by/3.0/', source:'https://commons.wikimedia.org/wiki/File:Caminandes-_Llama_Drama_-_Short_Movie.ogv' },
+  cam2: { title:'Caminandes 2: Gran Dillama', by:'Pablo Vazquez, Beorn Leonard, Francesco Siddi — caminandes.com', year:2013, license:'CC BY-SA 3.0',
+          licenseUrl:'https://creativecommons.org/licenses/by-sa/3.0/', source:'https://commons.wikimedia.org/wiki/File:Caminandes_-_Gran_Dillama_-_Blender_Foundation%27s_new_Open_Movie.webm' },
+  cam3: { title:'Caminandes 3: Llamigos', by:'Blender Foundation', year:2016, license:'CC BY 3.0',
+          licenseUrl:'https://creativecommons.org/licenses/by/3.0/', source:'https://commons.wikimedia.org/wiki/File:Caminandes_3_-_Llamigos_-_Blender_Animated_Short.webm' }
+};
+const REELS = [
+  { id:'bbb-birds', film:'bbb', en:'A Beautiful Morning', ar:'صباح جميل', cues:[
+      [1, "Good morning! The sky is pink.", "صباح الخير! السماء وردية."],
+      [6, "Look at the green trees and the grass.", "انظر إلى الأشجار الخضراء والعشب."],
+      [12, "A little bird is on a branch.", "عصفور صغير على غصن."],
+      [15, "The bird is happy. It sings and dances.", "العصفور سعيد. إنه يغنّي ويرقص."],
+      [21, "This is the forest. Someone lives here!", "هذه هي الغابة. هناك من يعيش هنا!"]],
+    quiz:{ q:"Where is the bird?", qAr:"أين العصفور؟", options:["On a branch","In the water","On a car","Under a rock"], answer:0 } },
+  { id:'bbb-morning', film:'bbb', en:'Good Morning, Bunny!', ar:'صباح الخير يا أرنب!', cues:[
+      [2, "This is a big bunny's house.", "هذا بيت أرنب كبير."],
+      [8, "The bunny is sleeping. Shh!", "الأرنب نائم. هدوء!"],
+      [17, "Now he wakes up and comes out.", "الآن يستيقظ ويخرج."],
+      [24, "He stretches his arms. Good morning, bunny!", "يمدّ ذراعيه. صباح الخير يا أرنب!"],
+      [30, "He looks at the sun. He smiles.", "ينظر إلى الشمس. إنه يبتسم."],
+      [37, "He smells the white flowers.", "يشمّ الزهور البيضاء."]],
+    quiz:{ q:"What does the bunny smell?", qAr:"ماذا يشمّ الأرنب؟", options:["Flowers","Apples","Bread","Fish"], answer:0 } },
+  { id:'bbb-butterfly', film:'bbb', en:'The Bunny and the Butterfly', ar:'الأرنب والفراشة', cues:[
+      [2, "The bunny loves flowers.", "الأرنب يحب الزهور."],
+      [7, "Look! A pink butterfly.", "انظر! فراشة وردية."],
+      [13, "An apple falls from the tree.", "تسقط تفاحة من الشجرة."],
+      [18, "He has a red apple. Yummy!", "معه تفاحة حمراء. لذيذة!"],
+      [35, "A purple butterfly flies over his head.", "فراشة بنفسجية تطير فوق رأسه."],
+      [41, "He walks to the big tree.", "يمشي نحو الشجرة الكبيرة."]],
+    quiz:{ q:"What color is the apple?", qAr:"ما لون التفاحة؟", options:["Red","Blue","Black","White"], answer:0 } },
+  { id:'bbb-friends', film:'bbb', en:'Three Naughty Friends', ar:'ثلاثة أصدقاء مشاغبين', cues:[
+      [2, "These are three small animals.", "هذه ثلاثة حيوانات صغيرة."],
+      [6, "The bunny is happy under the tree.", "الأرنب سعيد تحت الشجرة."],
+      [15, "A squirrel is on the tree. He is hiding.", "سنجاب على الشجرة. إنه يختبئ."],
+      [21, "The squirrel is behind the bunny!", "السنجاب خلف الأرنب!"],
+      [34, "The three animals are watching him.", "الحيوانات الثلاثة تراقبه."]],
+    quiz:{ q:"Where is the squirrel?", qAr:"أين السنجاب؟", options:["On the tree","In the sky","In a car","In the house"], answer:0 } },
+  { id:'bbb-notnice', film:'bbb', en:'That Is Not Nice!', ar:'هذا ليس لطيفاً!', cues:[
+      [1, "The bunny is in the field.", "الأرنب في الحقل."],
+      [5, "The three animals are laughing.", "الحيوانات الثلاثة تضحك."],
+      [13, "Oh no! They throw a nut at the bunny.", "يا إلهي! يرمون جوزة على الأرنب."],
+      [19, "The bunny is sad and angry.", "الأرنب حزين وغاضب."],
+      [23, "That is not nice! Be kind to others.", "هذا ليس لطيفاً! كن لطيفاً مع الآخرين."]],
+    quiz:{ q:"Is it nice to throw things at others?", qAr:"هل من اللطيف أن نرمي الأشياء على الآخرين؟", options:["No, it is not nice","Yes, it is nice","It is very good","It is funny"], answer:0 } },
+  { id:'bbb-surprise', film:'bbb', en:'Surprise!', ar:'مفاجأة!', cues:[
+      [1, "The little chinchilla has a nut.", "الشنشيلة الصغيرة معها جوزة."],
+      [5, "The nut rolls away. He follows it.", "تتدحرج الجوزة بعيداً، فيلحق بها."],
+      [13, "Look at the big log!", "انظر إلى جذع الشجرة الكبير!"],
+      [20, "Surprise! The big bunny is here.", "مفاجأة! الأرنب الكبير هنا."],
+      [26, "The bunny is big. The chinchilla is small.", "الأرنب كبير، والشنشيلة صغيرة."]],
+    quiz:{ q:"Who is big?", qAr:"من الكبير؟", options:["The bunny","The chinchilla","The nut","The butterfly"], answer:0 } },
+  { id:'bbb-fly', film:'bbb', en:'I Can Fly!', ar:'أستطيع الطيران!', cues:[
+      [1, "The red squirrel is on a branch.", "السنجاب الأحمر على غصن."],
+      [4, "He opens his arms. He wants to fly!", "يفتح ذراعيه. يريد أن يطير!"],
+      [9, "The bunny is watching.", "الأرنب يراقب."],
+      [12, "Wow! He can fly in the sky.", "واو! يستطيع أن يطير في السماء."],
+      [16, "Oops! An apple falls down.", "أوه! تسقط تفاحة."]],
+    quiz:{ q:"What can the red squirrel do?", qAr:"ماذا يستطيع السنجاب الأحمر أن يفعل؟", options:["Fly","Swim","Read","Cook"], answer:0 } },
+  { id:'bbb-ending', film:'bbb', en:'A Happy Ending', ar:'نهاية سعيدة', cues:[
+      [2, "It is a beautiful day again.", "إنه يوم جميل مرة أخرى."],
+      [8, "The bunny is happy now.", "الأرنب سعيد الآن."],
+      [11, "His butterfly friend is back!", "صديقته الفراشة عادت!"],
+      [16, "The squirrel is surprised.", "السنجاب متفاجئ."],
+      [18, "He is flying like a kite!", "إنه يطير مثل الطائرة الورقية!"]],
+    quiz:{ q:"How does the bunny feel at the end?", qAr:"كيف يشعر الأرنب في النهاية؟", options:["Happy","Sad","Angry","Sleepy"], answer:0 } },
+  { id:'cam1-road', film:'cam1', en:'The Llama and the Road', ar:'اللاما والطريق', cues:[
+      [1, "Look at the big mountains!", "انظر إلى الجبال الكبيرة!"],
+      [8, "A little llama is near the road.", "لاما صغير قرب الطريق."],
+      [13, "He wants to cross the road.", "يريد أن يعبر الطريق."],
+      [25, "Something big and orange walks by.", "شيء كبير برتقالي يمرّ من هنا."],
+      [36, "The llama looks around.", "اللاما ينظر حوله."]],
+    quiz:{ q:"Where is the llama?", qAr:"أين اللاما؟", options:["Near the road","In the sea","In a house","On a boat"], answer:0 } },
+  { id:'cam1-careful', film:'cam1', en:'Be Careful on the Road!', ar:'انتبه على الطريق!', cues:[
+      [1, "The llama is on the road.", "اللاما على الطريق."],
+      [3, "Oh no! A red car is coming!", "يا إلهي! سيارة حمراء قادمة!"],
+      [8, "The llama falls down. Is he OK?", "سقط اللاما. هل هو بخير؟"],
+      [15, "Yes, he is OK. But he is very surprised!", "نعم، هو بخير. لكنه متفاجئ جداً!"],
+      [25, "Remember: look left and right before you cross the road.", "تذكّر: انظر يميناً ويساراً قبل أن تعبر الطريق."]],
+    quiz:{ q:"What color is the car?", qAr:"ما لون السيارة؟", options:["Red","Green","Blue","Yellow"], answer:0 } },
+  { id:'cam2-hungry', film:'cam2', en:'The Hungry Llama', ar:'اللاما الجائع', cues:[
+      [1, "Here is the llama again. He is in the desert.", "هذا اللاما مرة أخرى. إنه في الصحراء."],
+      [8, "He is very hungry.", "إنه جائع جداً."],
+      [15, "There is a long fence.", "يوجد سياج طويل."],
+      [26, "Look! A green plant. Food!", "انظر! نبتة خضراء. طعام!"],
+      [34, "But the plant is on the other side.", "لكن النبتة على الجهة الأخرى."],
+      [44, "How can he get it? He is thinking.", "كيف يحصل عليها؟ إنه يفكّر."]],
+    quiz:{ q:"What does the llama want?", qAr:"ماذا يريد اللاما؟", options:["A green plant","A red car","A book","A ball"], answer:0 } },
+  { id:'cam3-ice', film:'cam3', en:'Slippery Ice', ar:'الجليد الزلق', cues:[
+      [1, "It is winter. There is snow and ice.", "إنه الشتاء. يوجد ثلج وجليد."],
+      [4, "The ice is slippery. Be careful, llama!", "الجليد زلق. انتبه يا لاما!"],
+      [11, "He falls down on the ice.", "سقط على الجليد."],
+      [16, "Look! A little penguin.", "انظر! بطريق صغير."],
+      [21, "The penguin and the llama look at each other.", "البطريق واللاما ينظران إلى بعضهما."]],
+    quiz:{ q:"What is slippery?", qAr:"ما الشيء الزلق؟", options:["The ice","The tree","The bread","The car"], answer:0 } },
+  { id:'cam3-train', film:'cam3', en:'The Train Is Coming!', ar:'القطار قادم!', cues:[
+      [1, "Choo choo! A big black train is coming.", "تشو تشو! قطار أسود كبير قادم."],
+      [5, "The llama is scared.", "اللاما خائف."],
+      [8, "The penguin is on the train tracks!", "البطريق على سكة القطار!"],
+      [14, "Everyone is safe. Phew!", "الجميع بأمان. يا للراحة!"],
+      [19, "The llama sees a red berry. He wants to eat it.", "يرى اللاما توتة حمراء. يريد أن يأكلها."]],
+    quiz:{ q:"What color is the train?", qAr:"ما لون القطار؟", options:["Black","Pink","Green","White"], answer:0 } },
+  { id:'cam3-snow', film:'cam3', en:'Fun in the Snow', ar:'مرح في الثلج', cues:[
+      [1, "The penguin has many red berries.", "مع البطريق الكثير من التوت الأحمر."],
+      [4, "The llama slides down the snowy hill.", "اللاما ينزلق على التلة الثلجية."],
+      [9, "Wheee! He is very fast!", "وييي! إنه سريع جداً!"],
+      [17, "He flies over the mountains!", "إنه يطير فوق الجبال!"],
+      [20, "Now the llama and the penguin rest in the snow.", "الآن يستريح اللاما والبطريق في الثلج."]],
+    quiz:{ q:"Where does the llama slide?", qAr:"أين ينزلق اللاما؟", options:["Down a snowy hill","In a pool","On a bed","In a kitchen"], answer:0 } },
+  { id:'cam3-together', film:'cam3', en:'Friends Together', ar:'أصدقاء معاً', cues:[
+      [1, "The llama is tired and alone.", "اللاما متعب ووحيد."],
+      [12, "It is evening. He sits by the sea.", "إنه المساء. يجلس بجانب البحر."],
+      [18, "Look! The penguin brings berries.", "انظر! البطريق يحضر التوت."],
+      [21, "Many penguins come. They bring food!", "تأتي بطاريق كثيرة. يحضرون الطعام!"],
+      [27, "Now they are friends. Friends share food.", "الآن هم أصدقاء. الأصدقاء يتشاركون الطعام."]],
+    quiz:{ q:"What do the penguins bring?", qAr:"ماذا تحضر البطاريق؟", options:["Red berries","Pizza","Books","Toys"], answer:0 } }
+];
+/** Where the clips are streamed from: next to the web version, or the public site for the app/local file. */
+const REELS_BASE = location.protocol.startsWith('http') ? new URL('../reels/', location.href).href
+  : 'https://momabdu7777-maker.github.io/hakim-learning/reels/';
+const REEL_REWARD = { coins:5, xp:10 };
 
 /* =========================================================
    2. SMALL HELPERS
@@ -995,7 +1156,8 @@ function newProfile(name, avatar, age) {
     ach: {},                                    // unlocked achievements { id: timestamp }
     groups: {},                                 // per-age-group progress (kept separately)
     look: { hat:'cap', color:'classic', owned:['cap', 'none', 'classic'] },  // shop items
-    quests: null                                // today's quests { day, list:[{id,target,n,claimed}] }
+    quests: null,                              // today's quests { day, list:[{id,target,n,claimed}] }
+    reels: { done:{}, liked:{} }                // Hakeem Reels: answered quizzes + likes
   };
 }
 /** Fill in fields added in later versions so older saves keep working. */
@@ -1004,6 +1166,7 @@ function migrateProfile(p) {
   p.look = p.look || p.owl || { hat:'cap', color:'classic', owned:['cap', 'none', 'classic'] };   // field was `owl` before v1.2
   delete p.owl;
   if (!('quests' in p)) p.quests = null;
+  p.reels = p.reels || { done:{}, liked:{} };
 }
 /** Current profile. */
 const P = () => Store.data.profiles.find(p => p.id === Store.data.currentId) || null;
@@ -1473,16 +1636,16 @@ function applyTheme() {
 /* =========================================================
    6. APP STATE + ROUTER
    ========================================================= */
-const state = { screen:null, run:null, key:null, timerId:null, modalResolve:null, modalPrevFocus:null, lastPt:null };
+const state = { screen:null, run:null, key:null, timerId:null, modalResolve:null, modalPrevFocus:null, lastPt:null, reelObs:null };
 const Screens = {};
-const PLAY_SCREENS = ['play', 'intro'];
+const PLAY_SCREENS = ['play', 'intro', 'reels'];
 
 function show(name, ...args) {
-  stopTimer(); stopRecognition(); Speech.cancel();
+  stopTimer(); stopRecognition(); stopReels(); Speech.cancel();
   $('#feedback').className = 'feedback';
   state.screen = name; state.key = null;
   document.body.dataset.screen = name;
-  Mascot.visible(name !== 'splash');
+  Mascot.visible(name !== 'splash' && name !== 'reels');
   Screens[name](...args);
   window.scrollTo(0, 0);
 }
@@ -1605,6 +1768,7 @@ Screens.menu = () => {
   const acc = p.stats.answers ? Math.round(p.stats.correct / p.stats.answers * 100) : 0;
   const weekSec = sum([...Array(7)].map((_, i) => p.daily[dayKeyOffset(-i)] || 0));
   const tiles = [
+    ['reels', '🎬', 'ريلز حكيم', `✅ ${Object.keys(p.reels.done).length}/${REELS.length}`],
     ['words', '📒', 'كلماتي', `${learned} كلمة`],
     ['review', '🔁', 'المراجعة الذكية', due ? `${due} للمراجعة` : 'لا شيء الآن', due],
     ['shop', '🛍️', 'متجر حكيم', `🪙 ${p.coins}`],
@@ -1912,6 +2076,152 @@ Screens.settings = () => {
     Store.data.currentId = null; save(); Music.sync();
     show(Store.data.profiles.length ? 'profiles' : 'create');
   };
+};
+
+/* ---------- Hakeem Reels: swipeable cartoon clips with timed narration ---------- */
+function stopReels() {
+  if (state.reelObs) { state.reelObs.disconnect(); state.reelObs = null; }
+  $$('.reel video').forEach(v => { try { v.pause(); v.removeAttribute('src'); v.load(); } catch (e) {} });
+}
+const reelsDone = () => Object.keys(P().reels.done).length;
+
+Screens.reels = () => {
+  const p = P(), rs = p.reels;
+  render(topbar('🎬 ريلز حكيم', 'menu', `<span class="chip" id="reelCount">✅ ${reelsDone()}/${REELS.length}</span>
+      <button class="icon-btn sm" id="reelAr" aria-pressed="${p.settings.reelsAr !== false}" aria-label="إظهار الترجمة العربية">ع</button>
+      <button class="icon-btn sm" id="reelCredits" aria-label="حقوق المقاطع">©</button>`) +
+    `<div class="reels ${p.settings.reelsAr === false ? 'no-ar' : ''}" id="reels">${REELS.map((r, i) => {
+      const f = REEL_FILMS[r.film];
+      return `<section class="reel" data-i="${i}" aria-label="${esc(r.ar)}">
+        <div class="reel-head"><b>${esc(r.en)}</b><small class="muted">${esc(r.ar)}</small>${rs.done[r.id] ? '<span class="badge">✅</span>' : ''}<small class="muted reel-n">${i + 1}/${REELS.length}</small></div>
+        <div class="reel-video"><video playsinline preload="none" poster="${REELS_BASE}${r.id}.jpg"></video>
+          <button class="reel-play" aria-label="تشغيل">▶</button><div class="reel-msg hidden" role="status"></div></div>
+        <div class="reel-cap glass" role="button" tabindex="0" aria-label="استمع للجملة مرة أخرى"><p class="cap-en en">▶</p><p class="cap-ar">اسحب للأعلى لمشاهدة المقطع التالي ⬆️</p></div>
+        <div class="reel-actions">
+          <button class="icon-btn" data-act="like" aria-label="إعجاب">${rs.liked[r.id] ? '❤️' : '🤍'}</button>
+          <button class="icon-btn" data-act="replay" aria-label="إعادة المقطع">🔁</button>
+          <button class="icon-btn" data-act="next" aria-label="المقطع التالي">⬇️</button>
+        </div>
+        <div class="reel-quiz glass hidden"></div>
+        <p class="reel-credit en">${esc(f.title)} © ${f.year} ${esc(f.by)} · ${f.license}</p>
+      </section>`;
+    }).join('')}</div>`);
+
+  const box = $('#reels'), secs = $$('.reel', box);
+  const ctl = secs.map(() => ({ spoken: new Set(), talking: 0 }));
+
+  const setCap = (sec, en, ar) => {
+    const ce = $('.cap-en', sec), ca = $('.cap-ar', sec);
+    ce.textContent = en; ca.textContent = ar;
+    ce.classList.remove('pop'); void ce.offsetWidth; ce.classList.add('pop');
+  };
+  // Hakeem reads a line; the cartoon's music is lowered while he talks
+  const narrate = (i, text) => {
+    const v = $('video', secs[i]), c = ctl[i];
+    c.talking++; v.volume = .25;
+    Speech.say(text, { queue: true, onend: () => { c.talking = Math.max(0, c.talking - 1); if (!c.talking) v.volume = 1; } });
+  };
+  const showQuiz = i => {
+    const r = REELS[i], sec = secs[i], q = $('.reel-quiz', sec), order = shuffle([0, 1, 2, 3]);
+    q.classList.remove('hidden');
+    q.innerHTML = `<p class="question en">${esc(r.quiz.q)}</p><p class="hint-ar">${esc(r.quiz.qAr)}</p>
+      <div class="options list">${order.map((oi, k) => `<button class="opt text en" data-k="${k}"><span class="kbd">${k + 1}</span>${esc(r.quiz.options[oi])}</button>`).join('')}</div>`;
+    const btns = $$('.opt', q), right = k => order[k] === r.quiz.answer;
+    btns.forEach((b, k) => b.onclick = () => {
+      if (btns.some(x => x.disabled)) return;
+      optClasses(btns, right, k);
+      if (right(k)) {
+        Sound.correct(); buzz(18);
+        if (!rs.done[r.id]) {
+          rs.done[r.id] = Date.now();
+          p.coins += REEL_REWARD.coins; addXP(REEL_REWARD.xp);
+          floatGain(`+${REEL_REWARD.xp} XP`, `+${REEL_REWARD.coins} 🪙`);
+          questEvent('reels');
+          $('#reelCount').textContent = `✅ ${reelsDone()}/${REELS.length}`;
+          $('.reel-head', sec).insertAdjacentHTML('beforeend', '<span class="badge">✅</span>');
+        }
+        Mascot.mood('happy');
+      } else { Sound.wrong(); buzz([40, 60, 40]); }
+      Speech.say(r.quiz.options[r.quiz.answer]);
+      save(); checkAchievements();
+      q.insertAdjacentHTML('beforeend', i < REELS.length - 1
+        ? `<button class="btn btn-primary btn-wide" data-act="next">المقطع التالي ⬇️</button>`
+        : `<p class="center"><b>🍿 شاهدت كل الريلز!</b></p>`);
+    });
+    q.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
+  };
+
+  secs.forEach((sec, i) => {
+    const v = $('video', sec), r = REELS[i], c = ctl[i], msg = $('.reel-msg', sec), playBtn = $('.reel-play', sec);
+    v.addEventListener('timeupdate', () => {
+      const t = v.currentTime;
+      r.cues.forEach(([at, en, ar], k) => {
+        // speak each line once, only when playback reaches it (not when jumping far ahead)
+        if (!c.spoken.has(k) && t >= at && t < at + 2) { c.spoken.add(k); setCap(sec, en, ar); narrate(i, en); }
+      });
+    });
+    v.addEventListener('play', () => { playBtn.classList.add('hidden'); msg.classList.add('hidden'); });
+    v.addEventListener('pause', () => { if (!v.ended) playBtn.classList.remove('hidden'); });
+    v.addEventListener('ended', () => { playBtn.classList.add('hidden'); showQuiz(i); });
+    v.addEventListener('error', () => {
+      if (!v.getAttribute('src')) return;
+      msg.innerHTML = '📶 تحتاج اتصالاً بالإنترنت لمشاهدة هذا المقطع<br><button class="btn btn-ghost" data-act="retry">حاول مجدداً</button>';
+      msg.classList.remove('hidden');
+    });
+    const toggle = () => { if (v.paused) start(i, false); else { v.pause(); Speech.cancel(); } };
+    v.addEventListener('click', toggle); playBtn.onclick = toggle;
+    $('.reel-cap', sec).onclick = () => { const en = $('.cap-en', sec).textContent; if (en && en !== '▶') Speech.say(en); };
+    sec.addEventListener('click', e => {
+      const a = e.target.closest('[data-act]'); if (!a) return;
+      const act = a.dataset.act;
+      if (act === 'like') { rs.liked[r.id] = !rs.liked[r.id]; a.textContent = rs.liked[r.id] ? '❤️' : '🤍'; a.classList.remove('liked'); void a.offsetWidth; a.classList.add('liked'); if (rs.liked[r.id]) Sound.coin(); save(); }
+      else if (act === 'replay') start(i, true);
+      else if (act === 'next' && secs[i + 1]) secs[i + 1].scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth' });
+      else if (act === 'retry') { msg.classList.add('hidden'); v.load(); start(i, false); }
+    });
+  });
+
+  /** Play reel i (and pause every other one). fromStart also resets narration and the quiz. */
+  function start(i, fromStart) {
+    secs.forEach((s, j) => { if (j !== i) { const o = $('video', s); if (!o.paused) o.pause(); } });
+    const sec = secs[i], v = $('video', sec), c = ctl[i];
+    if (!v.getAttribute('src')) { v.src = REELS_BASE + REELS[i].id + '.mp4'; v.preload = 'auto'; }
+    if (fromStart || v.ended) {
+      v.currentTime = 0; c.spoken.clear();
+      $('.reel-quiz', sec).classList.add('hidden');
+      setCap(sec, '…', '');
+    }
+    Speech.cancel(); c.talking = 0; v.volume = 1;
+    const pr = v.play();
+    if (pr && pr.catch) pr.catch(() => $('.reel-play', sec).classList.remove('hidden'));   // autoplay blocked: show ▶
+  }
+
+  // autoplay whichever reel is on screen; load the next one's poster early
+  state.reelObs = new IntersectionObserver(entries => entries.forEach(en => {
+    const i = +en.target.dataset.i, v = $('video', en.target);
+    if (en.isIntersecting && en.intersectionRatio >= .6) start(i, false);
+    else if (!v.paused) { v.pause(); Speech.cancel(); }
+  }), { root: box, threshold: [0, .6] });
+  secs.forEach(s => state.reelObs.observe(s));
+
+  $('#reelAr').onclick = e => {
+    p.settings.reelsAr = p.settings.reelsAr === false;
+    box.classList.toggle('no-ar', p.settings.reelsAr === false);
+    e.currentTarget.setAttribute('aria-pressed', String(p.settings.reelsAr !== false));
+    save();
+  };
+  $('#reelCredits').onclick = () => modal({ title: '© حقوق المقاطع', ok: 'حسناً', cancel: '', html:
+    `<div class="credits">${Object.values(REEL_FILMS).map(f => `<p class="en"><b>${esc(f.title)}</b> (${f.year})<br>© ${esc(f.by)}<br>
+      <a href="${f.licenseUrl}" target="_blank" rel="noopener">${f.license}</a> · <a href="${f.source}" target="_blank" rel="noopener">source</a></p>`).join('')}
+      <p class="muted small">المقاطع مقتطعة من هذه الأفلام المفتوحة، وأُضيف إليها تعليق صوتي وترجمة. مقاطع «Gran Dillama» المعدّلة منشورة بنفس رخصة CC BY-SA 3.0.</p></div>` });
+  state.key = e => {
+    const cur = secs.findIndex(s => { const r = s.getBoundingClientRect(); return r.top >= -10 && r.top < innerHeight / 2; });
+    if (e.key === 'ArrowDown' && secs[cur + 1]) { e.preventDefault(); secs[cur + 1].scrollIntoView({ behavior: 'smooth' }); }
+    else if (e.key === 'ArrowUp' && secs[cur - 1]) { e.preventDefault(); secs[cur - 1].scrollIntoView({ behavior: 'smooth' }); }
+    else if (e.key === ' ' && secs[cur]) { e.preventDefault(); $('video', secs[cur]).click(); }
+    else if (/^[1-4]$/.test(e.key) && secs[cur]) { const b = $$('.reel-quiz .opt', secs[cur])[+e.key - 1]; b && b.click(); }
+  };
+  Speech.say('Welcome to Hakeem Reels!');
 };
 
 /* =========================================================
@@ -2933,7 +3243,7 @@ window.hakimBack = () => {
   const run = state.run;
   const parent = {
     map: 'menu', words: 'menu', achievements: 'menu', settings: 'menu', stats: 'menu', parent: 'menu',
-    leaderboard: 'menu', shop: 'menu', fail: 'map',
+    leaderboard: 'menu', shop: 'menu', reels: 'menu', fail: 'map',
     results: run && run.kind === 'level' ? 'map' : 'menu',
     create: Store.data.profiles.length ? 'profiles' : null,
     profiles: P() ? 'menu' : null
@@ -2941,7 +3251,7 @@ window.hakimBack = () => {
   if (parent) { show(parent); return true; }
   return false;
 };
-window.hakimPause = () => { save(); Speech.cancel(); stopRecognition(); Music.stop(); };
+window.hakimPause = () => { save(); Speech.cancel(); stopRecognition(); Music.stop(); $$('.reel video').forEach(v => v.pause()); };
 window.hakimResume = () => { Music.sync(); };
 
 function init() {
