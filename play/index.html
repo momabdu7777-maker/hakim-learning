@@ -414,7 +414,7 @@ body[data-screen=play] #mascot{width:64px;height:70px}
 @keyframes toastOut{to{opacity:0;transform:translateY(-20px)}}
 
 .overlay{position:fixed;inset:0;z-index:250;background:rgba(10,8,30,.5);display:grid;place-items:center;padding:16px;animation:screenIn .2s}
-.modal{width:min(420px,100%);padding:22px;display:flex;flex-direction:column;gap:12px;background:var(--surface-solid)}
+.modal{width:min(420px,100%);padding:22px;display:flex;flex-direction:column;gap:12px;background:var(--surface-solid);max-height:92vh;overflow:auto}
 .modal h2{font-size:1.3rem}
 .modal-btns{display:flex;gap:10px;flex-wrap:wrap}
 .modal-btns .btn{flex:1}
@@ -523,6 +523,97 @@ body[data-screen=reels] .topbar .title{font-size:1.1rem;white-space:nowrap}
 .credits p{margin-bottom:10px;font-size:.9rem;line-height:1.6}
 .credits a{color:var(--primary)}
 
+/* =========================================================
+   12. TAB BAR, HUBS AND THE LEARN / ME FEATURES
+   ========================================================= */
+.tabbar{position:fixed;z-index:55;left:50%;bottom:0;transform:translateX(-50%);width:min(780px,100%);display:grid;grid-template-columns:repeat(4,1fr);gap:4px;
+  padding:6px 10px calc(6px + env(safe-area-inset-bottom));background:var(--surface-solid);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(0,0,0,.08);border-radius:20px 20px 0 0}
+.tabbar button{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px;border-radius:14px;font-family:var(--emoji-font);font-size:1.35rem;min-height:54px;color:var(--muted);transition:background .2s}
+.tabbar button span{font-family:var(--font-ar);font-size:.74rem;font-weight:800;line-height:1.3}
+.tabbar button[aria-current=page]{background:var(--chip);color:var(--primary)}
+body.has-tabs #app{padding-bottom:150px}
+body.has-tabs #mascot{bottom:78px}
+body.has-tabs[data-screen=reels] .reels,body.has-tabs[data-screen=reels] .reel{height:calc(100dvh - 152px);min-height:calc(100dvh - 152px)}
+.hub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.hub-card{display:flex;align-items:center;gap:12px;padding:14px;text-align:start;position:relative;transition:transform .15s;border:2px solid transparent}
+.hub-card:hover{transform:translateY(-2px)}
+.hub-card .emoji{font-size:2.2rem;width:52px;text-align:center;flex-shrink:0}
+.hub-card .hub-txt{flex:1;display:flex;flex-direction:column;min-width:0}
+.hub-card small{color:var(--muted)}
+.hub-card.rec{border-color:var(--primary)}
+.hub-card .badge{position:absolute;top:8px;left:8px}
+.sound-ico{font-family:var(--font-en)!important;font-weight:800;font-size:1.25rem!important;color:var(--primary)}
+.mini-card.season{width:100%;margin-bottom:12px;border:2px solid var(--primary)}
+.me-card{display:flex;gap:14px;align-items:center;padding:14px;margin-bottom:14px}
+.me-buddy{width:96px;height:106px;flex-shrink:0}
+.me-info{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}
+.me-info b{font-size:1.2rem}
+.abc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:8px}
+.abc-tile{padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;border:2px solid transparent}
+.abc-tile b{font-size:1.5rem}
+.abc-tile .emoji{font-size:1.4rem}
+.abc-tile.done{border-color:var(--good)}
+.letter-card{padding:16px;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center}
+.letter-big{font-size:5rem;font-weight:800;line-height:1;color:var(--primary)}
+.letter-big small{font-size:3.4rem;color:var(--primary-2);margin-inline-start:14px}
+.letter-word{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+.letter-word .emoji{font-size:2.6rem}
+.letter-word b{font-size:1.6rem}
+.trace-box{padding:14px;margin-top:12px;display:flex;flex-direction:column;gap:10px;align-items:center}
+.trace-box>.row{width:100%}
+canvas.trace{background:var(--surface-solid);border-radius:var(--radius);border:2px dashed var(--line);touch-action:none;cursor:crosshair}
+.tip-box{padding:12px 16px}
+.tip-box summary{font-weight:800;cursor:pointer}
+.tip-box p{margin-top:6px;line-height:1.8}
+.pair-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.pair-card{padding:16px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;border:3px solid var(--border)}
+.pair-card .emoji{font-size:3.4rem}
+.pair-card b{font-size:1.5rem}
+.pair-card small{color:var(--muted)}
+.pair-card.correct{border-color:var(--good);background:var(--good-bg);animation:bounce .6s}
+.pair-card.wrong{border-color:var(--bad);background:var(--bad-bg);animation:shake .45s}
+.pair-card.dim{opacity:.5}
+.story-scene{padding:22px;text-align:center;margin-bottom:12px}
+.story-scene .emoji{font-size:clamp(3.2rem,15vw,5rem);letter-spacing:6px;display:inline-block;animation:pop .45s}
+.story-text{font-size:1.4rem;font-weight:700;line-height:1.9;text-align:center}
+.story-text .w{cursor:pointer;border-radius:6px;padding:0 2px;transition:background .15s,color .15s}
+.story-text .w.on{background:var(--primary);color:#fff}
+.story-ar{text-align:center;color:var(--muted);font-weight:700;margin:6px 0 12px}
+.story-next{margin-top:16px;display:flex;flex-direction:column;align-items:center;gap:8px;width:100%}
+.story-next .opt small{display:block;color:var(--muted);font-family:var(--font-ar);font-weight:600}
+.karaoke{padding:14px;display:flex;flex-direction:column;gap:8px;max-height:52vh;overflow:auto}
+.k-line{padding:8px 10px;border-radius:12px;transition:background .2s}
+.k-line.on{background:var(--chip)}
+.k-line p{font-size:1.3rem;font-weight:800}
+.k-ar{color:var(--muted);font-weight:600}
+.syl{transition:color .1s,transform .1s;display:inline-block}
+.syl.on{color:var(--primary-2);transform:scale(1.25)}
+.lesson-card{padding:16px}
+.lesson-card h2{font-size:1.2rem;margin-bottom:8px;color:var(--primary)}
+.lesson-card p{line-height:1.9}
+.lesson-q{padding:14px;margin-top:14px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.room{position:relative;width:100%;aspect-ratio:16/11;overflow:hidden;padding:0}
+.room-wall{position:absolute;inset:0 0 40% 0;background:var(--wall)}
+.room-floor{position:absolute;inset:60% 0 0 0;background:linear-gradient(180deg,var(--floor),color-mix(in srgb,var(--floor) 75%,#000))}
+.room-slot{position:absolute;transform:translate(-50%,-50%);width:clamp(56px,16vw,86px);height:clamp(56px,16vw,86px);border-radius:18px;border:2px dashed rgba(0,0,0,.28);
+  color:rgba(0,0,0,.45);font-size:1.6rem;display:grid;place-items:center;background:rgba(255,255,255,.35);z-index:2}
+.room-slot.filled{border:none;background:none}
+.room-slot .emoji{font-size:clamp(2.6rem,11vw,4rem);filter:drop-shadow(0 6px 6px rgba(0,0,0,.25))}
+.room-slot.wall.filled .emoji{font-size:clamp(2.2rem,9vw,3.4rem)}
+.room-buddy{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);width:clamp(90px,26vw,140px);height:clamp(100px,29vw,154px);z-index:1}
+.paint-row{display:flex;gap:10px;flex-wrap:wrap}
+.paint{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px;border-radius:14px;border:2px solid transparent}
+.paint i{width:44px;height:44px;border-radius:50%;background:var(--c);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.paint.on{border-color:var(--primary)}
+.paint small{font-size:.75rem;color:var(--muted)}
+.item-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.item-grid .btn{grid-column:1/-1}
+.sheet{width:min(520px,100%)}
+.cert-img{width:100%;border-radius:12px;box-shadow:var(--shadow)}
+.cert-row.locked{opacity:.6}
+.champ{margin-bottom:12px;border:2px solid #f5b301;width:100%}
+.reel-words{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center}
+
 @media (max-width:420px){
   .menu-row{grid-template-columns:1fr}
   .opt{min-height:104px}
@@ -538,6 +629,12 @@ body[data-screen=reels] .topbar .title{font-size:1.1rem;white-space:nowrap}
 <body data-age="young">
 <div id="bg-deco" aria-hidden="true"><i></i><i></i><i></i></div>
 <main id="app"></main>
+<nav id="tabbar" class="tabbar hidden" aria-label="التنقل الرئيسي">
+  <button data-tab="menu">🏠<span>الرئيسية</span></button>
+  <button data-tab="learn">📚<span>تعلّم</span></button>
+  <button data-tab="reels">🎬<span>ريلز</span></button>
+  <button data-tab="me">😊<span>أنا</span></button>
+</nav>
 <div id="mascot" class="buddy-wrap off" role="button" tabindex="0" aria-label="حكيم — اضغط لنصيحة"></div>
 <div id="feedback" class="feedback" role="status" aria-live="assertive"></div>
 <div id="toast-wrap" aria-live="polite"></div>
@@ -1288,6 +1385,336 @@ const REELS_BASE = location.protocol.startsWith('http') ? new URL('../reels/', l
 const REEL_REWARD = { coins:5, xp:10 };
 
 /* =========================================================
+   1b. MORE CONTENT — new worlds, letters, sounds, stories, songs, grammar, Hakeem's home
+   ========================================================= */
+
+/** Append worlds to an age group (keeps existing world indexes, so saved stars stay valid). */
+function addWorlds(group, list) {
+  const start = WORLDS[group].length;
+  list.forEach((w, k) => {
+    const wi = start + k;
+    const words = w.words.map((line, i, arr) => {
+      const [word, arabic, emoji, exampleSentence] = line.split('|');
+      const obj = { word, arabic, emoji, exampleSentence, ageGroup: group, world: w.id, worldIndex: wi,
+        level: Math.min(5, Math.floor(i * 5 / arr.length) + 1), key: group + ':' + word.toLowerCase() };
+      VOCAB.push(obj); VOCAB_BY_KEY.set(obj.key, obj);
+      return obj;
+    });
+    WORLDS[group].push({ ...w, index: wi, words, dialogues: w.dialogues || [] });
+  });
+}
+
+// free: true → the world's first level is open from the start (seasonal world)
+addWorlds('kids', [
+  { id:'ramadan', name:'Ramadan & Eid', ar:'رمضان والعيد', icon:'🌙', color:'#7c3aed', free:true, words:[
+    "lantern|فانوس|🏮|I have a pretty lantern.", "crescent|هلال|🌙|Look at the crescent in the sky.", "mosque|مسجد|🕌|The mosque is big and white.",
+    "dates|تمر|🌴|We eat dates at sunset.", "soup|شوربة|🍲|Mom makes hot soup.", "gift|هدية|🎁|I have a gift for you.",
+    "sweets|حلويات|🍬|Eid sweets are yummy.", "cookies|كعك|🍪|We bake cookies for Eid.", "lights|أضواء|✨|The lights are shining.",
+    "friends|أصدقاء|🧑‍🤝‍🧑|I play with my friends.", "fireworks|ألعاب نارية|🎆|Look at the fireworks!", "happy|سعيد|😊|I am happy on Eid.",
+    "new clothes|ملابس جديدة|👗|I wear new clothes on Eid.", "Eid money|عيدية|💰|Grandpa gives me Eid money.", "share|يشارك|🤝|I share my sweets.",
+    "Eid Mubarak|عيد مبارك|🎉|Eid Mubarak, everyone!", "Ramadan Kareem|رمضان كريم|🕯️|Ramadan Kareem, Mom!"
+  ]},
+  { id:'jobs', name:'Jobs', ar:'المهن', icon:'🧑‍🚒', color:'#ea580c', words:[
+    "doctor|طبيب|👩‍⚕️|The doctor helps sick people.", "teacher|معلم|🧑‍🏫|My teacher is kind.", "farmer|مزارع|🧑‍🌾|The farmer has a cow.",
+    "cook|طبّاخ|🧑‍🍳|The cook makes pizza.", "pilot|طيّار|🧑‍✈️|The pilot flies a plane.", "builder|عامل بناء|👷|The builder makes a house.",
+    "artist|رسّام|🧑‍🎨|The artist paints a picture.", "singer|مغنٍّ|🎤|The singer sings a song.", "baker|خبّاز|🥐|The baker makes bread.",
+    "driver|سائق|🚌|The bus driver is friendly.", "dentist|طبيب أسنان|🪥|The dentist checks my teeth.", "vet|طبيب بيطري|🐕|The vet helps my dog.",
+    "scientist|عالِم|🧑‍🔬|The scientist works in a lab.", "astronaut|رائد فضاء|🧑‍🚀|The astronaut goes to the moon.",
+    "police officer|شرطي|👮|The police officer is brave.", "firefighter|رجل إطفاء|🧑‍🚒|The firefighter has a big truck."
+  ]}
+]);
+
+addWorlds('young', [
+  { id:'ramadan', name:'Ramadan & Eid', ar:'رمضان والعيد', icon:'🌙', color:'#7c3aed', free:true, words:[
+    "Ramadan|رمضان|✨|Ramadan is a special month.", "fasting|الصيام|⏳|We are fasting today.", "iftar|الإفطار|🍲|Iftar is at sunset.",
+    "suhoor|السحور|🌄|We eat suhoor before dawn.", "lantern|فانوس|🏮|My little brother has a lantern.", "crescent|هلال|🌙|We can see the crescent tonight.",
+    "mosque|مسجد|🕌|We go to the mosque together.", "prayer|صلاة|🤲|We say a prayer.", "charity|صدقة|💝|We give charity to the poor.",
+    "dates|تمر|🌴|We break our fast with dates.", "neighbors|جيران|🏘️|We visit our neighbors.", "gift|هدية|🎁|This gift is for you.",
+    "sweets|حلويات|🍬|We make sweets for Eid.", "new clothes|ملابس جديدة|👕|I wear new clothes on Eid morning.", "Eid|العيد|🎉|Eid is a happy day.",
+    "Eid Mubarak|عيد مبارك|🎊|Eid Mubarak to you and your family!", "Ramadan Kareem|رمضان كريم|🕯️|Ramadan Kareem, Grandma!"
+  ]},
+  { id:'jobs', name:'Jobs & Places', ar:'المهن والأماكن', icon:'👩‍⚕️', color:'#0891b2', words:[
+    "doctor|طبيب|👩‍⚕️|The doctor works in a hospital.", "nurse|ممرّضة|💉|The nurse is very kind.", "farmer|مزارع|🧑‍🌾|The farmer grows vegetables.",
+    "chef|طاهٍ|🧑‍🍳|The chef cooks delicious food.", "pilot|طيّار|🧑‍✈️|The pilot flies the plane.", "engineer|مهندس|👷|My uncle is an engineer.",
+    "scientist|عالِم|🧑‍🔬|The scientist does experiments.", "mechanic|ميكانيكي|🔧|The mechanic fixes cars.", "dentist|طبيب أسنان|🦷|The dentist checks my teeth.",
+    "astronaut|رائد فضاء|🧑‍🚀|I want to be an astronaut.", "hospital|مستشفى|🏥|The hospital is open all night.",
+    "police officer|شرطي|👮|The police officer helps people.", "firefighter|رجل إطفاء|🧑‍🚒|The firefighter puts out fires.",
+    "fire station|مركز إطفاء|🚒|The fire station has red trucks.", "police station|مركز شرطة|🚓|The police station is near my school.",
+    "what do you want to be|ماذا تريد أن تصبح؟|💭|What do you want to be when you grow up?"
+  ]}
+]);
+
+addWorlds('teens', [
+  { id:'ramadan', name:'Ramadan & Eid', ar:'رمضان والعيد', icon:'🌙', color:'#9333ea', free:true, words:[
+    "fasting|الصيام|⏳|I'm fasting, so I can't eat now.", "break the fast|يفطر|🍽️|We break the fast at sunset.", "iftar|الإفطار|🍲|My aunt invited us to iftar.",
+    "suhoor|السحور|🌄|I always wake up for suhoor.", "charity|الصدقة|💝|Giving charity is important in Ramadan.", "lantern|فانوس|🏮|We hung a lantern on the balcony.",
+    "crescent moon|الهلال|🌙|Did you see the crescent moon?", "Eid prayer|صلاة العيد|🕌|We went to the Eid prayer early.",
+    "Eid Mubarak|عيد مبارك|🎉|Eid Mubarak! Have a great day.", "Ramadan Kareem|رمضان كريم|✨|Ramadan Kareem to you and your family.",
+    "visit relatives|يزور الأقارب|🏡|We visit relatives on the first day of Eid.", "exchange gifts|يتبادل الهدايا|🎁|We exchange gifts with our cousins.",
+    "stay up late|يسهر|🌃|We stay up late in Ramadan.", "be patient|كن صبوراً|🧘|Fasting teaches us to be patient.",
+    "share food|يتشارك الطعام|🥘|Neighbors share food during Ramadan.", "volunteer|يتطوّع|🙌|I volunteer at the food bank."
+  ], dialogues:[
+    { lines:[['Hana',"Are you coming to our iftar on Friday?"],['Yousef',"Of course! What time do you break the fast?"],['Hana',"At six thirty, right after sunset."]],
+      q:"When do they break the fast?", qAr:"متى يفطرون؟", options:["At six thirty","At noon","At midnight","At nine"], answer:0 },
+    { lines:[['Omar',"Eid Mubarak! What are you doing today?"],['Lina',"Eid Mubarak! We're visiting my grandparents, then we'll exchange gifts."]],
+      q:"Who is Lina visiting?", qAr:"من ستزور لينا؟", options:["Her grandparents","Her teacher","Her friends at school","Nobody"], answer:0 }
+  ]},
+  { id:'health', name:'Health & Body', ar:'الصحة والجسم', icon:'🩺', color:'#16a34a', words:[
+    "headache|صداع|🤕|I have a terrible headache.", "fever|حمّى|🤒|She stayed home because of a fever.", "cough|سعال|😷|You should see a doctor about that cough.",
+    "sore throat|التهاب الحلق|🗣️|I have a sore throat today.", "medicine|دواء|💊|Take your medicine after dinner.", "healthy|صحي|🥗|Eating vegetables is healthy.",
+    "drink water|يشرب الماء|💧|Drink water when you exercise.", "allergy|حساسية|🤧|I have an allergy to cats.", "injury|إصابة|🩹|He missed the game because of an injury.",
+    "stressed|مضغوط|😣|I feel stressed before exams.", "dentist|طبيب أسنان|🦷|I'm going to the dentist tomorrow.", "check-up|فحص دوري|🩺|I have a check-up next week.",
+    "get enough sleep|ينام كفاية|🛌|Teens need to get enough sleep.", "stay active|يحافظ على نشاطه|🚴|Stay active and walk every day.",
+    "I feel sick|أشعر بالمرض|🤢|I feel sick, can I go home?", "get well soon|أتمنى لك الشفاء|💐|Get well soon, Sam!"
+  ], dialogues:[
+    { lines:[['Nurse',"What's the problem?"],['Adam',"I have a fever and a sore throat."],['Nurse',"OK. Drink a lot of water and rest at home."]],
+      q:"What does the nurse tell Adam to do?", qAr:"ماذا تطلب الممرضة من آدم؟", options:["Drink water and rest","Go to school","Play football","Eat sweets"], answer:0 },
+    { lines:[['Coach',"Why aren't you playing today?"],['Lily',"I hurt my knee yesterday. It's a small injury."]],
+      q:"Why isn't Lily playing?", qAr:"لماذا لا تلعب ليلي؟", options:["She hurt her knee","She is tired","She is late","She forgot her shoes"], answer:0 }
+  ]}
+]);
+
+addWorlds('adults', [
+  { id:'ramadan', name:'Ramadan & Eid', ar:'رمضان والعيد', icon:'🌙', color:'#6d28d9', free:true, words:[
+    "working hours|ساعات العمل|🕘|Working hours are shorter in Ramadan.", "fasting|الصيام|⏳|Many people are fasting this month.",
+    "iftar invitation|دعوة إفطار|📩|Thank you for the iftar invitation.", "Ramadan Kareem|رمضان كريم|✨|Ramadan Kareem to you and your team.",
+    "Eid holiday|عطلة العيد|🏖️|The office is closed for the Eid holiday.", "Eid Mubarak|عيد مبارك|🎉|Eid Mubarak! Enjoy the holiday.",
+    "charity|الصدقة|💝|Our company organizes a charity event.", "donation|تبرّع|💰|We made a donation to the hospital.",
+    "moon sighting|رؤية الهلال|🔭|Eid depends on the moon sighting.", "evening prayers|صلاة التراويح|🕌|He goes to the evening prayers every night.",
+    "family gathering|اجتماع عائلي|👨‍👩‍👧‍👦|We have a big family gathering on Eid.", "greeting card|بطاقة تهنئة|💌|I sent a greeting card to my colleagues.",
+    "traditional dish|طبق تقليدي|🥘|This is a traditional dish from Yemen.", "sweets|حلويات|🍬|We bought sweets for our guests.",
+    "lantern|فانوس|🏮|There is a lantern in every window.", "wishing you a blessed Eid|أتمنى لك عيداً مباركاً|🌙|Wishing you a blessed Eid with your family."
+  ], dialogues:[
+    { lines:[['Manager',"During Ramadan, we'll work from nine to two."],['Nora',"Great. And when does the Eid holiday start?"],['Manager',"It depends on the moon sighting, probably next Tuesday."]],
+      q:"What are the working hours in Ramadan?", qAr:"ما ساعات العمل في رمضان؟", options:["Nine to two","Eight to five","Ten to six","Seven to three"], answer:0 },
+    { lines:[['Sami',"Would you like to join us for iftar tomorrow?"],['David',"Thank you for the invitation! What should I bring?"],['Sami',"Nothing, just come hungry!"]],
+      q:"What should David bring?", qAr:"ماذا يجب أن يحضر ديفيد؟", options:["Nothing","Sweets","A gift","Drinks"], answer:0 }
+  ]},
+  { id:'health', name:'Doctor & Pharmacy', ar:'الطبيب والصيدلية', icon:'🏥', color:'#dc2626', words:[
+    "appointment|موعد|🗓️|I'd like to make an appointment.", "clinic|عيادة|🏥|The clinic opens at eight.", "pharmacy|صيدلية|💊|Is there a pharmacy near here?",
+    "prescription|وصفة طبية|📝|You need a prescription for this medicine.", "symptoms|أعراض|🤒|What are your symptoms?", "pain|ألم|🤕|I have a pain in my back.",
+    "allergy|حساسية|🤧|Do you have an allergy to anything?", "blood test|تحليل دم|🩸|The doctor wants a blood test.", "insurance|تأمين|🛡️|Do you accept my insurance?",
+    "emergency|طوارئ|🚑|Call an ambulance, it's an emergency!", "check-up|فحص شامل|🩺|I go for a check-up every year.", "side effects|آثار جانبية|⚠️|Are there any side effects?",
+    "twice a day|مرتين في اليوم|🔁|Take this medicine twice a day.", "I have a headache|عندي صداع|🤯|I have a headache and I feel tired.",
+    "how long will it take|كم سيستغرق؟|⏱️|How long will it take to get better?", "I need to see a doctor|أحتاج أن أرى طبيباً|👨‍⚕️|I need to see a doctor today."
+  ], dialogues:[
+    { lines:[['Receptionist',"Good morning. How can I help you?"],['Karim',"I'd like to make an appointment. I have a pain in my back."],['Receptionist',"The doctor can see you at four o'clock."]],
+      q:"What time is Karim's appointment?", qAr:"متى موعد كريم؟", options:["At four o'clock","At nine o'clock","At noon","Tomorrow"], answer:0 },
+    { lines:[['Pharmacist',"Take one tablet twice a day after meals."],['Mariam',"Are there any side effects?"],['Pharmacist',"You may feel a little sleepy."]],
+      q:"How often should Mariam take the tablet?", qAr:"كم مرة يجب أن تأخذ مريم القرص؟", options:["Twice a day","Once a week","Every hour","Three times a day"], answer:0 }
+  ]}
+]);
+
+/* ---------- ABC: letters, a word for each, and the closest Arabic sound ---------- */
+const ABC = [
+  ['A','apple','🍎','تفاحة','أ / آ'], ['B','ball','⚽','كرة','ب'], ['C','cat','🐱','قطة','ك (وأحياناً س)'], ['D','dog','🐶','كلب','د'],
+  ['E','egg','🥚','بيضة','إ'], ['F','fish','🐟','سمكة','ف'], ['G','grapes','🍇','عنب','ج مصرية (مثل go)'], ['H','house','🏠','بيت','هـ'],
+  ['I','ice cream','🍦','آيس كريم','إ / آي'], ['J','juice','🧃','عصير','ج'], ['K','kite','🪁','طائرة ورقية','ك'], ['L','lion','🦁','أسد','ل'],
+  ['M','moon','🌙','قمر','م'], ['N','nose','👃','أنف','ن'], ['O','orange','🍊','برتقالة','أو'], ['P','pen','🖊️','قلم','ب مع نفخة هواء (ليست في العربية)'],
+  ['Q','queen','👸','ملكة','كو'], ['R','rabbit','🐰','أرنب','ر خفيفة'], ['S','sun','☀️','شمس','س'], ['T','tree','🌳','شجرة','ت'],
+  ['U','umbrella','☂️','مظلة','أَ / يو'], ['V','van','🚐','شاحنة صغيرة','ف مع اهتزاز (ليست في العربية)'], ['W','water','💧','ماء','و'],
+  ['X','fox','🦊','ثعلب','كس (في آخر الكلمة)'], ['Y','yellow','🟡','أصفر','ي'], ['Z','zebra','🦓','حمار وحشي','ز']
+];
+
+/* ---------- Sounds that are hard for Arabic speakers (minimal pairs) ---------- */
+const SOUND_SETS = [
+  { id:'pb', title:'P / B', ar:'الفرق بين P و B',
+    tip:'P: أغلق شفتيك ثم افتحهما بنفخة هواء قوية — ضع يدك أمام فمك لتشعر بالهواء. B: مثل الباء العربية، بصوت من الحلق وبدون نفخة.',
+    pairs:[['pear','🍐','كمثرى','bear','🐻','دب'], ['pin','📌','دبوس','bin','🗑️','سلة مهملات'], ['peach','🍑','خوخ','beach','🏖️','شاطئ'], ['pie','🥧','فطيرة','bye','👋','وداعاً']] },
+  { id:'fv', title:'F / V', ar:'الفرق بين F و V',
+    tip:'F: ضع أسنانك العليا على شفتك السفلى وانفخ، مثل الفاء. V: نفس الوضع تماماً لكن مع اهتزاز الصوت من الحلق.',
+    pairs:[['face','😊','وجه','vase','🏺','مزهرية'], ['leaf','🍃','ورقة شجر','leave','🚶','يغادر'], ['safe','🔒','آمن','save','💾','يحفظ'], ['fine','👌','بخير','vine','🍇','كرمة العنب']] },
+  { id:'iee', title:'i / ee', ar:'i القصيرة و ee الطويلة',
+    tip:'i في ship قصيرة وسريعة. ee في sheep طويلة: ابتسم ومدّ الصوت — شييييب.',
+    pairs:[['ship','🚢','سفينة','sheep','🐑','خروف'], ['sit','🪑','يجلس','seat','💺','مقعد'], ['chip','🍟','رقاقة بطاطس','cheap','🪙','رخيص'], ['hill','⛰️','تلّ','heel','👠','كعب']] },
+  { id:'th', title:'TH', ar:'صوت TH',
+    tip:'TH: أخرج طرف لسانك قليلاً بين أسنانك وانفخ — مثل الثاء العربية في think. لا تقل «سِنك» ولا «تري».',
+    pairs:[['three','3️⃣','ثلاثة','tree','🌳','شجرة'], ['mouth','👄','فم','mouse','🐭','فأر'], ['think','🤔','يفكّر','sink','🚰','حوض'], ['thumb','👍','إبهام','sum','➕','مجموع']] }
+];
+
+/* ---------- Interactive stories: pages with one choice and two happy endings ---------- */
+const STORIES = [
+  { id:'leo', en:'Leo Wants to Roar', ar:'ليو يريد أن يزأر', icon:'🦁', ages:['kids','young'], pages:[
+    { scene:'🦁🌳☀️', en:"This is Leo. Leo is a little lion.", ar:"هذا ليو. ليو أسد صغير." },
+    { scene:'🦁🐘🐒', en:"Leo wants to roar like his dad. But he can only say: meow!", ar:"يريد ليو أن يزأر مثل أبيه، لكنه يقول فقط: مياو!" },
+    { scene:'🦁😢', en:"Leo is sad. What can Leo do?", ar:"ليو حزين. ماذا يستطيع أن يفعل؟", choice:[
+      { en:"Ask his friends for help", ar:"يطلب المساعدة من أصدقائه", to:3 }, { en:"Practice every day", ar:"يتدرّب كل يوم", to:5 }] },
+    { scene:'🦁🐘🐦🐒', en:"His friends help him. The bird sings, the elephant stomps, the monkey jumps.", ar:"أصدقاؤه يساعدونه: العصفور يغرّد، والفيل يدقّ الأرض، والقرد يقفز." },
+    { scene:'🦁💪🎉', en:"Leo takes a big breath... ROAR! Everyone claps. Friends help friends!", ar:"يأخذ ليو نفساً عميقاً... زئير! الجميع يصفّق. الأصدقاء يساعدون بعضهم!", end:true },
+    { scene:'🦁🌙☀️', en:"Leo practices in the morning and at night.", ar:"يتدرّب ليو في الصباح وفي الليل." },
+    { scene:'🦁🔊🎉', en:"One day... ROAR! Leo did it! Practice makes perfect!", ar:"وفي يوم... زئير! لقد نجح ليو! التدريب يصنع الإتقان!", end:true }],
+    quiz:{ q:"What does Leo want to do?", qAr:"ماذا يريد ليو أن يفعل؟", options:["Roar like his dad","Fly like a bird","Swim like a fish","Sleep all day"], answer:0 } },
+  { id:'kite', en:'The Red Kite', ar:'الطائرة الورقية الحمراء', icon:'🪁', ages:['kids','young'], pages:[
+    { scene:'👧🪁🌬️', en:"Mia has a red kite. It is a windy day.", ar:"مع ميا طائرة ورقية حمراء. إنه يوم عاصف." },
+    { scene:'🪁☁️☁️', en:"The kite flies high, high, high!", ar:"تطير الطائرة الورقية عالياً، عالياً، عالياً!" },
+    { scene:'🪁🌳😮', en:"Oh no! The kite is stuck in a tree.", ar:"يا إلهي! علقت الطائرة الورقية في شجرة.", choice:[
+      { en:"Ask Dad for help", ar:"تطلب المساعدة من أبيها", to:3 }, { en:"Climb the tree", ar:"تتسلّق الشجرة", to:5 }] },
+    { scene:'👨🪜🪁', en:"Dad brings a ladder. He gets the kite down.", ar:"يحضر الأب سلّماً وينزل الطائرة الورقية." },
+    { scene:'👧👨🪁😊', en:"Mia and Dad fly the kite together. Asking for help is smart!", ar:"ميا وأبوها يطيّران الطائرة معاً. طلب المساعدة تصرّف ذكي!", end:true },
+    { scene:'👧🌳⚠️', en:"The tree is too high. Mia stops. It is not safe.", ar:"الشجرة عالية جداً. تتوقف ميا. هذا ليس آمناً." },
+    { scene:'👧🧒🪁', en:"Her friend has a long stick. Together they get the kite. Safety first!", ar:"صديقها معه عصا طويلة. معاً يُنزلان الطائرة. السلامة أولاً!", end:true }],
+    quiz:{ q:"What color is Mia's kite?", qAr:"ما لون طائرة ميا الورقية؟", options:["Red","Blue","Green","Yellow"], answer:0 } },
+  { id:'school', en:"Sara's First Day", ar:'أول يوم لسارة', icon:'🎒', ages:['young','teens'], pages:[
+    { scene:'👧🎒🏫', en:"Today is Sara's first day at a new school.", ar:"اليوم هو أول يوم لسارة في مدرسة جديدة." },
+    { scene:'👧😟🏫', en:"She feels nervous. She doesn't know anyone.", ar:"تشعر بالتوتر. لا تعرف أحداً." },
+    { scene:'👧🧒📚', en:"A boy is sitting alone in the library. What should Sara do?", ar:"ولد يجلس وحده في المكتبة. ماذا يجب أن تفعل سارة؟", choice:[
+      { en:"Say hello to him", ar:"تقول له مرحباً", to:3 }, { en:"Sit and read a book", ar:"تجلس وتقرأ كتاباً", to:5 }] },
+    { scene:'👧👋🧒', en:"Hi, I'm Sara. What's your name? I'm Adam. Nice to meet you!", ar:"مرحباً، أنا سارة. ما اسمك؟ أنا آدم. سعيد بلقائك!" },
+    { scene:'👧🧒⚽😄', en:"Sara and Adam play football at break time. Now Sara has a new friend!", ar:"سارة وآدم يلعبان كرة القدم في الاستراحة. الآن لدى سارة صديق جديد!", end:true },
+    { scene:'👧📖🐉', en:"Sara reads a book about dragons. The boy looks at her book.", ar:"سارة تقرأ كتاباً عن التنانين. ينظر الولد إلى كتابها." },
+    { scene:'👧🧒📖😄', en:"I love dragons too! he says. They read together. Books can make friends!", ar:"يقول: أنا أيضاً أحب التنانين! يقرآن معاً. الكتب تصنع الأصدقاء!", end:true }],
+    quiz:{ q:"How does Sara feel at first?", qAr:"كيف تشعر سارة في البداية؟", options:["Nervous","Angry","Sleepy","Hungry"], answer:0 } },
+  { id:'ramadan', en:'A Ramadan Night', ar:'ليلة رمضانية', icon:'🌙', ages:['young','teens'], pages:[
+    { scene:'🌙🏮🏠', en:"It is Ramadan. Omar's house is full of lanterns.", ar:"إنه رمضان. بيت عمر مليء بالفوانيس." },
+    { scene:'👦🍽️⏰', en:"Omar is fasting. He is hungry, but he waits for sunset.", ar:"عمر صائم. إنه جائع، لكنه ينتظر غروب الشمس." },
+    { scene:'🌅🍲🌴', en:"At sunset, the family breaks the fast with dates and soup.", ar:"عند الغروب، تفطر العائلة على التمر والشوربة." },
+    { scene:'👦🥘🚪', en:"Mom made a lot of food. What should Omar do?", ar:"أعدّت الأم الكثير من الطعام. ماذا يجب أن يفعل عمر؟", choice:[
+      { en:"Take some food to the neighbors", ar:"يأخذ بعض الطعام للجيران", to:4 }, { en:"Invite his friend Ali", ar:"يدعو صديقه علي", to:6 }] },
+    { scene:'👦🥘👵', en:"Omar takes food to Mrs. Fatima next door. She smiles.", ar:"يأخذ عمر الطعام إلى جارتهم السيدة فاطمة. فتبتسم." },
+    { scene:'👵🍪👦', en:"The next day, she gives Omar homemade cookies. Sharing brings happiness!", ar:"في اليوم التالي، تعطي عمر كعكاً من صنعها. المشاركة تجلب السعادة!", end:true },
+    { scene:'👦🧒🍽️', en:"Ali comes for iftar. They eat, laugh, and play games.", ar:"يأتي علي للإفطار. يأكلان ويضحكان ويلعبان." },
+    { scene:'👦🧒🌙✨', en:"Ramadan Kareem! says Ali. This is the best iftar ever!", ar:"يقول علي: رمضان كريم! هذا أجمل إفطار على الإطلاق!", end:true }],
+    quiz:{ q:"What does the family eat at sunset?", qAr:"ماذا تأكل العائلة عند الغروب؟", options:["Dates and soup","Pizza","Ice cream","Burgers"], answer:0 } },
+  { id:'match', en:'The Big Match', ar:'المباراة الكبيرة', icon:'⚽', ages:['teens','young'], pages:[
+    { scene:'⚽🏟️👥', en:"It's the school final. Zain's team is losing one to zero.", ar:"إنه نهائي المدرسة. فريق زين خاسر بهدف دون مقابل." },
+    { scene:'⚽⏱️😬', en:"There are only two minutes left. Zain has the ball.", ar:"بقيت دقيقتان فقط. الكرة مع زين." },
+    { scene:'⚽🧍🥅', en:"His friend Rami is free near the goal. What should Zain do?", ar:"صديقه رامي حرّ قرب المرمى. ماذا يجب أن يفعل زين؟", choice:[
+      { en:"Pass the ball to Rami", ar:"يمرّر الكرة لرامي", to:3 }, { en:"Shoot from far away", ar:"يسدّد من بعيد", to:5 }] },
+    { scene:'⚽➡️🥅🎉', en:"Zain passes. Rami scores! It's one to one!", ar:"يمرّر زين. رامي يسجّل! التعادل هدف لهدف!" },
+    { scene:'🏆👥😄', en:"They win in the penalty shootout. Great teamwork! says the coach.", ar:"يفوزون بركلات الترجيح. يقول المدرب: عمل جماعي رائع!", end:true },
+    { scene:'⚽💨🥅', en:"Zain shoots... and misses. The match ends.", ar:"يسدّد زين... ويضيّع. تنتهي المباراة." },
+    { scene:'🤝👥💪', en:"His team says: No big deal. We'll train harder. Next time, Zain will pass!", ar:"يقول فريقه: لا بأس، سنتدرّب أكثر. في المرة القادمة سيمرّر زين!", end:true }],
+    quiz:{ q:"What is the score with two minutes left?", qAr:"ما النتيجة قبل دقيقتين من النهاية؟", options:["One to zero","Two to two","Three to one","Zero to zero"], answer:0 } },
+  { id:'luggage', en:'The Lost Suitcase', ar:'الحقيبة الضائعة', icon:'🧳', ages:['adults','teens'], pages:[
+    { scene:'✈️🛬🧳', en:"Nadia lands in London after a long flight.", ar:"تهبط نادية في لندن بعد رحلة طويلة." },
+    { scene:'🛄⏳❓', en:"She waits at baggage claim, but her suitcase doesn't come.", ar:"تنتظر عند استلام الأمتعة، لكن حقيبتها لا تصل." },
+    { scene:'👩‍💼🛃', en:"She goes to the airline desk. What should she say?", ar:"تذهب إلى مكتب شركة الطيران. ماذا يجب أن تقول؟", choice:[
+      { en:"Excuse me, my suitcase is missing.", ar:"المعذرة، حقيبتي مفقودة.", to:3 }, { en:"Where is my bag?! This is terrible!", ar:"أين حقيبتي؟! هذا فظيع!", to:5 }] },
+    { scene:'👩‍💼📝🧳', en:"I'm sorry to hear that. Can you describe it? It's a large blue suitcase.", ar:"يؤسفنا ذلك. هل يمكنك وصفها؟ إنها حقيبة زرقاء كبيرة." },
+    { scene:'🏨🧳😊', en:"The next morning, the airline brings her suitcase to the hotel. Being polite helps!", ar:"في صباح اليوم التالي، توصل الشركة الحقيبة إلى الفندق. اللطف يساعد!", end:true },
+    { scene:'👩‍💼😐', en:"The agent says: Please stay calm, madam. I need some information.", ar:"يقول الموظف: من فضلك اهدئي يا سيدتي. أحتاج بعض المعلومات." },
+    { scene:'👩😌📝', en:"Nadia says: Sorry. It's a large blue suitcase. They find it the next day. Staying calm works better!", ar:"تقول نادية: آسفة، إنها حقيبة زرقاء كبيرة. يجدونها في اليوم التالي. الهدوء أفضل!", end:true }],
+    quiz:{ q:"What color is Nadia's suitcase?", qAr:"ما لون حقيبة نادية؟", options:["Blue","Black","Red","Green"], answer:0 } }
+];
+
+/* ---------- Songs (traditional, public-domain tunes). Each note: [syllable, note, beats] ---------- */
+const SONGS = [
+  { id:'twinkle', en:'Twinkle, Twinkle, Little Star', ar:'تلألئي يا نجمة صغيرة', icon:'⭐', lines:[
+    { ar:'تلألئي، تلألئي يا نجمة صغيرة', n:[['Twin','C4',1],['kle','C4',1],['twin','G4',1],['kle','G4',1],['lit','A4',1],['tle','A4',1],['star','G4',2]] },
+    { ar:'كم أتساءل ماذا تكونين', n:[['How','F4',1],['I','F4',1],['won','E4',1],['der','E4',1],['what','D4',1],['you','D4',1],['are','C4',2]] },
+    { ar:'فوق العالم عالية جداً', n:[['Up','G4',1],['a','G4',1],['bove','F4',1],['the','F4',1],['world','E4',1],['so','E4',1],['high','D4',2]] },
+    { ar:'مثل ماسة في السماء', n:[['Like','G4',1],['a','G4',1],['dia','F4',1],['mond','F4',1],['in','E4',1],['the','E4',1],['sky','D4',2]] },
+    { ar:'تلألئي، تلألئي يا نجمة صغيرة', n:[['Twin','C4',1],['kle','C4',1],['twin','G4',1],['kle','G4',1],['lit','A4',1],['tle','A4',1],['star','G4',2]] },
+    { ar:'كم أتساءل ماذا تكونين', n:[['How','F4',1],['I','F4',1],['won','E4',1],['der','E4',1],['what','D4',1],['you','D4',1],['are','C4',2]] }] },
+  { id:'abc', en:'The ABC Song', ar:'أنشودة الحروف', icon:'🔤', lines:[
+    { ar:'A B C D E F G', n:[['A','C4',1],['B','C4',1],['C','G4',1],['D','G4',1],['E','A4',1],['F','A4',1],['G','G4',2]] },
+    { ar:'H I J K L M N O P', n:[['H','F4',1],['I','F4',1],['J','E4',1],['K','E4',1],['L','D4',.5],['M','D4',.5],['N','D4',.5],['O','D4',.5],['P','C4',2]] },
+    { ar:'Q R S، T U V', n:[['Q','G4',1],['R','G4',1],['S','F4',2],['T','E4',1],['U','E4',1],['V','D4',2]] },
+    { ar:'W X، Y و Z', n:[['Dou','G4',.5],['ble','G4',.5],['u','G4',1],['X','F4',2],['Y','E4',1],['and','E4',1],['Z','D4',2]] },
+    { ar:'الآن عرفت حروفي', n:[['Now','C4',1],['I','C4',1],['know','G4',1],['my','G4',1],['A','A4',1],['B','A4',1],['Cs','G4',2]] },
+    { ar:'في المرة القادمة غنِّ معي', n:[['Next','F4',1],['time','F4',1],["won't",'E4',1],['you','E4',1],['sing','D4',1],['with','D4',1],['me','C4',2]] }] },
+  { id:'row', en:'Row, Row, Row Your Boat', ar:'جدّف، جدّف قاربك', icon:'🚣', lines:[
+    { ar:'جدّف، جدّف، جدّف قاربك', n:[['Row','C4',1.5],['row','C4',1.5],['row','C4',1],['your','D4',.5],['boat','E4',1.5]] },
+    { ar:'بهدوء في النهر', n:[['Gent','E4',1],['ly','D4',.5],['down','E4',1],['the','F4',.5],['stream','G4',3]] },
+    { ar:'بمرح، بمرح، بمرح، بمرح', n:[['Mer','C5',.5],['ri','C5',.5],['ly','C5',.5],['mer','G4',.5],['ri','G4',.5],['ly','G4',.5],['mer','E4',.5],['ri','E4',.5],['ly','E4',.5],['mer','C4',.5],['ri','C4',.5],['ly','C4',.5]] },
+    { ar:'الحياة مجرد حلم', n:[['Life','G4',1],['is','F4',.5],['but','E4',1],['a','D4',.5],['dream','C4',3]] }] },
+  { id:'mary', en:'Mary Had a Little Lamb', ar:'كان لماري حَمَل صغير', icon:'🐑', lines:[
+    { ar:'كان لماري حَمَل صغير', n:[['Ma','E4',1],['ry','D4',1],['had','C4',1],['a','D4',1],['lit','E4',1],['tle','E4',1],['lamb','E4',2]] },
+    { ar:'حَمَل صغير، حَمَل صغير', n:[['Lit','D4',1],['tle','D4',1],['lamb','D4',2],['lit','E4',1],['tle','G4',1],['lamb','G4',2]] },
+    { ar:'كان لماري حَمَل صغير', n:[['Ma','E4',1],['ry','D4',1],['had','C4',1],['a','D4',1],['lit','E4',1],['tle','E4',1],['lamb','E4',1]] },
+    { ar:'صوفه أبيض كالثلج', n:[['Its','E4',1],['fleece','D4',1],['was','D4',1],['white','E4',1],['as','D4',1],['snow','C4',3]] }] },
+  { id:'farm', en:'Old MacDonald Had a Farm', ar:'العم ماكدونالد عنده مزرعة', icon:'🐄', lines:[
+    { ar:'العم ماكدونالد عنده مزرعة', n:[['Old','C4',1],['Mac','C4',1],['Don','C4',1],['ald','G3',1],['had','A3',1],['a','A3',1],['farm','G3',2]] },
+    { ar:'إي آي إي آي أو!', n:[['E','E4',1],['I','E4',1],['E','D4',1],['I','D4',1],['O','C4',3]] },
+    { ar:'وفي المزرعة عنده بقرة', n:[['And','G3',1],['on','C4',1],['that','C4',1],['farm','C4',1],['he','G3',1],['had','A3',1],['a','A3',1],['cow','G3',2]] },
+    { ar:'إي آي إي آي أو!', n:[['E','E4',1],['I','E4',1],['E','D4',1],['I','D4',1],['O','C4',3]] },
+    { ar:'مووو هنا، ومووو هناك', n:[['With','G3',.5],['a','G3',.5],['moo','C4',1],['moo','C4',1],['here','C4',1],['and','G3',.5],['a','G3',.5],['moo','C4',1],['moo','C4',1],['there','C4',1]] },
+    { ar:'مووو في كل مكان', n:[['Here','C4',.5],['a','C4',.5],['moo','C4',1],['there','C4',.5],['a','C4',.5],['moo','C4',1],['ev','C4',.5],['ery','C4',.5],['where','C4',.5],['a','C4',.5],['moo','C4',1],['moo','C4',1]] },
+    { ar:'العم ماكدونالد عنده مزرعة', n:[['Old','C4',1],['Mac','C4',1],['Don','C4',1],['ald','G3',1],['had','A3',1],['a','A3',1],['farm','G3',2]] },
+    { ar:'إي آي إي آي أو!', n:[['E','E4',1],['I','E4',1],['E','D4',1],['I','D4',1],['O','C4',3]] }] }
+];
+
+/* ---------- Grammar mini-lessons (Arabic explanation, examples, short quiz) ---------- */
+const LESSONS = [
+  { id:'a-an', en:'a / an', ar:'أداة النكرة a و an', icon:'🅰️', ages:['young','teens','adults'],
+    explain:'نستخدم a قبل الكلمة التي تبدأ بصوت ساكن، و an قبل الكلمة التي تبدأ بصوت متحرك (a, e, i, o, u). المهم هو الصوت لا الحرف: an hour لأن h لا تُنطق.',
+    examples:[['a cat','قطة'],['a book','كتاب'],['an apple','تفاحة'],['an egg','بيضة'],['an hour','ساعة']],
+    quiz:[['I have ___ apple.',['an','a']],['She is ___ teacher.',['a','an']],['It is ___ orange.',['an','a']],['We saw ___ elephant.',['an','a']],['He has ___ dog.',['a','an']]] },
+  { id:'plural', en:'Plurals', ar:'الجمع في الإنجليزية', icon:'🔢', ages:['young','teens','adults'],
+    explain:'نضيف s لجمع معظم الأسماء: cat ← cats. ونضيف es بعد s و sh و ch و x: box ← boxes. وبعض الكلمات شاذة: child ← children، man ← men، mouse ← mice.',
+    examples:[['one cat, two cats','قطة، قطتان'],['one box, three boxes','صندوق، ثلاثة صناديق'],['one child, two children','طفل، طفلان'],['one mouse, many mice','فأر، فئران كثيرة']],
+    quiz:[['two ___ (dog)',['dogs','doges','dog']],['three ___ (box)',['boxes','boxs','box']],['many ___ (child)',['children','childs','childes']],['two ___ (bus)',['buses','buss','bus']],['five ___ (man)',['men','mans','mens']]] },
+  { id:'this-that', en:'this / that / these / those', ar:'أسماء الإشارة', icon:'👉', ages:['young','teens','adults'],
+    explain:'this للقريب المفرد، و that للبعيد المفرد، و these للقريب الجمع، و those للبعيد الجمع.',
+    examples:[['This is my pen.','هذا قلمي.'],['That is a big tree.','تلك شجرة كبيرة.'],['These are my shoes.','هذه أحذيتي.'],['Those birds are beautiful.','تلك الطيور جميلة.']],
+    quiz:[['___ is my pen. (قريب، مفرد)',['This','These','Those']],['___ are my shoes. (قريب، جمع)',['These','This','That']],['Look at ___ bird in the sky! (بعيد، مفرد)',['that','these','those']],['___ cars over there are fast. (بعيد، جمع)',['Those','This','That']],['Is ___ your bag? (قريب، مفرد)',['this','those','these']]] },
+  { id:'prepositions', en:'in / on / under', ar:'حروف المكان', icon:'📦', ages:['young','teens','adults'],
+    explain:'in تعني داخل، و on تعني فوق وملامساً، و under تعني تحت.',
+    examples:[['The cat is in the box.','القطة داخل الصندوق.'],['The book is on the table.','الكتاب على الطاولة.'],['The dog is under the bed.','الكلب تحت السرير.']],
+    quiz:[['The ball is ___ the box. (داخل)',['in','on','under']],['The book is ___ the table. (فوق)',['on','in','under']],['The dog is ___ the bed. (تحت)',['under','on','in']],['The milk is ___ the fridge.',['in','on','under']],['The picture is ___ the wall.',['on','in','under']]] },
+  { id:'can', en:"can / can't", ar:'القدرة: can و can\'t', icon:'💪', ages:['young','teens','adults'],
+    explain:'نستخدم can للتعبير عن القدرة: I can swim. ونفيها can\'t. بعد can يأتي الفعل بدون to وبدون s.',
+    examples:[['A bird can fly.','الطائر يستطيع أن يطير.'],["A fish can't walk.",'السمكة لا تستطيع أن تمشي.'],['Can you help me?','هل تستطيع مساعدتي؟']],
+    quiz:[['A bird ___ fly.',['can','cans','can to']],['A fish ___ walk.',["can't",'can','cans']],['She can ___ English.',['speak','speaks','to speak']],['___ you help me, please?',['Can','Do','Are']],["I can't ___ the box. It's heavy.",['lift','lifts','lifting']]] },
+  { id:'present-simple', en:'Present simple', ar:'المضارع البسيط', icon:'🔁', ages:['teens','adults','young'],
+    explain:'للعادات والحقائق. مع he و she و it نضيف s للفعل: I play ← he plays. ومع الأفعال المنتهية بـ o و sh و ch و x نضيف es: go ← goes.',
+    examples:[['I play football.','ألعب كرة القدم.'],['She goes to school every day.','تذهب إلى المدرسة كل يوم.'],['He watches TV at night.','يشاهد التلفاز في الليل.']],
+    quiz:[['She ___ to school every day.',['goes','go','going']],['He ___ football on Fridays.',['plays','play','playing']],['I ___ milk every morning.',['drink','drinks','drinking']],['My dad ___ the dishes.',['washes','wash','washs']],['It ___ a lot in winter.',['rains','rain','raining']]] },
+  { id:'present-continuous', en:'Present continuous', ar:'المضارع المستمر', icon:'⏳', ages:['teens','adults','young'],
+    explain:'لشيء يحدث الآن: am / is / are + الفعل مضافاً إليه ing. مثال: I am reading now.',
+    examples:[['I am reading a book.','أنا أقرأ كتاباً.'],['She is making a cake.','هي تصنع كعكة.'],['They are playing outside.','هم يلعبون في الخارج.']],
+    quiz:[['Look! The baby ___ sleeping.',['is','are','am']],['We ___ watching a movie now.',['are','is','am']],['I ___ reading a book.',['am','is','are']],['They are ___ football.',['playing','play','plays']],['She is ___ a cake.',['making','make','makes']]] },
+  { id:'past-simple', en:'Past simple', ar:'الماضي البسيط', icon:'⏮️', ages:['teens','adults'],
+    explain:'لما حدث وانتهى. نضيف ed للفعل: play ← played. وبعض الأفعال شاذة: go ← went، eat ← ate، see ← saw.',
+    examples:[['I played football yesterday.','لعبت كرة القدم أمس.'],['We went to the park.','ذهبنا إلى الحديقة.'],['She ate an apple.','أكلت تفاحة.']],
+    quiz:[['Yesterday I ___ football.',['played','play','plays']],['Last night we ___ to the park.',['went','go','goed']],['She ___ an apple.',['ate','eated','eat']],['They ___ a movie last week.',['watched','watch','watching']],['I ___ my friend yesterday.',['saw','see','seed']]] },
+  { id:'future', en:'will / going to', ar:'المستقبل', icon:'🔮', ages:['teens','adults'],
+    explain:'going to للخطط المقررة مسبقاً، و will للقرار في لحظته أو للتوقع.',
+    examples:[["I'm going to visit my grandma tomorrow.",'سأزور جدتي غداً (خطة).'],["It's cold. I'll close the window.",'الجو بارد، سأغلق النافذة (قرار الآن).'],['I think it will rain.','أظن أنها ستمطر (توقع).']],
+    quiz:[['Tomorrow I ___ visit my grandma. (خطة)',['am going to','going','will to']],["It's cold. I ___ close the window. (قرار الآن)",['will','am going','going to']],['Look at the clouds! It ___ rain.',['is going to','will to','going']],['We ___ travel next summer. (خطة)',['are going to','will going','going']],['I think she ___ win.',['will','wills','is will']]] },
+  { id:'comparatives', en:'Comparatives', ar:'المقارنة', icon:'⚖️', ages:['teens','adults','young'],
+    explain:'للصفات القصيرة نضيف er + than: tall ← taller than. وللطويلة نستخدم more: more beautiful than. وشاذة: good ← better، bad ← worse.',
+    examples:[['An elephant is bigger than a cat.','الفيل أكبر من القطة.'],['This book is more interesting.','هذا الكتاب أكثر تشويقاً.'],['My grade is better than yesterday.','درجتي أفضل من أمس.']],
+    quiz:[['An elephant is ___ than a cat.',['bigger','more big','biggest']],['This book is ___ than that one.',['more interesting','interestinger','most interesting']],['My grade is ___ than yesterday.',['better','gooder','more good']],['Ali is ___ than Omar.',['taller','more tall','tallest']],['Today is ___ than yesterday.',['hotter','hoter','more hot']]] }
+];
+
+/* ---------- Hakeem's home: items bought with coins and placed in slots ---------- */
+const ROOM = {
+  slots: [
+    { id:'wall1', kind:'wall', x:20, y:26 }, { id:'wall2', kind:'wall', x:50, y:18 }, { id:'wall3', kind:'wall', x:80, y:26 },
+    { id:'floor1', kind:'floor', x:14, y:70 }, { id:'floor2', kind:'floor', x:86, y:70 }, { id:'pet', kind:'pet', x:68, y:84 }
+  ],
+  items: [
+    { id:'picture', kind:'wall', icon:'🖼️', name:'لوحة', price:40 }, { id:'clock', kind:'wall', icon:'🕰️', name:'ساعة حائط', price:40 },
+    { id:'map', kind:'wall', icon:'🗺️', name:'خريطة العالم', price:50 }, { id:'stars', kind:'wall', icon:'✨', name:'أضواء نجوم', price:60 },
+    { id:'lantern', kind:'wall', icon:'🏮', name:'فانوس', price:60 }, { id:'trophy', kind:'wall', icon:'🏆', name:'كأس الأبطال', price:0, unlock:'boss' },
+    { id:'cert', kind:'wall', icon:'📜', name:'إطار الشهادة', price:0, unlock:'cert' },
+    { id:'plant', kind:'floor', icon:'🪴', name:'نبتة', price:50 }, { id:'books', kind:'floor', icon:'📚', name:'مكتبة', price:60 },
+    { id:'teddy', kind:'floor', icon:'🧸', name:'دبدوب', price:40 }, { id:'guitar', kind:'floor', icon:'🎸', name:'غيتار', price:90 },
+    { id:'globe', kind:'floor', icon:'🌍', name:'كرة أرضية', price:60 }, { id:'console', kind:'floor', icon:'🎮', name:'جهاز ألعاب', price:100 },
+    { id:'sofa', kind:'floor', icon:'🛋️', name:'أريكة', price:80 },
+    { id:'cat', kind:'pet', icon:'🐱', name:'قطة', price:120 }, { id:'dog', kind:'pet', icon:'🐶', name:'كلب', price:120 },
+    { id:'fish', kind:'pet', icon:'🐠', name:'سمكة', price:100 }, { id:'turtle', kind:'pet', icon:'🐢', name:'سلحفاة', price:100 }
+  ],
+  paints: [
+    { id:'cream', name:'كريمي', wall:'#fdf2dc', floor:'#d6a77a', price:0 }, { id:'mint', name:'نعناعي', wall:'#d8f3e8', floor:'#b98b63', price:50 },
+    { id:'sky', name:'سماوي', wall:'#dbeafe', floor:'#a47551', price:50 }, { id:'pink', name:'وردي', wall:'#fde2ef', floor:'#c48a6a', price:50 },
+    { id:'night', name:'ليلي', wall:'#312e81', floor:'#4b3a2f', price:80 }
+  ]
+};
+
+QUESTS.push({ id:'learn', icon:'📚', name:'أكمل نشاطاً في قسم «تعلّم»', target:{ def:1 } });
+ACHIEVEMENTS.push(
+  { id:'abc',     icon:'🔤', name:'خطّاط صغير',     desc:'تتبّع الحروف الـ26 كلها',     test:p => Object.keys(p.abc || {}).length >= 26 },
+  { id:'sounds',  icon:'👂', name:'أذن ذهبية',       desc:'3 نجوم في تمرين أصوات',        test:p => Object.values(p.sounds || {}).some(s => s >= 3) },
+  { id:'stories', icon:'📖', name:'قارئ القصص',      desc:'أكمل 3 قصص',                   test:p => Object.keys(p.stories || {}).length >= 3 },
+  { id:'songs',   icon:'🎵', name:'المغنّي',          desc:'غنِّ 3 أناشيد مختلفة',          test:p => Object.keys(p.songs || {}).length >= 3 },
+  { id:'grammar', icon:'📐', name:'خبير القواعد',     desc:'أكمل 5 دروس قواعد',            test:p => Object.keys(p.lessons || {}).length >= 5 },
+  { id:'cert',    icon:'📜', name:'أول شهادة',        desc:'أكمل عالماً كاملاً واحصل على شهادة', test:p => certificatesOf(p).length >= 1 },
+  { id:'room',    icon:'🏡', name:'مصمّم الديكور',    desc:'ضع 5 أغراض في بيت حكيم',       test:p => Object.values((p.room || {}).slots || {}).filter(Boolean).length >= 5 }
+);
+
+/* =========================================================
    2. SMALL HELPERS
    ========================================================= */
 const $  = (s, r = document) => r.querySelector(s);
@@ -1339,7 +1766,7 @@ const save = () => Store.save();
 const DEFAULT_SETTINGS = { speed:'normal', sound:true, music:false, theme:'auto', timer:null, goal:10, arHints:true, vibrate:true };
 
 function newProfile(name, avatar, age) {
-  return {
+  const p = {
     id: 'p' + Date.now().toString(36) + rand(1e4), name, avatar, age, created: Date.now(),
     xp: 0, coins: 0, streak: 0, bestStreak: 0, lastDay: null,
     daily: {},                                  // { 'YYYY-MM-DD': secondsPlayed }
@@ -1352,6 +1779,8 @@ function newProfile(name, avatar, age) {
     quests: null,                              // today's quests { day, list:[{id,target,n,claimed}] }
     reels: { done:{}, liked:{} }                // Hakeem Reels: answered quizzes + likes
   };
+  migrateExtras(p);
+  return p;
 }
 /** Fill in fields added in later versions so older saves keep working. */
 function migrateProfile(p) {
@@ -1360,6 +1789,7 @@ function migrateProfile(p) {
   delete p.owl;
   if (!('quests' in p)) p.quests = null;
   p.reels = p.reels || { done:{}, liked:{} };
+  migrateExtras(p);
 }
 /** Current profile. */
 const P = () => Store.data.profiles.find(p => p.id === Store.data.currentId) || null;
@@ -1381,6 +1811,12 @@ const LEVELS_PER_WORLD = 6; // 5 levels + 1 boss
 const worldsOf = () => WORLDS[P().age];
 const isDone = (w, l, gp = G()) => (gp.stars[w + '-' + l] || 0) > 0;
 function isUnlocked(w, l, gp = G()) {
+  const ws = worldsOf();
+  if (l === 0 && ws[w] && ws[w].free) return true;          // seasonal worlds (Ramadan & Eid) are always open
+  if (l === 0 && w > 0) {                                     // otherwise a world opens after the previous regular world's boss
+    let pw = w - 1; while (pw > 0 && ws[pw].free) pw--;
+    if (ws[pw] && !ws[pw].free && pw !== w - 1) return w <= gp.placement || isDone(pw, LEVELS_PER_WORLD - 1, gp);
+  }
   if (w < gp.placement) return true;
   if (w === gp.placement && l === 0) return true;
   if (w === 0 && l === 0) return true;
@@ -1407,7 +1843,7 @@ function addXP(x) {
   const p = P();
   const before = levelInfo(p.xp).lvl;
   p.xp += x;
-  if (p.week.key !== weekKey()) p.week = { key: weekKey(), xp: 0 };
+  if (p.week.key !== weekKey()) { p.lastWeek = { ...p.week }; p.week = { key: weekKey(), xp: 0 }; }   // keep last week for the family challenge
   p.week.xp += x;
   const after = levelInfo(p.xp).lvl;
   if (after > before) {
@@ -1417,6 +1853,7 @@ function addXP(x) {
 const displayStreak = p => (p.lastDay === todayKey() || p.lastDay === dayKeyOffset(-1)) ? p.streak : 0;
 function touchStreak() {
   const p = P(), t = todayKey();
+  if (Native && Native.markPlayed) try { Native.markPlayed(t); } catch (e) {}   // the daily reminder skips days already played
   if (p.lastDay === t) return;
   p.streak = p.lastDay === dayKeyOffset(-1) ? p.streak + 1 : 1;
   p.bestStreak = Math.max(p.bestStreak, p.streak);
@@ -1835,10 +2272,12 @@ const PLAY_SCREENS = ['play', 'intro', 'reels'];
 
 function show(name, ...args) {
   stopTimer(); stopRecognition(); stopReels(); Speech.cancel();
+  if (state.songStop) { state.songStop(); state.songStop = null; }
   $('#feedback').className = 'feedback';
   state.screen = name; state.key = null;
   document.body.dataset.screen = name;
   Mascot.visible(name !== 'splash' && name !== 'reels');
+  updateTabbar(name);
   Screens[name](...args);
   window.scrollTo(0, 0);
 }
@@ -1910,7 +2349,7 @@ Screens.profiles = () => {
   $$('[data-pid]').forEach(b => b.onclick = () => { Sound.click(); selectProfile(b.dataset.pid); show('menu'); });
   Mascot.say('أهلاً! أنا حكيم 💬 من سيلعب معي؟', 'happy');
 };
-function selectProfile(id) { Store.data.currentId = id; save(); applyTheme(); Mascot.refresh(); Music.sync(); }
+function selectProfile(id) { Store.data.currentId = id; save(); applyTheme(); Mascot.refresh(); Music.sync(); syncReminder(); }
 
 Screens.create = () => {
   let avatar = AVATARS[0], age = null;
@@ -1960,17 +2399,14 @@ Screens.menu = () => {
   const learned = Object.values(gp.words).filter(r => r.c > 0).length;
   const acc = p.stats.answers ? Math.round(p.stats.correct / p.stats.answers * 100) : 0;
   const weekSec = sum([...Array(7)].map((_, i) => p.daily[dayKeyOffset(-i)] || 0));
+  // the rest (shop, achievements, settings…) lives in the Learn / Me tabs
   const tiles = [
-    ['reels', '🎬', 'ريلز حكيم', `✅ ${Object.keys(p.reels.done).length}/${REELS.length}`],
-    ['words', '📒', 'كلماتي', `${learned} كلمة`],
     ['review', '🔁', 'المراجعة الذكية', due ? `${due} للمراجعة` : 'لا شيء الآن', due],
-    ['shop', '🛍️', 'متجر حكيم', `🪙 ${p.coins}`],
-    ['achievements', '🏅', 'الإنجازات', `${Object.keys(p.ach).length}/${ACHIEVEMENTS.length}`],
-    p.age === 'teens' && ['leaderboard', '🏆', 'المتصدّرون', 'هذا الأسبوع'],
-    ['kids', 'young'].includes(p.age) ? ['parent', '👪', 'لوحة الوالدين', 'متابعة التقدّم'] : ['stats', '📊', 'إحصائياتي', 'تقدّمك بالتفصيل'],
-    ['settings', '⚙️', 'الإعدادات', 'الصوت والمظهر'],
-    ['profiles', '👥', 'تبديل اللاعب', `${Store.data.profiles.length} ملفات`]
-  ].filter(Boolean);
+    ['reels', '🎬', 'ريلز حكيم', `✅ ${Object.keys(p.reels.done).length}/${REELS.length}`],
+    ['stories', '📖', 'قصص حكيم', 'أنت تختار النهاية'],
+    ['room', '🏡', 'بيت حكيم', `🪙 ${p.coins}`]
+  ];
+  const freeW = worldsOf().findIndex(w => w.free && !isDone(worldsOf().indexOf(w), LEVELS_PER_WORLD - 1));
   render(`
   <header class="menu-head glass">
     <div class="who"><span class="avatar sm">${p.avatar}</span><div><b>${esc(p.name)}</b><small>${g.icon} ${g.ar}</small></div></div>
@@ -1986,6 +2422,7 @@ Screens.menu = () => {
     <button class="mini-card glass ${dailyDone ? 'done' : ''}" id="daily"><span class="emoji">📅</span><span><b>تحدي اليوم</b><small>${dailyDone ? 'أنجزته اليوم ✅ (العب للتدريب)' : '+50 XP و +50 🪙'}</small></span></button>
     <div class="mini-card glass"><div class="ring" style="--p:${goalPct}" aria-hidden="true">${goalPct}%</div><span><b>هدف اليوم</b><small>${Math.floor(todaySec / 60)} من ${p.settings.goal} دقائق</small></span></div>
   </div>
+  ${freeW >= 0 ? `<button class="mini-card glass season" data-go="map"><span class="emoji">${worldsOf()[freeW].icon}</span><span><b>عالم ${worldsOf()[freeW].ar} مفتوح لك الآن!</b><small>كلمات وعبارات جديدة 🎉</small></span></button>` : ''}
   ${questsHTML()}
   ${(() => { const w = wordOfDay(); return `<div class="mini-card glass wod"><span class="emoji">${w.emoji}</span>
     <span class="wod-txt"><small>💡 كلمة اليوم</small><b class="en">${esc(w.word)}</b><small>${esc(w.arabic)}</small></span>
@@ -2029,7 +2466,7 @@ Screens.shop = () => {
       <span class="sw">${kind === 'color' ? `<i style="background:${it.body}"></i>` : `<span class="emoji">${it.icon}</span>`}</span>
       <b>${it.name}</b><small>${on ? '✅ مُستخدَم' : owned ? 'اضغط للارتداء' : `🪙 ${it.price}`}</small></button>`;
   };
-  render(topbar('🛍️ متجر حكيم', 'menu', `<span class="chip">🪙 ${p.coins}</span>`) + `
+  render(topbar('🛍️ متجر حكيم', 'me', `<span class="chip">🪙 ${p.coins}</span>`) + `
     <div class="shop-preview glass"><div class="buddy-wrap" id="preview">${buddySVG()}</div>
       <p class="muted">اجمع العملات من الإجابات والمهام والصناديق لتزيين حكيم!</p></div>
     <h2 class="section-title">🎩 القبعات والإكسسوارات</h2><div class="shop-grid">${SHOP.hats.map(it => item('hat', it)).join('')}</div>
@@ -2094,7 +2531,7 @@ Screens.words = () => {
   const gp = G(); let tab = 'all', query = '';
   const entries = Object.entries(gp.words).map(([k, r]) => ({ w: VOCAB_BY_KEY.get(k), r })).filter(e => e.w && (e.r.c > 0 || e.r.w > 0));
   const weakN = entries.filter(e => isWeak(e.r)).length;
-  render(topbar('📒 كلماتي', 'menu', `<span class="chip">${entries.length} كلمة</span>`) + `
+  render(topbar('📒 كلماتي', 'learn', `<span class="chip">${entries.length} كلمة</span>`) + `
     <div class="tabs" role="tablist">
       <button role="tab" data-tab="all" aria-selected="true">الكل (${entries.length})</button>
       <button role="tab" data-tab="learned" aria-selected="false">أتقنتها (${entries.length - weakN})</button>
@@ -2132,7 +2569,7 @@ Screens.review = () => {
 
 Screens.achievements = () => {
   const p = P();
-  render(topbar('🏅 الإنجازات', 'menu', `<span class="chip">${Object.keys(p.ach).length}/${ACHIEVEMENTS.length}</span>`) + `
+  render(topbar('🏅 الإنجازات', 'me', `<span class="chip">${Object.keys(p.ach).length}/${ACHIEVEMENTS.length}</span>`) + `
     <div class="stat-grid" style="margin-bottom:16px">
       <div class="stat"><b>${learnedCount(p)}</b><small>كلمة متعلَّمة</small></div>
       <div class="stat"><b>${totalStars(p)}</b><small>⭐ نجوم</small></div>
@@ -2146,7 +2583,7 @@ Screens.achievements = () => {
 Screens.leaderboard = () => {
   const wk = weekKey(), me = P();
   const rows = Store.data.profiles.map(p => ({ p, xp: p.week && p.week.key === wk ? p.week.xp : 0 })).sort((a, b) => b.xp - a.xp);
-  render(topbar('🏆 متصدّرو الأسبوع', 'menu') + `<div class="panel glass">
+  render(topbar('🏆 متصدّرو الأسبوع', 'me') + `<div class="panel glass">
     <p class="muted small" style="margin-bottom:8px">ترتيب الملفات على هذا الجهاز حسب نقاط XP هذا الأسبوع، ويبدأ من جديد كل أسبوع.</p>
     ${rows.map((r, i) => `<div class="lb-row ${r.p.id === me.id ? 'me' : ''}"><span class="rank">${['🥇', '🥈', '🥉'][i] || i + 1}</span>
       <span class="avatar sm">${r.p.avatar}</span><div style="flex:1"><b>${esc(r.p.name)}</b><small class="muted" style="display:block">${AGE_GROUPS[r.p.age].icon} ${AGE_GROUPS[r.p.age].ar}</small></div>
@@ -2180,11 +2617,11 @@ function statsHTML(p) {
 }
 Screens.stats = () => {
   const p = P();
-  render(topbar('📊 إحصائياتي', 'menu', `<span class="chip">🎯 ${p.settings.goal} د يومياً</span>`) + statsHTML(p));
+  render(topbar('📊 إحصائياتي', 'me', `<span class="chip">🎯 ${p.settings.goal} د يومياً</span>`) + statsHTML(p));
 };
 Screens.parent = () => {
   const a = 3 + rand(7), b = 3 + rand(7);
-  render(topbar('👪 لوحة الوالدين', 'menu') + `<div class="form-card glass">
+  render(topbar('👪 لوحة الوالدين', 'me') + `<div class="form-card glass">
     <p>هذه الصفحة مخصّصة للوالدين. أجيبوا عن السؤال للمتابعة:</p>
     <label for="gate" class="en" style="font-size:1.6rem">${a} × ${b} = ?</label>
     <input id="gate" class="text-input en" inputmode="numeric" autocomplete="off">
@@ -2192,7 +2629,7 @@ Screens.parent = () => {
   const go = () => {
     if (+$('#gate').value === a * b) {
       const p = P();
-      render(topbar('👪 لوحة الوالدين', 'menu') + `<p class="muted" style="margin-bottom:12px">ملخص تقدّم <b>${esc(p.name)}</b> ${p.avatar} في فئة ${AGE_GROUPS[p.age].ar}</p>` + statsHTML(p));
+      render(topbar('👪 لوحة الوالدين', 'me') + `<p class="muted" style="margin-bottom:12px">ملخص تقدّم <b>${esc(p.name)}</b> ${p.avatar} في فئة ${AGE_GROUPS[p.age].ar}</p>` + statsHTML(p));
     } else { toast('إجابة غير صحيحة'); $('#gate').value = ''; }
   };
   $('#gateGo').onclick = go;
@@ -2204,7 +2641,7 @@ Screens.settings = () => {
   const p = P(), s = p.settings, g = AGE_GROUPS[p.age];
   const seg = (key, opts) => `<div class="seg" role="group">${opts.map(([v, l]) => `<button data-set="${key}" data-val="${v}" aria-pressed="${String(s[key]) === String(v)}">${l}</button>`).join('')}</div>`;
   const sw = (key, on, label) => `<button class="switch" role="switch" data-toggle="${key}" aria-checked="${!!on}" aria-label="${label}"></button>`;
-  render(topbar('⚙️ الإعدادات', 'menu') + `
+  render(topbar('⚙️ الإعدادات', 'me') + `
   <div class="panel glass">
     <div class="set-row"><div><b>الفئة العمرية</b><small>لكل فئة عوالمها وكلماتها وتقدّمها الخاص</small></div></div>
     <div class="age-grid" style="margin:4px 0 8px">${Object.values(AGE_GROUPS).map(a => `<button class="age-card" data-agegroup="${a.id}" aria-pressed="${a.id === p.age}">
@@ -2218,6 +2655,11 @@ Screens.settings = () => {
     <div class="set-row"><div><b>الهدف اليومي</b></div>${seg('goal', [[5, '5 د'], [10, '10 د'], [20, '20 د']])}</div>
     ${['kids', 'young'].includes(p.age) ? `<div class="set-row"><div><b>تعليمات صوتية بالعربية</b><small>${Speech.ar ? 'متوفرة على جهازك' : 'لا يوجد صوت عربي على هذا الجهاز (تظهر التعليمات كتابةً)'}</small></div>${sw('arHints', s.arHints, 'التعليمات الصوتية بالعربية')}</div>` : ''}
   </div>
+  ${Native && Native.setReminder ? `<div class="panel glass">
+    <div class="set-row"><div><b>⏰ تذكير يومي</b><small>إشعار لطيف إذا لم تلعب اليوم</small></div>${sw('reminder', (s.reminder || {}).on, 'التذكير اليومي')}</div>
+    ${(s.reminder || {}).on ? `<div class="set-row"><div><b>وقت التذكير</b></div><div class="seg" role="group">${REMINDER_HOURS.map(h => `<button data-rhour="${h}" aria-pressed="${(s.reminder || {}).hour === h}">${h - 12}:00 م</button>`).join('')}</div></div>` : ''}
+    <div class="set-row"><div><b>⬇️ الريلز بدون إنترنت</b><small>حمّل المقاطع مرة واحدة</small></div><button class="btn btn-ghost" id="offReels">إدارة</button></div>
+  </div>` : ''}
   <div class="panel glass">
     <div class="set-row"><div><b>اختبار تحديد المستوى</b><small>نقترح لك نقطة بداية مناسبة</small></div><button class="btn btn-ghost" id="placement">🎯 ابدأ</button></div>
     <div class="set-row"><div><b>تجربة الصوت</b><small>${Speech.supported ? (Speech.en ? esc(Speech.en.name) : 'الصوت الافتراضي') : 'النطق غير مدعوم في هذا المتصفح'}</small></div><button class="btn btn-ghost" id="testVoice">🔊 <span class="en">Hello!</span></button></div>
@@ -2239,6 +2681,7 @@ Screens.settings = () => {
   });
   $$('[data-toggle]').forEach(b => b.onclick = () => {
     const key = b.dataset.toggle;
+    if (key === 'reminder') { s.reminder = { on: !(s.reminder && s.reminder.on), hour: (s.reminder && s.reminder.hour) || 18 }; save(); syncReminder(); Sound.click(); return rerender(); }
     s[key] = key === 'timer' ? !timerOn() : key === 'vibrate' ? s.vibrate === false : !s[key];
     if (key === 'vibrate') buzz(40);
     save();
@@ -2253,6 +2696,8 @@ Screens.settings = () => {
     toast(`${AGE_GROUPS[id].icon} تم التبديل إلى ${AGE_GROUPS[id].ar}`);
     rerender();
   });
+  $$('[data-rhour]').forEach(b => b.onclick = () => { s.reminder.hour = +b.dataset.rhour; save(); syncReminder(); Sound.click(); rerender(); });
+  if ($('#offReels')) $('#offReels').onclick = openOfflineReels;
   $('#placement').onclick = () => startRun('placement');
   $('#testVoice').onclick = () => Speech.say('Hello! I am Hakeem, your English friend.');
   $('#reset').onclick = async () => {
@@ -2287,12 +2732,13 @@ Screens.reels = () => {
   const p = P(), rs = p.reels;
   render(topbar('🎬 ريلز حكيم', 'menu', `<span class="chip" id="reelCount">✅ ${reelsDone()}/${REELS.length}</span>
       <button class="icon-btn sm" id="reelAr" aria-pressed="${p.settings.reelsAr !== false}" aria-label="إظهار الترجمة العربية">ع</button>
-      <button class="icon-btn sm" id="reelCredits" aria-label="حقوق المقاطع">©</button>`) +
+      <button class="icon-btn sm" id="reelCredits" aria-label="حقوق المقاطع">©</button>
+      ${Native && Native.downloadReels ? '<button class="icon-btn sm" id="reelDl" aria-label="تحميل للمشاهدة بدون إنترنت">⬇️</button>' : ''}`) +
     `<div class="reels ${p.settings.reelsAr === false ? 'no-ar' : ''}" id="reels">${REELS.map((r, i) => {
       const f = REEL_FILMS[r.film];
       return `<section class="reel" data-i="${i}" aria-label="${esc(r.ar)}">
         <div class="reel-head"><b>${esc(r.en)}</b><small class="muted">${esc(r.ar)}</small>${rs.done[r.id] ? '<span class="badge">✅</span>' : ''}<small class="muted reel-n">${i + 1}/${REELS.length}</small></div>
-        <div class="reel-video"><video playsinline preload="none" data-poster="${REELS_BASE}${r.id}.jpg"></video>
+        <div class="reel-video"><video playsinline preload="none" data-poster="${reelSrc(r.id, 'jpg')}"></video>
           <button class="reel-play" aria-label="تشغيل">▶</button><div class="reel-msg hidden" role="status"></div></div>
         <div class="reel-cap glass" role="button" tabindex="0" aria-label="استمع للجملة مرة أخرى"><p class="cap-en en">▶</p><p class="cap-ar">اسحب للأعلى لمشاهدة المقطع التالي ⬆️</p></div>
         <div class="reel-actions">
@@ -2335,6 +2781,8 @@ Screens.reels = () => {
           p.coins += REEL_REWARD.coins; addXP(REEL_REWARD.xp);
           floatGain(`+${REEL_REWARD.xp} XP`, `+${REEL_REWARD.coins} 🪙`);
           questEvent('reels');
+          const rw = reelWords(r); rw.forEach(w => srsMark(w, true));
+          if (rw.length) q.insertAdjacentHTML('beforeend', `<p class="reel-words">📒 أُضيفت إلى كلماتي: ${rw.map(w => `<button class="chip" data-say="${esc(w.word)}"><span class="emoji">${w.emoji}</span> <span class="en">${esc(w.word)}</span></button>`).join(' ')}</p>`);
           $('#reelCount').textContent = `✅ ${reelsDone()}/${REELS.length}`;
           $('.reel-head', sec).insertAdjacentHTML('beforeend', '<span class="badge">✅</span>');
         }
@@ -2383,7 +2831,7 @@ Screens.reels = () => {
   function start(i, fromStart) {
     secs.forEach((s, j) => { if (j !== i) { const o = $('video', s); if (!o.paused) o.pause(); } });
     const sec = secs[i], v = $('video', sec), c = ctl[i];
-    if (!v.getAttribute('src')) { v.src = REELS_BASE + REELS[i].id + '.mp4'; v.preload = 'auto'; }
+    if (!v.getAttribute('src')) { v.src = reelSrc(REELS[i].id, 'mp4'); v.preload = 'auto'; }
     if (fromStart || v.ended) {
       v.currentTime = 0; c.spoken.clear();
       $('.reel-quiz', sec).classList.add('hidden');
@@ -2419,6 +2867,7 @@ Screens.reels = () => {
     e.currentTarget.setAttribute('aria-pressed', String(p.settings.reelsAr !== false));
     save();
   };
+  if ($('#reelDl')) $('#reelDl').onclick = openOfflineReels;
   $('#reelCredits').onclick = () => modal({ title: '© حقوق المقاطع', ok: 'حسناً', cancel: '', html:
     `<div class="credits">${Object.values(REEL_FILMS).map(f => `<p class="en"><b>${esc(f.title)}</b> (${f.year})<br>${f.license === 'Public Domain' ? '' : '© '}${esc(f.by)}<br>
       <a href="${f.licenseUrl}" target="_blank" rel="noopener">${f.license}</a> · <a href="${f.source}" target="_blank" rel="noopener">source</a></p>`).join('')}
@@ -3408,6 +3857,691 @@ MODES.dialogue = (q, st, run, prompt, first) => {
   setTimeout(() => Speech.hintThen(first ? prompt : null, () => { if (q.alive()) playDialogue(d); }), 400);
 };
 
+
+/* =========================================================
+   12. NAVIGATION — bottom tab bar + screen hierarchy
+   ========================================================= */
+/** Which tab each screen belongs to (screens not listed are full-screen activities without the tab bar). */
+const TAB_OF = {
+  menu:'menu', map:'menu',
+  learn:'learn', words:'learn', abc:'learn', sounds:'learn', stories:'learn', songs:'learn', grammar:'learn',
+  reels:'reels',
+  me:'me', achievements:'me', shop:'me', room:'me', certificates:'me', family:'me', leaderboard:'me', stats:'me', parent:'me', settings:'me'
+};
+/** Where the back button (and Android's back key) goes from each screen. */
+const SCREEN_PARENT = {
+  map:'menu', learn:'menu', reels:'menu', me:'menu',
+  words:'learn', abc:'learn', sounds:'learn', stories:'learn', songs:'learn', grammar:'learn',
+  letter:'abc', 'sound-game':'sounds', story:'stories', song:'songs', lesson:'grammar',
+  achievements:'me', shop:'me', room:'me', certificates:'me', family:'me', leaderboard:'me', stats:'me', parent:'me', settings:'me'
+};
+function updateTabbar(name) {
+  const tab = TAB_OF[name], bar = $('#tabbar');
+  document.body.classList.toggle('has-tabs', !!tab);
+  bar.classList.toggle('hidden', !tab);
+  $$('[data-tab]', bar).forEach(b => b.setAttribute('aria-current', b.dataset.tab === tab ? 'page' : 'false'));
+}
+$('#tabbar').addEventListener('click', e => {
+  const b = e.target.closest('[data-tab]');
+  if (b && state.screen !== b.dataset.tab) { Sound.click(); show(b.dataset.tab); }
+});
+/** Hub header: title + streak/coins chips, no back button (the tab bar is the navigation). */
+const hubHeader = title => `<header class="topbar"><h1 class="title">${title}</h1><div class="chips">
+  <span class="chip" title="سلسلة الأيام">🔥 ${displayStreak(P())}</span><span class="chip" title="العملات">🪙 ${P().coins}</span></div></header>`;
+
+/** Extra per-profile fields used by the features in this section (also fills old saves). */
+function migrateExtras(p) {
+  p.abc = p.abc || {}; p.sounds = p.sounds || {}; p.stories = p.stories || {}; p.songs = p.songs || {}; p.songsDay = p.songsDay || {};
+  p.lessons = p.lessons || {};
+  p.room = p.room || { paint:'cream', owned:['cream'], slots:{} };
+  if (!('lastWeek' in p)) p.lastWeek = null;
+}
+/** Shared reward for finishing a Learn activity. */
+function learnReward(coins, xp, label) {
+  const p = P();
+  p.coins += coins; addXP(xp);
+  floatGain(`+${xp} XP`, `+${coins} 🪙`);
+  questEvent('learn');
+  Sound.fanfare(); Confetti.burst(80); buzz(30);
+  if (label) toast(label);
+  save(); checkAchievements();
+}
+/** A small sheet of choices inside the modal layer (resolves with the picked value or null). */
+function sheet(title, html, bind) {
+  return new Promise(res => {
+    const root = $('#modal-root');
+    state.modalPrevFocus = document.activeElement;
+    root.innerHTML = `<div class="overlay"><div class="modal glass sheet" role="dialog" aria-modal="true" aria-labelledby="mt"><h2 id="mt">${title}</h2>${html}
+      <div class="modal-btns"><button class="btn btn-ghost" data-m="0">إغلاق</button></div></div></div>`;
+    let picked = null;
+    state.modalResolve = () => res(picked);
+    $('[data-m="0"]', root).onclick = () => closeModal(false);
+    $('.overlay', root).addEventListener('click', e => { if (e.target.classList.contains('overlay')) closeModal(false); });
+    bind(root, v => { picked = v; closeModal(true); });
+  });
+}
+
+/* =========================================================
+   13. HUBS — Learn and Me
+   ========================================================= */
+Screens.learn = () => {
+  const p = P(), age = p.age, kidsy = age === 'kids' || age === 'young';
+  const due = dueWords().length, learned = Object.values(G().words).filter(r => r.c > 0).length;
+  const card = (go, icon, title, sub, rec) => `<button class="hub-card glass ${rec ? 'rec' : ''}" data-go="${go}">
+    <span class="emoji">${icon}</span><span class="hub-txt"><b>${title}</b><small>${sub}</small></span>${rec ? '<span class="badge">⭐ مقترح لك</span>' : ''}</button>`;
+  render(hubHeader('📚 تعلّم') + `
+    <h2 class="section-title">🌱 الأساسيات</h2><div class="hub-grid">
+      ${card('abc', '🔤', 'الحروف ABC', `${Object.keys(p.abc).length}/26 حرفاً · ارسم بإصبعك`, kidsy)}
+      ${card('sounds', '👂', 'أصوات صعبة', 'P/B · F/V · i/ee · TH', !kidsy || age === 'young')}</div>
+    <h2 class="section-title">📖 اقرأ واستمع</h2><div class="hub-grid">
+      ${card('stories', '📖', 'قصص حكيم', `${Object.keys(p.stories).length}/${STORIES.length} · أنت تختار النهاية`, true)}
+      ${card('songs', '🎵', 'أناشيد', `${SONGS.length} أناشيد مع الكلمات`, kidsy)}</div>
+    <h2 class="section-title">📐 القواعد</h2><div class="hub-grid">
+      ${card('grammar', '📐', 'دروس القواعد', `${Object.keys(p.lessons).length}/${LESSONS.length} دروس بشرح عربي`, !kidsy)}</div>
+    <h2 class="section-title">🔁 راجع</h2><div class="hub-grid">
+      ${card('review', '🔁', 'المراجعة الذكية', due ? `${due} كلمات تنتظرك` : 'لا شيء الآن', due > 0)}
+      ${card('words', '📒', 'كلماتي', `${learned} كلمة`, false)}</div>`);
+};
+
+Screens.me = () => {
+  const p = P(), g = AGE_GROUPS[p.age], li = levelInfo(p.xp), certs = certificatesOf(p).length;
+  const parentOrStats = ['kids', 'young'].includes(p.age) ? ['parent', '👪', 'لوحة الوالدين', 'متابعة التقدّم'] : ['stats', '📊', 'إحصائياتي', 'تقدّمك بالتفصيل'];
+  const tiles = [
+    ['room', '🏡', 'بيت حكيم', 'زيّن الغرفة بالعملات'], ['shop', '🛍️', 'المتجر', 'قبعات وألوان لحكيم'],
+    ['certificates', '📜', 'شهاداتي', certs ? `${certs} شهادات` : 'أكمل عالماً لتحصل عليها'], ['achievements', '🏅', 'الإنجازات', `${Object.keys(p.ach).length}/${ACHIEVEMENTS.length}`],
+    ['family', '🏆', 'تحدي العائلة', 'منافسة الأسبوع'], parentOrStats,
+    ['settings', '⚙️', 'الإعدادات', 'الصوت والمظهر والتذكير'], ['profiles', '👥', 'تبديل اللاعب', `${Store.data.profiles.length} ملفات`]
+  ];
+  render(hubHeader('😊 أنا') + `
+    <div class="me-card glass"><div class="buddy-wrap me-buddy">${buddySVG()}</div>
+      <div class="me-info"><span class="avatar sm">${p.avatar}</span><b>${esc(p.name)}</b><small>${g.icon} ${g.ar}</small>
+        <div class="xpline"><span>المستوى ${li.lvl}</span><div class="bar"><i style="width:${li.cur / li.need * 100}%"></i></div></div>
+        <small class="muted">⭐ ${totalStars(p)} نجمة · 📒 ${learnedCount(p)} كلمة</small></div></div>
+    <div class="menu-grid">${tiles.map(([id, ic, name, sub]) => `<button class="tile-btn glass" data-go="${id}"><span class="emoji">${ic}</span><b>${name}</b><small class="muted">${sub}</small></button>`).join('')}</div>`);
+};
+
+/* =========================================================
+   14. ABC — letters with sounds and finger tracing
+   ========================================================= */
+Screens.abc = () => {
+  const p = P();
+  render(topbar('🔤 الحروف ABC', 'learn', `<span class="chip">${Object.keys(p.abc).length}/26</span>`) + `
+    <p class="muted center" style="margin-bottom:12px">اختر حرفاً، استمع إلى صوته، ثم ارسمه بإصبعك ✍️</p>
+    <div class="abc-grid">${ABC.map(([L, w, e], i) => { const s = p.abc[L] || 0; return `<button class="abc-tile glass ${s ? 'done' : ''}" data-letter="${i}" aria-label="${L}">
+      <b class="en">${L}${L.toLowerCase()}</b><span class="emoji">${e}</span><small class="nstars">${[0, 1, 2].map(k => `<span class="${k < s ? '' : 'off'}">★</span>`).join('')}</small></button>`; }).join('')}</div>`);
+  $$('[data-letter]').forEach(b => b.onclick = () => { Sound.click(); show('letter', +b.dataset.letter); });
+};
+const abcPhrase = ([L, w]) => L === 'X' ? `X is in fox.` : `${L} is for ${w}.`;
+Screens.letter = i => {
+  const p = P(), [L, word, emoji, ar, sound] = ABC[i];
+  let glyph = L;
+  render(topbar(`<span class="en">${L} ${L.toLowerCase()}</span>`, 'abc', `<span class="chip">${i + 1}/26</span>`) + `
+    <div class="letter-card glass">
+      <div class="letter-big en">${L}<small>${L.toLowerCase()}</small></div>
+      <div class="letter-word"><span class="emoji">${emoji}</span><b class="en">${esc(word)}</b><small>${esc(ar)}</small></div>
+      <p class="muted">🔈 صوته قريب من: <b>${esc(sound)}</b></p>
+      <div class="row center">
+        <button class="btn btn-ghost" id="sayL">🔊 <span class="en">${L}</span></button>
+        <button class="btn btn-ghost" data-say="${esc(word)}">🔊 <span class="en">${esc(word)}</span></button>
+        <button class="btn btn-ghost" id="sayP">🔊 <span class="en">${esc(abcPhrase(ABC[i]))}</span></button>
+      </div></div>
+    <div class="trace-box glass">
+      <div class="row" style="justify-content:space-between"><b>✍️ ارسم الحرف بإصبعك</b>
+        <div class="seg" role="group"><button id="caseU" aria-pressed="true" class="en">${L}</button><button id="caseL" aria-pressed="false" class="en">${L.toLowerCase()}</button></div></div>
+      <canvas class="trace" id="trace" aria-label="مساحة الرسم"></canvas>
+      <p class="center" id="traceMsg">تتبّع الخط المنقّط</p>
+      <div class="row center"><button class="btn btn-ghost" id="clr">↺ مسح</button><button class="btn btn-primary" id="chk">تحقّق ✓</button></div>
+    </div>
+    <div class="row center" style="margin-top:12px">
+      ${i > 0 ? `<button class="btn btn-ghost" id="prev">→ ${ABC[i - 1][0]}</button>` : ''}
+      ${i < 25 ? `<button class="btn btn-primary" id="next">${ABC[i + 1][0]} ←</button>` : ''}</div>`);
+  $('#sayL').onclick = () => Speech.say(L);
+  $('#sayP').onclick = () => Speech.say(abcPhrase(ABC[i]));
+  if ($('#prev')) $('#prev').onclick = () => show('letter', i - 1);
+  if ($('#next')) $('#next').onclick = () => show('letter', i + 1);
+  const tracer = makeTracer($('#trace'));
+  const setCase = upper => { glyph = upper ? L : L.toLowerCase(); $('#caseU').setAttribute('aria-pressed', upper); $('#caseL').setAttribute('aria-pressed', !upper); tracer.setGlyph(glyph); $('#traceMsg').textContent = 'تتبّع الخط المنقّط'; };
+  $('#caseU').onclick = () => setCase(true); $('#caseL').onclick = () => setCase(false);
+  $('#clr').onclick = () => tracer.clear();
+  $('#chk').onclick = () => {
+    const r = tracer.check(), msg = $('#traceMsg');
+    if (!r.pass) { msg.innerHTML = r.empty ? 'ارسم الحرف أولاً ✍️' : '🙂 قريب! حاول أن تمشي فوق الخط المنقّط'; Sound.wrong(); buzz([30, 40, 30]); return; }
+    msg.innerHTML = `🎉 رائع! ${'⭐'.repeat(r.stars)}`;
+    Sound.correct(); Speech.say(abcPhrase(ABC[i]));
+    const before = p.abc[L] || 0;
+    p.abc[L] = Math.max(before, r.stars);
+    if (!before) learnReward(3, 5); else save();
+    if (Object.keys(p.abc).length === 26 && !before) toast('🔤 أتقنت كل الحروف! أحسنت');
+  };
+  setTimeout(() => Speech.say(abcPhrase(ABC[i])), 300);
+  document.fonts.load('800 100px "Baloo 2"', L + L.toLowerCase()).finally(() => tracer.setGlyph(glyph));
+};
+
+/** Finger-tracing canvas: a dotted guide letter, scored by how much of it the strokes cover. */
+function makeTracer(cv) {
+  const size = Math.min(cv.parentElement.clientWidth - 24, 320), dpr = window.devicePixelRatio || 1;
+  cv.style.width = cv.style.height = size + 'px';
+  cv.width = cv.height = size * dpr;
+  const ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
+  const layer = () => { const c = document.createElement('canvas'); c.width = c.height = size; return c; };
+  const core = layer(), tol = layer(), ink = layer(), inkWide = layer();
+  let glyph = 'A', strokes = [];
+  const font = () => `800 ${Math.round(size * 0.74)}px "Baloo 2", "Cairo", sans-serif`;
+  const drawGlyph = (c, mode) => {
+    const g = c.getContext('2d'); g.clearRect(0, 0, size, size);
+    g.font = font(); g.textAlign = 'center'; g.textBaseline = 'middle';
+    const y = size * 0.56;
+    if (mode === 'core') { g.fillStyle = '#000'; g.fillText(glyph, size / 2, y); }
+    else { g.fillStyle = '#000'; g.strokeStyle = '#000'; g.lineWidth = size * 0.11; g.lineJoin = 'round'; g.fillText(glyph, size / 2, y); g.strokeText(glyph, size / 2, y); }
+  };
+  const paint = () => {
+    ctx.clearRect(0, 0, size, size);
+    ctx.font = font(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(124,92,255,.10)'; ctx.fillText(glyph, size / 2, size * 0.56);
+    ctx.setLineDash([6, 8]); ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(124,92,255,.55)'; ctx.strokeText(glyph, size / 2, size * 0.56); ctx.setLineDash([]);
+    const style = getComputedStyle(document.body).getPropertyValue('--primary').trim() || '#7c3aed';
+    for (const s of strokes) {
+      ctx.strokeStyle = style; ctx.lineWidth = size * 0.07; ctx.lineCap = ctx.lineJoin = 'round';
+      ctx.beginPath(); s.forEach(([x, y], k) => k ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); if (s.length === 1) ctx.lineTo(s[0][0] + .1, s[0][1]); ctx.stroke();
+    }
+  };
+  const drawInk = (c, w) => {
+    const g = c.getContext('2d'); g.clearRect(0, 0, size, size);
+    g.strokeStyle = '#000'; g.lineWidth = w; g.lineCap = g.lineJoin = 'round';
+    for (const s of strokes) { g.beginPath(); s.forEach(([x, y], k) => k ? g.lineTo(x, y) : g.moveTo(x, y)); if (s.length === 1) g.lineTo(s[0][0] + .1, s[0][1]); g.stroke(); }
+  };
+  const pos = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * size / r.width, (e.clientY - r.top) * size / r.height]; };
+  let drawing = null;
+  cv.addEventListener('pointerdown', e => { e.preventDefault(); cv.setPointerCapture(e.pointerId); drawing = [pos(e)]; strokes.push(drawing); paint(); });
+  cv.addEventListener('pointermove', e => { if (!drawing) return; e.preventDefault(); drawing.push(pos(e)); paint(); });
+  const end = () => { drawing = null; };
+  cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+  const alpha = c => c.getContext('2d').getImageData(0, 0, size, size).data;
+  return {
+    setGlyph(gl) { glyph = gl; strokes = []; drawGlyph(core, 'core'); drawGlyph(tol, 'tol'); paint(); },
+    clear() { strokes = []; paint(); },
+    /** coverage = share of the letter the strokes pass over; outside = share of ink off the letter */
+    check() {
+      if (!strokes.length) return { pass: false, empty: true };
+      drawInk(ink, size * 0.07); drawInk(inkWide, size * 0.17);
+      const a = alpha(core), t = alpha(tol), k = alpha(ink), w = alpha(inkWide);
+      let coreN = 0, covered = 0, inkN = 0, out = 0;
+      for (let i = 3; i < a.length; i += 16) {
+        if (a[i] > 128) { coreN++; if (w[i] > 0) covered++; }
+        if (k[i] > 128) { inkN++; if (t[i] < 40) out++; }
+      }
+      const cov = coreN ? covered / coreN : 0, outside = inkN ? out / inkN : 1;
+      const pass = cov >= 0.55 && outside <= 0.35;
+      return { pass, cov, outside, stars: !pass ? 0 : cov >= 0.8 && outside <= 0.2 ? 3 : cov >= 0.68 ? 2 : 1 };
+    }
+  };
+}
+
+/* =========================================================
+   15. SOUNDS — minimal pairs that are hard for Arabic speakers
+   ========================================================= */
+Screens.sounds = () => {
+  const p = P();
+  render(topbar('👂 أصوات صعبة', 'learn') + `
+    <p class="muted center" style="margin-bottom:12px">أصوات لا توجد في العربية بنفس الشكل، فيخلط بينها المتعلّم العربي. استمع جيداً واختر الكلمة الصحيحة!</p>
+    <div class="hub-grid">${SOUND_SETS.map((s, i) => { const st = p.sounds[s.id] || 0; return `<button class="hub-card glass" data-set="${i}">
+      <span class="emoji en sound-ico">${s.title}</span><span class="hub-txt"><b>${s.ar}</b>
+      <small class="en">${s.pairs.slice(0, 2).map(x => `${x[0]} / ${x[3]}`).join(' · ')}</small>
+      <small class="nstars">${[0, 1, 2].map(k => `<span class="${k < st ? '' : 'off'}">★</span>`).join('')}</small></span></button>`; }).join('')}</div>`);
+  $$('[data-set]').forEach(b => b.onclick = () => { Sound.click(); show('sound-game', +b.dataset.set); });
+};
+Screens['sound-game'] = si => {
+  const set = SOUND_SETS[si], p = P(), ROUNDS = 8;
+  const rounds = [...Array(ROUNDS)].map(() => { const pair = pick(set.pairs); return { pair, side: rand(2), flip: rand(2) }; });
+  let r = 0, correct = 0, locked = false;
+  render(topbar(`👂 <span class="en">${set.title}</span>`, 'sounds', `<span class="chip" id="sgScore">✅ 0</span>`) + `
+    <details class="tip-box glass" open><summary>💡 كيف أنطقها؟</summary><p>${esc(set.tip)}</p></details>
+    <div class="bar" style="margin:12px 0"><i id="sgProg" style="width:0"></i></div>
+    <p class="prompt">أي كلمة تسمع؟</p>
+    <div class="speak-row"><button class="speak-btn" id="sgPlay" aria-label="استمع">🔊</button><button class="speak-btn slow" id="sgSlow" aria-label="ببطء">🐢</button>
+      <button class="btn btn-ghost" id="sgBoth">🔄 قارن بينهما</button></div>
+    <div class="pair-row" id="sgPair"></div>
+    <div class="row center" style="margin-top:12px">${Recog.available() ? '<button class="btn btn-ghost" id="sgMic">🎤 جرّب أن تنطقها أنت</button>' : ''}</div>
+    <p class="heard center" id="sgHeard"></p>`);
+  const word = (rd, k) => k === 0 ? rd.pair.slice(0, 3) : rd.pair.slice(3);
+  const target = () => word(rounds[r], rounds[r].side);
+  const say = slow => Speech.say(target()[0], { slow });
+  const drawRound = () => {
+    locked = false;
+    const rd = rounds[r], order = rd.flip ? [1, 0] : [0, 1];
+    $('#sgProg').style.width = (r / ROUNDS * 100) + '%';
+    $('#sgHeard').textContent = '';
+    $('#sgPair').innerHTML = order.map(k => { const [w, e, a] = word(rd, k); return `<button class="pair-card glass" data-k="${k}"><span class="emoji">${e}</span><b class="en">${w}</b><small>${a}</small></button>`; }).join('');
+    $$('#sgPair .pair-card').forEach(b => b.onclick = () => choose(+b.dataset.k, b));
+    setTimeout(() => { if (state.screen === 'sound-game') say(false); }, 350);
+  };
+  const choose = (k, btn) => {
+    if (locked) return; locked = true;
+    const ok = k === rounds[r].side;
+    $$('#sgPair .pair-card').forEach(b => b.classList.add(+b.dataset.k === rounds[r].side ? 'correct' : 'dim'));
+    if (ok) { correct++; Sound.correct(correct); buzz(18); } else { btn.classList.add('wrong'); Sound.wrong(); buzz([30, 40, 30]); }
+    $('#sgScore').textContent = `✅ ${correct}`;
+    Speech.say(target()[0]);
+    setTimeout(() => { r++; if (r < ROUNDS) drawRound(); else finish(); }, 1300);
+  };
+  const finish = async () => {
+    const stars = correct >= 8 ? 3 : correct >= 6 ? 2 : correct >= 4 ? 1 : 0;
+    const before = p.sounds[set.id] || 0;
+    p.sounds[set.id] = Math.max(before, stars);
+    if (stars) learnReward(correct, correct * 2); else save();
+    const again = await modal({ title: stars ? `${'⭐'.repeat(stars)} أحسنت!` : '💪 تدرّب أكثر', text: `أجبت عن ${correct} من ${ROUNDS} بشكل صحيح.`, ok: '🔄 مرة أخرى', cancel: 'رجوع' });
+    show(again ? 'sound-game' : 'sounds', si);
+  };
+  $('#sgPlay').onclick = () => say(false); $('#sgSlow').onclick = () => say(true);
+  $('#sgBoth').onclick = () => { const rd = rounds[r]; Speech.say(rd.pair[0], { onend: () => setTimeout(() => Speech.say(rd.pair[3], { queue: true }), 400) }); };
+  if ($('#sgMic')) $('#sgMic').onclick = () => {
+    const [w] = target(), other = word(rounds[r], 1 - rounds[r].side)[0], h = $('#sgHeard');
+    h.textContent = `قل: ${w} ... أنا أستمع 👂`;
+    Recog.start({
+      onresult: alts => {
+        const norm = alts.map(a => normSpeech(a));
+        if (norm.some(a => (' ' + a + ' ').includes(' ' + w + ' '))) { h.innerHTML = `✅ ممتاز! سمعت <span class="en">"${esc(alts[0])}"</span>`; Sound.correct(); }
+        else if (norm.some(a => (' ' + a + ' ').includes(' ' + other + ' '))) h.innerHTML = `🤔 سمعت <span class="en">"${esc(other)}"</span> — حاول مرة أخرى`;
+        else h.innerHTML = `سمعت <span class="en">"${esc(alts[0] || '…')}"</span> — حاول مرة أخرى`;
+      },
+      onerror: () => { h.textContent = 'تعذّر سماعك، حاول مرة أخرى'; },
+      onend: () => {}
+    });
+  };
+  state.key = e => { if (e.key === 'r' || e.key === 'R') say(false); else if (e.key === '1' || e.key === '2') { const b = $$('#sgPair .pair-card')[+e.key - 1]; b && b.click(); } };
+  drawRound();
+};
+
+/* =========================================================
+   16. STORIES — read-along with word highlighting and a choice
+   ========================================================= */
+Screens.stories = () => {
+  const p = P();
+  render(topbar('📖 قصص حكيم', 'learn') + `
+    <p class="muted center" style="margin-bottom:12px">حكيم يقرأ لك، والكلمات تضيء أثناء القراءة. وفي منتصف كل قصة أنت تختار ماذا يحدث!</p>
+    <div class="hub-grid">${STORIES.map((s, i) => `<button class="hub-card glass ${s.ages.includes(p.age) ? 'rec' : ''}" data-story="${i}">
+      <span class="emoji">${s.icon}</span><span class="hub-txt"><b class="en">${esc(s.en)}</b><small>${esc(s.ar)}</small></span>
+      ${p.stories[s.id] ? '<span class="badge">✅</span>' : s.ages.includes(p.age) ? '<span class="badge">⭐ مقترحة</span>' : ''}</button>`).join('')}</div>`);
+  $$('[data-story]').forEach(b => b.onclick = () => { Sound.click(); show('story', +b.dataset.story); });
+};
+/** Look up an English word in the vocabulary (any age group) for tap-to-translate. */
+function glossary(word) {
+  const w = word.toLowerCase().replace(/[^a-z']/g, '');
+  if (!w) return null;
+  return VOCAB.find(v => v.word.toLowerCase() === w) || VOCAB.find(v => v.word.toLowerCase() === w.replace(/s$/, '')) || null;
+}
+Screens.story = si => {
+  const s = STORIES[si], p = P();
+  let page = 0, hl = [];
+  const clearHl = () => { hl.forEach(clearTimeout); hl = []; };
+  const draw = () => {
+    clearHl();
+    const pg = s.pages[page];
+    const words = pg.en.split(/\s+/);
+    render(topbar(`${s.icon} <span class="en">${esc(s.en)}</span>`, 'stories', `<span class="chip">📄 ${page + 1}</span>`) + `
+      <div class="story-scene glass"><span class="emoji">${pg.scene}</span></div>
+      <p class="story-text en" id="stText">${words.map((w, k) => `<span class="w" data-w="${k}">${esc(w)}</span>`).join(' ')}</p>
+      <p class="story-ar ${p.settings.reelsAr === false ? 'hidden' : ''}">${esc(pg.ar)}</p>
+      <div class="row center"><button class="btn btn-ghost" id="stRead">🔊 اقرأ</button><button class="btn btn-ghost" id="stSlow">🐢 ببطء</button>
+        <button class="btn btn-ghost" id="stAr" aria-pressed="${p.settings.reelsAr !== false}">ع الترجمة</button></div>
+      <div class="story-next" id="stNext"></div>`);
+    const next = $('#stNext');
+    if (pg.choice) next.innerHTML = `<p class="prompt">🤔 ماذا تختار؟</p><div class="options list">${pg.choice.map((c, k) => `<button class="opt text" data-c="${k}"><b class="en">${esc(c.en)}</b><small>${esc(c.ar)}</small></button>`).join('')}</div>`;
+    else if (pg.end) next.innerHTML = `<button class="btn btn-primary btn-big btn-wide" id="stEnd">🏁 النهاية — سؤال سريع</button>`;
+    else next.innerHTML = `<button class="btn btn-primary btn-big btn-wide" id="stGo">التالي ←</button>`;
+    if ($('#stGo')) $('#stGo').onclick = () => { page++; Sound.click(); draw(); };
+    if ($('#stEnd')) $('#stEnd').onclick = quiz;
+    $$('[data-c]', next).forEach(b => b.onclick = () => { page = pg.choice[+b.dataset.c].to; Sound.click(); draw(); });
+    $$('#stText .w').forEach(sp => sp.onclick = () => {
+      const g = glossary(sp.textContent); Speech.say(sp.textContent.replace(/[^\w' -]/g, ''));
+      if (g) toast(`<span class="emoji">${g.emoji}</span> <span class="en">${esc(g.word)}</span> = ${esc(g.arabic)}`, 2200);
+    });
+    $('#stRead').onclick = () => read(false); $('#stSlow').onclick = () => read(true);
+    $('#stAr').onclick = () => { p.settings.reelsAr = p.settings.reelsAr === false; save(); $('.story-ar').classList.toggle('hidden', p.settings.reelsAr === false); };
+    setTimeout(() => { if (state.screen === 'story') read(false); }, 350);
+  };
+  /** Speak the page and light up each word at its estimated moment (TTS gives no word timings on Android). */
+  const read = slow => {
+    clearHl();
+    const spans = $$('#stText .w'), rate = Speech.rate(slow);
+    const total = spans.reduce((t, sp) => t + 1.2 + sp.textContent.length, 0);
+    const ms = (380 + total * 52) / rate;
+    let acc = 0;
+    spans.forEach(sp => {
+      const at = acc / total * ms; acc += 1.2 + sp.textContent.length;
+      hl.push(setTimeout(() => { spans.forEach(x => x.classList.remove('on')); sp.classList.add('on'); }, at + 250));
+    });
+    hl.push(setTimeout(() => spans.forEach(x => x.classList.remove('on')), ms + 600));
+    Speech.say(s.pages[page].en, { slow });
+  };
+  const quiz = () => {
+    clearHl(); Speech.cancel();
+    const q = s.quiz, order = shuffle([0, 1, 2, 3]);
+    $('#stNext').innerHTML = `<p class="question en">${esc(q.q)}</p><p class="hint-ar">${esc(q.qAr)}</p>
+      <div class="options list">${order.map((oi, k) => `<button class="opt text en" data-k="${k}">${esc(q.options[oi])}</button>`).join('')}</div>`;
+    const btns = $$('#stNext .opt'), right = k => order[k] === q.answer;
+    btns.forEach((b, k) => b.onclick = async () => {
+      if (btns.some(x => x.disabled)) return;
+      optClasses(btns, right, k);
+      const ok = right(k), first = !p.stories[s.id];
+      if (ok) { Sound.correct(); if (first) { p.stories[s.id] = Date.now(); learnReward(10, 20, '📖 أكملت القصة!'); } }
+      else Sound.wrong();
+      Speech.say(q.options[q.answer]);
+      save();
+      setTimeout(async () => {
+        const again = await modal({ title: ok ? '🎉 أحسنت!' : '💪 لا بأس', text: ok ? 'جرّب الاختيار الآخر لترى نهاية مختلفة!' : `الإجابة الصحيحة: ${q.options[q.answer]}`, ok: '🔄 اقرأها مرة أخرى', cancel: 'قصة أخرى' });
+        show(again ? 'story' : 'stories', si);
+      }, 900);
+    });
+    $('#stNext').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+  draw();
+};
+
+/* =========================================================
+   17. SONGS — karaoke over a synthesised melody
+   ========================================================= */
+/** Syllables that continue the previous one inside the same word (Twin+kle, Mac+Don+ald). */
+const SYL_CONT = /^(kle|tle|der|bove|mond|ry|ly|ri|ble|Don|ald|ery|where)$/;
+const sylJoin = (syl, k) => (k && !SYL_CONT.test(syl) ? ' ' : '');
+const noteFreq = n => { const m = /^([A-G])(#?)(\d)$/.exec(n); const idx = { C:0, D:2, E:4, F:5, G:7, A:9, B:11 }[m[1]] + (m[2] ? 1 : 0); return 440 * Math.pow(2, ((+m[3] + 1) * 12 + idx - 69) / 12); };
+Screens.songs = () => {
+  const p = P();
+  render(topbar('🎵 أناشيد', 'learn') + `
+    <p class="muted center" style="margin-bottom:12px">أناشيد إنجليزية تقليدية — تابع الكلمات وهي تضيء وغنِّ معها 🎤</p>
+    <div class="hub-grid">${SONGS.map((s, i) => `<button class="hub-card glass" data-song="${i}"><span class="emoji">${s.icon}</span>
+      <span class="hub-txt"><b class="en">${esc(s.en)}</b><small>${esc(s.ar)}</small></span>${p.songs[s.id] ? `<span class="badge">🎵 ${p.songs[s.id]}</span>` : ''}</button>`).join('')}</div>`);
+  $$('[data-song]').forEach(b => b.onclick = () => { Sound.click(); show('song', +b.dataset.song); });
+};
+Screens.song = si => {
+  const s = SONGS[si], p = P();
+  let slow = false, timers = [], playing = false, out = null;
+  render(topbar(`${s.icon} <span class="en">${esc(s.en)}</span>`, 'songs') + `
+    <div class="karaoke glass" id="kara">${s.lines.map((ln, li) => `<div class="k-line" data-line="${li}"><p class="en">${ln.n.map(([syl], k) => `${sylJoin(syl, k)}<span class="syl" data-k="${k}">${esc(syl)}</span>`).join('')}</p>
+      <small class="k-ar">${esc(ln.ar)}</small></div>`).join('')}</div>
+    <div class="row center" style="margin-top:12px">
+      <button class="btn btn-primary btn-big" id="sgPlayBtn">▶ شغّل اللحن</button>
+      <button class="btn btn-ghost" id="sgTempo" aria-pressed="false">🐢 أبطأ</button>
+      <button class="btn btn-ghost" id="sgRead">🔊 اقرأ الكلمات</button></div>`);
+  const stop = () => {
+    timers.forEach(clearTimeout); timers = []; playing = false;
+    if (out) { try { out.disconnect(); } catch (e) {} out = null; }
+    $$('.syl.on, .k-line.on').forEach(x => x.classList.remove('on'));
+    const b = $('#sgPlayBtn'); if (b) b.textContent = '▶ شغّل اللحن';
+  };
+  state.songStop = stop;
+  const play = () => {
+    stop(); Speech.cancel();
+    const c = Sound.ensure(); if (!c) return;
+    out = c.createGain(); out.gain.value = .9; out.connect(c.destination);
+    const beat = slow ? 0.62 : 0.42, t0 = c.currentTime + 0.25;
+    let t = 0;
+    s.lines.forEach((ln, li) => ln.n.forEach(([syl, note, beats], k) => {
+      const f = noteFreq(note), d = beats * beat, at = t0 + t;
+      [[f, 'triangle', .22], [f * 2, 'sine', .05]].forEach(([fq, type, vol]) => {
+        const o = c.createOscillator(), g = c.createGain(); o.type = type; o.frequency.value = fq;
+        g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(vol, at + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, at + d * 0.95);
+        o.connect(g).connect(out); o.start(at); o.stop(at + d);
+      });
+      if (k === 0) { const o = c.createOscillator(), g = c.createGain(); o.type = 'sine'; o.frequency.value = f / 2;
+        g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(.12, at + .03); g.gain.exponentialRampToValueAtTime(0.0001, at + beat * 3); o.connect(g).connect(out); o.start(at); o.stop(at + beat * 3); }
+      timers.push(setTimeout(() => {
+        $$('.syl.on').forEach(x => x.classList.remove('on'));
+        $$('.k-line').forEach(x => x.classList.toggle('on', +x.dataset.line === li));
+        const sp = $(`.k-line[data-line="${li}"] .syl[data-k="${k}"]`); if (sp) { sp.classList.add('on'); if (k === 0) sp.closest('.k-line').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      }, (at - c.currentTime) * 1000));
+      t += d;
+    }));
+    playing = true; $('#sgPlayBtn').textContent = '⏹ إيقاف';
+    timers.push(setTimeout(() => {
+      stop();
+      p.songs[s.id] = (p.songs[s.id] || 0) + 1;
+      if (p.songsDay[s.id] !== todayKey()) { p.songsDay[s.id] = todayKey(); learnReward(3, 8, '🎵 أحسنت الغناء!'); } else save();
+    }, (t0 - c.currentTime + t) * 1000 + 300));
+  };
+  $('#sgPlayBtn').onclick = () => playing ? stop() : play();
+  $('#sgTempo').onclick = e => { slow = !slow; e.currentTarget.setAttribute('aria-pressed', slow); if (playing) play(); };
+  $('#sgRead').onclick = () => {
+    stop();
+    const lines = s.lines.map(ln => ln.n.map(([syl], k) => sylJoin(syl, k) + syl).join(''));
+    lines.forEach((txt, li) => Speech.say(txt, { queue: li > 0, slow: true, onend: () => $$('.k-line').forEach(x => x.classList.toggle('on', +x.dataset.line === li + 1)) }));
+    $$('.k-line').forEach(x => x.classList.toggle('on', x.dataset.line === '0'));
+  };
+};
+
+/* =========================================================
+   18. GRAMMAR — short lessons with an Arabic explanation and a quiz
+   ========================================================= */
+Screens.grammar = () => {
+  const p = P();
+  render(topbar('📐 دروس القواعد', 'learn') + `
+    <p class="muted center" style="margin-bottom:12px">قاعدة واحدة في كل درس: شرح بالعربي، أمثلة مسموعة، ثم 5 أسئلة.</p>
+    <div class="hub-grid">${LESSONS.map((l, i) => { const st = p.lessons[l.id] || 0; return `<button class="hub-card glass ${l.ages[0] === p.age ? 'rec' : ''}" data-lesson="${i}">
+      <span class="emoji">${l.icon}</span><span class="hub-txt"><b class="en">${esc(l.en)}</b><small>${esc(l.ar)}</small>
+      <small class="nstars">${[0, 1, 2].map(k => `<span class="${k < st ? '' : 'off'}">★</span>`).join('')}</small></span></button>`; }).join('')}</div>`);
+  $$('[data-lesson]').forEach(b => b.onclick = () => { Sound.click(); show('lesson', +b.dataset.lesson); });
+};
+Screens.lesson = li => {
+  const l = LESSONS[li], p = P();
+  render(topbar(`${l.icon} <span class="en">${esc(l.en)}</span>`, 'grammar') + `
+    <div class="lesson-card glass"><h2>${esc(l.ar)}</h2><p>${esc(l.explain)}</p></div>
+    <h2 class="section-title">🔊 أمثلة</h2>
+    <div class="word-list">${l.examples.map(([en, ar]) => `<div class="word-row"><div class="wtxt"><b class="en">${esc(en)}</b><small>${esc(ar)}</small></div>
+      <button class="icon-btn sm" data-say="${esc(en)}" aria-label="استمع">🔊</button></div>`).join('')}</div>
+    <div class="row center" style="margin-top:16px"><button class="btn btn-primary btn-big" id="lsStart">✍️ ابدأ التمرين</button></div>
+    <div id="lsQuiz"></div>`);
+  $('#lsStart').onclick = () => {
+    $('#lsStart').parentElement.remove();
+    let qi = 0, correct = 0;
+    const box = $('#lsQuiz');
+    const ask = () => {
+      const [sent, opts] = l.quiz[qi], order = shuffle(opts.map((_, k) => k));
+      box.innerHTML = `<div class="lesson-q glass"><small class="muted">السؤال ${qi + 1} من ${l.quiz.length}</small>
+        <p class="sentence en">${esc(sent).replace('___', '<span class="blank">?</span>')}</p>
+        <div class="options ${opts.some(o => o.length > 10) ? 'list' : ''}">${order.map((oi, k) => `<button class="opt text en" data-k="${k}">${esc(opts[oi])}</button>`).join('')}</div></div>`;
+      const btns = $$('.opt', box), right = k => order[k] === 0;
+      btns.forEach((b, k) => b.onclick = () => {
+        if (btns.some(x => x.disabled)) return;
+        optClasses(btns, right, k);
+        const ok = right(k); if (ok) { correct++; Sound.correct(correct); } else Sound.wrong();
+        const full = sent.replace('___', opts[0]).replace(/\s*\([^)]*\)\s*$/, '');
+        $('.blank', box).textContent = opts[0]; $('.blank', box).classList.add('ok');
+        Speech.say(full);
+        setTimeout(() => { qi++; if (qi < l.quiz.length) ask(); else done(); }, 1500);
+      });
+      box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    };
+    const done = async () => {
+      const stars = correct >= 5 ? 3 : correct >= 4 ? 2 : correct >= 3 ? 1 : 0, before = p.lessons[l.id] || 0;
+      if (stars) { p.lessons[l.id] = Math.max(before, stars); learnReward(correct * 2, correct * 3); } else save();
+      const again = await modal({ title: stars ? `${'⭐'.repeat(stars)} ممتاز!` : '💪 راجع الشرح وحاول مجدداً', text: `${correct} من ${l.quiz.length} إجابات صحيحة.`, ok: '🔄 أعد الدرس', cancel: 'دروس أخرى' });
+      show(again ? 'lesson' : 'grammar', li);
+    };
+    ask();
+  };
+};
+
+/* =========================================================
+   19. HAKEEM'S HOME — decorate a room with coins
+   ========================================================= */
+const roomUnlocked = (p, it) => !it.unlock || (it.unlock === 'boss' ? p.stats.boss >= 1 : certificatesOf(p).length >= 1);
+Screens.room = () => {
+  const p = P(), r = p.room, paint = ROOM.paints.find(x => x.id === r.paint) || ROOM.paints[0];
+  render(topbar('🏡 بيت حكيم', 'me', `<span class="chip">🪙 ${p.coins}</span>`) + `
+    <p class="muted center" style="margin-bottom:10px">اضغط على أي مكان «＋» لتضع فيه غرضاً 🛋️</p>
+    <div class="room glass" style="--wall:${paint.wall};--floor:${paint.floor}">
+      <div class="room-wall"></div><div class="room-floor"></div>
+      ${ROOM.slots.map(s => { const it = ROOM.items.find(x => x.id === r.slots[s.id]); return `<button class="room-slot ${it ? 'filled' : ''} ${s.kind}" data-slot="${s.id}" style="left:${s.x}%;top:${s.y}%" aria-label="مكان ${s.id}">${it ? `<span class="emoji">${it.icon}</span>` : '＋'}</button>`; }).join('')}
+      <div class="room-buddy buddy-wrap">${buddySVG()}</div>
+    </div>
+    <h2 class="section-title">🎨 لون الغرفة</h2>
+    <div class="paint-row">${ROOM.paints.map(pt => `<button class="paint ${pt.id === r.paint ? 'on' : ''}" data-paint="${pt.id}" style="--c:${pt.wall}" aria-label="${pt.name}">
+      <i></i><small>${r.owned.includes(pt.id) ? pt.name : '🪙 ' + pt.price}</small></button>`).join('')}</div>`);
+  const buy = async (id, price, name) => {
+    if (r.owned.includes(id)) return true;
+    if (p.coins < price) { toast(`تحتاج ${price - p.coins} 🪙 إضافية`); Sound.wrong(); return false; }
+    if (!await modal({ title: `شراء «${name}»؟`, text: `السعر: ${price} 🪙 — رصيدك: ${p.coins} 🪙`, ok: 'شراء ✨', cancel: 'ليس الآن' })) return false;
+    p.coins -= price; r.owned.push(id); Sound.chest(); Confetti.burst(60); return true;
+  };
+  $$('[data-paint]').forEach(b => b.onclick = async () => {
+    const pt = ROOM.paints.find(x => x.id === b.dataset.paint);
+    if (await buy(pt.id, pt.price, pt.name)) { r.paint = pt.id; save(); rerender(); }
+  });
+  $$('[data-slot]').forEach(b => b.onclick = async () => {
+    const slot = ROOM.slots.find(s => s.id === b.dataset.slot);
+    const items = ROOM.items.filter(it => it.kind === slot.kind);
+    const choice = await sheet('اختر غرضاً', `<div class="item-grid">${items.map(it => {
+      const owned = r.owned.includes(it.id) || (it.price === 0 && roomUnlocked(p, it)), lockedU = it.unlock && !roomUnlocked(p, it);
+      return `<button class="shop-item glass ${r.slots[slot.id] === it.id ? 'equipped' : ''}" data-pick="${it.id}" ${lockedU ? 'disabled' : ''}>
+        <span class="sw"><span class="emoji">${it.icon}</span></span><b>${it.name}</b>
+        <small>${lockedU ? (it.unlock === 'boss' ? '🔒 اهزم زعيماً' : '🔒 احصل على شهادة') : owned ? 'ضعه هنا' : '🪙 ' + it.price}</small></button>`; }).join('')}
+      ${r.slots[slot.id] ? '<button class="btn btn-ghost btn-wide" data-pick="__none">🗑️ إزالة من هذا المكان</button>' : ''}</div>`,
+      (root, done) => $$('[data-pick]', root).forEach(x => x.onclick = () => done(x.dataset.pick)));
+    if (!choice) return;
+    if (choice === '__none') { delete r.slots[slot.id]; save(); return rerender(); }
+    const it = ROOM.items.find(x => x.id === choice);
+    if (it.price === 0 && roomUnlocked(p, it) && !r.owned.includes(it.id)) r.owned.push(it.id);
+    if (!await buy(it.id, it.price, it.name)) return;
+    r.slots[slot.id] = it.id; save(); Sound.coin(); checkAchievements(); rerender();
+    Mascot.say('غرفتي تصبح أجمل! 😍', 'celebrate');
+  });
+};
+
+/* =========================================================
+   20. CERTIFICATES — earned by finishing a world's boss, shareable as an image
+   ========================================================= */
+function certificatesOf(p) {
+  const out = [];
+  Object.entries(p.groups || {}).forEach(([group, gp]) => (WORLDS[group] || []).forEach((w, wi) => { if ((gp.stars[wi + '-5'] || 0) > 0) out.push({ group, wi }); }));
+  return out;
+}
+Screens.certificates = () => {
+  const p = P(), gp = G(), ws = worldsOf();
+  render(topbar('📜 شهاداتي', 'me', `<span class="chip">${certificatesOf(p).length}</span>`) + `
+    <p class="muted center" style="margin-bottom:12px">أكمل كل مستويات العالم واهزم الزعيم 👑 لتحصل على شهادة باسمك وتشاركها مع العائلة!</p>
+    <div class="word-list">${ws.map((w, wi) => {
+      const done = [0, 1, 2, 3, 4, 5].filter(l => (gp.stars[wi + '-' + l] || 0) > 0).length, has = done === 6 || (gp.stars[wi + '-5'] || 0) > 0;
+      return `<div class="word-row cert-row ${has ? '' : 'locked'}"><span class="emoji">${has ? '📜' : '🔒'}</span>
+        <div class="wtxt"><b>${w.icon} ${w.ar}</b><small>${has ? 'شهادة جاهزة!' : `${done}/6 مستويات`}</small></div>
+        ${has ? `<button class="btn btn-primary" data-cert="${wi}">عرض ومشاركة</button>` : ''}</div>`; }).join('')}</div>`);
+  $$('[data-cert]').forEach(b => b.onclick = async () => {
+    b.disabled = true; b.textContent = '⏳';
+    const url = await makeCertificate(p, p.age, +b.dataset.cert);
+    b.disabled = false; b.textContent = 'عرض ومشاركة';
+    const w = ws[+b.dataset.cert];
+    const share = await modal({ title: '📜 شهادتك', html: `<img src="${url}" class="cert-img" alt="شهادة ${esc(w.ar)}">`, ok: '📤 مشاركة', cancel: 'إغلاق' });
+    if (share) shareImage(url, `أكملت عالم «${w.ar}» في لعبة حكيم لتعلّم الإنجليزية! 🎉`, `hakeem-${w.id}`);
+  });
+};
+/** Draw the certificate on a canvas and return a PNG data URL. */
+async function makeCertificate(p, group, wi) {
+  const w = WORLDS[group][wi], g = AGE_GROUPS[group], W = 1080, H = 1350;
+  await Promise.all([document.fonts.load('800 60px "Cairo"', 'شهادة'), document.fonts.load('800 60px "Baloo 2"', 'Hakeem')]).catch(() => {});
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const x = c.getContext('2d');
+  const bg = x.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#fff8e7'); bg.addColorStop(1, '#fde7f3');
+  x.fillStyle = bg; x.fillRect(0, 0, W, H);
+  x.strokeStyle = '#d4a017'; x.lineWidth = 18; x.strokeRect(40, 40, W - 80, H - 80);
+  x.strokeStyle = '#7c3aed'; x.lineWidth = 4; x.strokeRect(70, 70, W - 140, H - 140);
+  x.textAlign = 'center'; x.direction = 'rtl';
+  x.fillStyle = '#4c1d95'; x.font = '800 92px "Cairo", sans-serif'; x.fillText('شهادة إتمام', W / 2, 220);
+  x.direction = 'ltr'; x.fillStyle = '#a21caf'; x.font = '800 48px "Baloo 2", sans-serif'; x.fillText('Certificate of Achievement', W / 2, 290);
+  // Hakeem (lids removed: the blink animation's CSS isn't available inside an image)
+  const svg = buddySVG().replace(/<g fill="var\(--buddy-body\)"><ellipse class="lid"[\s\S]*?<\/g>/, '').replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="330" ');
+  const img = new Image(); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  await new Promise(r => { img.onload = r; img.onerror = r; });
+  try { x.drawImage(img, W / 2 - 150, 320, 300, 330); } catch (e) {}
+  x.direction = 'rtl'; x.fillStyle = '#1e1b3a'; x.font = '600 46px "Cairo", sans-serif'; x.fillText('تشهد لعبة حكيم بأنّ', W / 2, 730);
+  x.fillStyle = '#7c3aed'; x.font = '800 104px "Cairo", sans-serif'; x.fillText(p.name, W / 2, 860);
+  x.fillStyle = '#1e1b3a'; x.font = '700 50px "Cairo", sans-serif'; x.fillText(`أكمل بنجاح عالم «${w.ar}» ${w.icon}`, W / 2, 965);
+  x.fillStyle = '#5f5c80'; x.font = '600 38px "Cairo", sans-serif'; x.fillText(`${g.icon} ${g.ar}`, W / 2, 1030);
+  const st = [0, 1, 2, 3, 4, 5].reduce((s, l) => s + ((p.groups[group].stars[wi + '-' + l]) || 0), 0);
+  x.fillStyle = '#d4a017'; x.font = '700 56px sans-serif'; x.fillText(`⭐ ${st} / 18`, W / 2, 1110);
+  x.fillStyle = '#5f5c80'; x.font = '600 34px "Cairo", sans-serif'; x.fillText(new Date().toLocaleDateString('ar', { year: 'numeric', month: 'long', day: 'numeric' }), W / 2, 1180);
+  x.direction = 'ltr'; x.fillStyle = '#4c1d95'; x.font = '800 40px "Baloo 2", sans-serif'; x.fillText('حكيم | Hakeem', W / 2, 1250);
+  return c.toDataURL('image/png');
+}
+/** Share an image: Android share sheet in the app, the Web Share API, or a download. */
+async function shareImage(dataUrl, text, name) {
+  const b64 = dataUrl.split(',')[1];
+  if (Native && Native.shareImage) { try { Native.shareImage(b64, text, name); return; } catch (e) {} }
+  try {
+    const blob = await (await fetch(dataUrl)).blob(), file = new File([blob], name + '.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], text }); return; }
+  } catch (e) { if (e && e.name === 'AbortError') return; }
+  const a = document.createElement('a'); a.href = dataUrl; a.download = name + '.png'; document.body.appendChild(a); a.click(); a.remove();
+  toast('📥 حُفظت الشهادة في التنزيلات');
+}
+
+/* =========================================================
+   21. FAMILY CHALLENGE — weekly XP between profiles on this device
+   ========================================================= */
+function rollWeeks() {
+  const wk = weekKey();
+  Store.data.profiles.forEach(p => { if (!p.week || p.week.key !== wk) { p.lastWeek = p.week ? { ...p.week } : null; p.week = { key: wk, xp: 0 }; } });
+}
+Screens.family = () => {
+  rollWeeks();
+  const me = P(), wk = weekKey(), prevKey = weekKey(new Date(Date.now() - 7 * 864e5)), ps = Store.data.profiles;
+  const last = ps.filter(p => p.lastWeek && p.lastWeek.key === prevKey && p.lastWeek.xp > 0).sort((a, b) => b.lastWeek.xp - a.lastWeek.xp);
+  const champ = last[0];
+  // the champion of last week gets a one-time prize
+  if (champ && ps.length > 1 && Store.data.familyReward !== prevKey) {
+    Store.data.familyReward = prevKey; champ.coins += 50; save();
+    if (champ.id === me.id) setTimeout(() => { toast('🏆 أنت بطل الأسبوع الماضي! +50 🪙', 3500); Sound.fanfare(); Confetti.burst(140); }, 400);
+  }
+  const rows = ps.map(p => ({ p, xp: p.week.xp })).sort((a, b) => b.xp - a.xp);
+  render(topbar('🏆 تحدي العائلة', 'me') + `
+    ${champ && ps.length > 1 ? `<div class="mini-card glass champ"><span class="emoji">👑</span><span><b>بطل الأسبوع الماضي: ${esc(champ.name)} ${champ.avatar}</b><small>${champ.lastWeek.xp} XP · فاز بـ 50 🪙</small></span></div>` : ''}
+    <div class="panel glass"><p class="muted small" style="margin-bottom:8px">من يجمع أكثر نقاط XP هذا الأسبوع؟ البطل يربح 50 🪙 يوم الإثنين!</p>
+    ${rows.map((r, i) => `<div class="lb-row ${r.p.id === me.id ? 'me' : ''}"><span class="rank">${['🥇', '🥈', '🥉'][i] || i + 1}</span>
+      <span class="avatar sm">${r.p.avatar}</span><div style="flex:1"><b>${esc(r.p.name)}</b><small class="muted" style="display:block">${AGE_GROUPS[r.p.age].icon} ${AGE_GROUPS[r.p.age].ar}</small>
+      <div class="bar" style="margin-top:4px"><i style="width:${rows[0].xp ? r.xp / rows[0].xp * 100 : 0}%"></i></div></div><b class="en">${r.xp} XP</b></div>`).join('')}</div>
+    ${ps.length < 2 ? '<div class="center"><p class="muted">أضف ملفاً لكل فرد في العائلة لتبدأ المنافسة! 👨‍👩‍👧</p><button class="btn btn-primary" data-go="create">➕ إضافة ملف</button></div>' : ''}`);
+};
+
+/* =========================================================
+   22. ANDROID EXTRAS — daily reminder and offline reels (app only)
+   ========================================================= */
+const REMINDER_HOURS = [16, 18, 20];
+function syncReminder() {
+  const p = P(); if (!Native || !Native.setReminder || !p) return;
+  const r = p.settings.reminder || { on: false, hour: 18 };
+  try { Native.setReminder(!!r.on, r.hour, 0, `🔥 ${p.name}، حكيم ينتظرك!`, 'خمس دقائق من الإنجليزية تكفي اليوم 💬'); } catch (e) {}
+}
+window.hakeemNotifDenied = () => toast('🔕 لم يُسمح بالإشعارات — يمكنك تفعيلها من إعدادات الهاتف');
+
+/** Where to load a reel file from: the downloaded copy (app) or the website. */
+function reelSrc(id, ext) {
+  try { if (Native && Native.reelPath) { const l = Native.reelPath(id + '.' + ext); if (l) return l; } } catch (e) {}
+  return REELS_BASE + id + '.' + ext;
+}
+function openOfflineReels() {
+  const have = () => { try { return Native.reelsDownloaded(); } catch (e) { return 0; } };
+  modal({ title: '⬇️ الريلز بدون إنترنت', ok: 'تحميل الكل', cancel: 'إغلاق', html: `
+    <p>حمّل المقاطع مرة واحدة (حوالي 70 ميغابايت) لتشاهدها في أي وقت بدون إنترنت.</p>
+    <p class="center"><b id="dlCount">${have()} / ${REELS.length}</b> مقطعاً محمّلاً</p>
+    <div class="bar"><i id="dlBar" style="width:${have() / REELS.length * 100}%"></i></div>
+    ${have() ? '<button class="btn btn-ghost btn-wide" id="dlDel" style="margin-top:10px">🗑️ حذف المقاطع المحمّلة</button>' : ''}` }).then(ok => {
+    if (!ok) return;
+    toast('⬇️ بدأ التحميل… يمكنك متابعة اللعب');
+    Native.downloadReels(REELS_BASE, JSON.stringify(REELS.map(r => r.id)));
+  });
+  setTimeout(() => { const d = $('#dlDel'); if (d) d.onclick = () => { Native.deleteReels(); closeModal(false); toast('🗑️ حُذفت المقاطع المحمّلة'); }; }, 50);
+}
+window.hakeemDl = (done, total, failed, finished) => {
+  const c = $('#dlCount'), b = $('#dlBar');
+  if (c) c.textContent = `${done} / ${total}`;
+  if (b) b.style.width = (done / total * 100) + '%';
+  if (finished) toast(failed ? `⚠️ اكتمل التحميل مع ${failed} مقاطع لم تُحمّل — حاول مجدداً` : '✅ كل الريلز جاهزة للمشاهدة بدون إنترنت!', 3500);
+};
+
+/** Vocabulary words heard in a reel (current age group) — added to «My Words» after its quiz. */
+function reelWords(r) {
+  const text = r.cues.map(c => c[1]).join(' ');
+  return WORLDS[P().age].flatMap(w => w.words).filter(w => wordRegex(w.word).test(text)).slice(0, 4);
+}
+
 /* =========================================================
    10. GLOBAL EVENTS + INIT
    ========================================================= */
@@ -3451,8 +4585,7 @@ window.hakimBack = () => {
   if (state.screen === 'play' || state.screen === 'intro') { quitRun(); return true; }
   const run = state.run;
   const parent = {
-    map: 'menu', words: 'menu', achievements: 'menu', settings: 'menu', stats: 'menu', parent: 'menu',
-    leaderboard: 'menu', shop: 'menu', reels: 'menu', fail: 'map',
+    ...SCREEN_PARENT, fail: 'map',
     results: run && run.kind === 'level' ? 'map' : 'menu',
     create: Store.data.profiles.length ? 'profiles' : null,
     profiles: P() ? 'menu' : null
