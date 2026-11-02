@@ -613,6 +613,15 @@ canvas.trace{background:var(--surface-solid);border-radius:var(--radius);border:
 .cert-row.locked{opacity:.6}
 .champ{margin-bottom:12px;border:2px solid #f5b301;width:100%}
 .reel-words{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center}
+.shortcuts{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:12px}
+.shortcut{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;border-radius:14px;background:var(--surface);border:1px solid var(--border)}
+.shortcut .emoji{font-size:1.5rem}
+.shortcut small{font-size:.68rem;font-weight:700;color:var(--muted);white-space:nowrap}
+.quick-games{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.quick-game{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 4px;text-align:center}
+.quick-game .emoji{font-size:2rem}
+.quick-game small{font-weight:700;font-size:.75rem;line-height:1.3}
+@media (max-width:420px){.shortcuts{grid-template-columns:repeat(3,1fr)}.quick-games{grid-template-columns:repeat(3,1fr)}}
 
 @media (max-width:420px){
   .menu-row{grid-template-columns:1fr}
@@ -2401,11 +2410,17 @@ Screens.menu = () => {
   const weekSec = sum([...Array(7)].map((_, i) => p.daily[dayKeyOffset(-i)] || 0));
   // the rest (shop, achievements, settings…) lives in the Learn / Me tabs
   const tiles = [
+    ['games', '🎮', 'ألعاب سريعة', '🎈 البالونات وغيرها'],
     ['review', '🔁', 'المراجعة الذكية', due ? `${due} للمراجعة` : 'لا شيء الآن', due],
+    ['words', '📒', 'كلماتي', `${learned} كلمة`],
     ['reels', '🎬', 'ريلز حكيم', `✅ ${Object.keys(p.reels.done).length}/${REELS.length}`],
     ['stories', '📖', 'قصص حكيم', 'أنت تختار النهاية'],
     ['room', '🏡', 'بيت حكيم', `🪙 ${p.coins}`]
   ];
+  const shortcuts = [['shop', '🛍️', 'المتجر'], ['achievements', '🏅', 'الإنجازات'],
+    p.age === 'teens' ? ['leaderboard', '🏆', 'المتصدّرون'] : ['family', '👨‍👩‍👧', 'العائلة'],
+    ['kids', 'young'].includes(p.age) ? ['parent', '👪', 'الوالدين'] : ['stats', '📊', 'إحصائياتي'],
+    ['settings', '⚙️', 'الإعدادات'], ['profiles', '👥', 'اللاعبون']];
   const freeW = worldsOf().findIndex(w => w.free && !isDone(worldsOf().indexOf(w), LEVELS_PER_WORLD - 1));
   render(`
   <header class="menu-head glass">
@@ -2427,6 +2442,7 @@ Screens.menu = () => {
   ${(() => { const w = wordOfDay(); return `<div class="mini-card glass wod"><span class="emoji">${w.emoji}</span>
     <span class="wod-txt"><small>💡 كلمة اليوم</small><b class="en">${esc(w.word)}</b><small>${esc(w.arabic)}</small></span>
     <button class="icon-btn" data-say="${esc(w.word)}" aria-label="استمع إلى كلمة اليوم">🔊</button></div>`; })()}
+  <div class="shortcuts">${shortcuts.map(([id, ic, name]) => `<button class="shortcut" data-go="${id}"><span class="emoji">${ic}</span><small>${name}</small></button>`).join('')}</div>
   <div class="menu-grid">${tiles.map(([id, ic, name, sub, count]) => `<button class="tile-btn glass" data-go="${id}"><span class="emoji">${ic}</span><b>${name}</b><small class="muted">${sub}</small>${count ? `<span class="count">${count}</span>` : ''}</button>`).join('')}</div>`);
   $('#daily').onclick = () => { Sound.click(); startRun('daily'); };
   $$('[data-claim]').forEach(b => b.onclick = () => claimQuest(+b.dataset.claim));
@@ -2905,9 +2921,9 @@ function reviewPool() {
 
 function startRun(kind, opt = {}) {
   const p = P(), g = AGE_GROUPS[p.age];
-  const practice = kind === 'placement' || kind === 'review';
+  const practice = kind === 'placement' || kind === 'review' || kind === 'practice';
   const run = {
-    kind, group: p.age, w: opt.w || 0, l: opt.l || 0, idx: 0,
+    kind, group: p.age, w: opt.w || 0, l: opt.l || 0, mode: opt.mode, idx: 0,
     correct: 0, wrong: 0, skipped: 0, mistakes: [], combo: 0, bestCombo: 0, xp: 0, coins: 0,
     ratios: [], start: Date.now(), hearts: practice ? Infinity : g.hearts, maxHearts: g.hearts,
     seenModes: {}, placeLog: [], retry: []
@@ -2924,6 +2940,7 @@ function startRun(kind, opt = {}) {
 }
 
 function buildQuestions(run) {
+  if (run.kind === 'practice') return buildPractice(run);
   const g = AGE_GROUPS[run.group], ws = WORLDS[run.group];
   if (run.kind === 'level') {
     const w = ws[run.w], boss = run.l === 5;
@@ -3059,7 +3076,8 @@ const comboMult = c => c >= 6 ? 3 : c >= 3 ? 2 : 1;
 Screens.play = () => {
   const run = state.run;
   const tag = { level: run.l === 5 ? '👑 مستوى الزعيم' : `${WORLDS[run.group][run.w].icon} المستوى ${run.l + 1}`,
-                daily: '📅 تحدي اليوم', review: '🔁 مراجعة ذكية', placement: '🎯 تحديد المستوى' }[run.kind];
+                daily: '📅 تحدي اليوم', review: '🔁 مراجعة ذكية', placement: '🎯 تحديد المستوى',
+                practice: '🎮 ' + ((PRACTICE_GAMES.find(x => x.mode === run.mode) || {}).name || '') }[run.kind];
   render(`<div class="game-top"><button class="icon-btn" id="quit" aria-label="خروج">✕</button>
       <div class="bar" role="progressbar" aria-label="التقدّم"><i id="prog"></i></div><span id="hearts" class="hearts" aria-label="القلوب"></span></div>
     <div class="hud-sub"><span class="kind-tag" id="kindTag" data-tag="${tag}">${tag}</span><span id="combo" class="combo" aria-live="polite"></span>
@@ -3276,6 +3294,7 @@ function finishRun() {
     gp.dailyDone = todayKey(); p.stats.daily++;
     addXP(50); run.xp += 50; p.coins += 50; run.coins += 50; run.bonus = true;
   } else if (run.kind === 'review') { p.stats.reviews++; questEvent('review'); }
+  else if (run.kind === 'practice') questEvent('learn');
   save();
   show('results');
   checkAchievements();
@@ -3302,7 +3321,7 @@ Screens.results = () => {
   }
   render(`<div class="results glass">
     <div class="buddy-wrap celebrate" style="width:110px;height:122px">${buddySVG()}</div>
-    <h1>${run.kind === 'level' ? head : run.kind === 'daily' ? 'أنهيت تحدي اليوم! 📅' : 'أنهيت المراجعة! 🔁'}</h1>
+    <h1>${run.kind === 'level' ? head : run.kind === 'daily' ? 'أنهيت تحدي اليوم! 📅' : run.kind === 'practice' ? 'أحسنت! انتهت اللعبة 🎮' : 'أنهيت المراجعة! 🔁'}</h1>
     ${run.worldComplete ? `<p class="chip">🏆 أكملت عالم ${ws[run.w].ar}!</p>` : ''}
     ${run.kind === 'level' ? `<div class="big-stars" role="img" aria-label="${run.stars} من 3 نجوم"><span>★</span><span>★</span><span>★</span></div>` : ''}
     <div class="stat-grid">
@@ -3323,7 +3342,7 @@ Screens.results = () => {
   Sound.fanfare();
   if (run.stars >= 2 || run.kind !== 'level') setTimeout(() => Confetti.burst(), 300);
   Mascot.say(tip('done'), 'celebrate');
-  $('#retry').onclick = () => startRun(run.kind, { w: run.w, l: run.l });
+  $('#retry').onclick = () => startRun(run.kind, { w: run.w, l: run.l, mode: run.mode });
   if (next) { $('#nextLevel').onclick = () => startRun('level', next); $('#nextLevel').focus(); }
   const chest = $('#chest');
   if (chest) chest.onclick = () => {
@@ -3348,7 +3367,7 @@ Screens.fail = () => {
     ${mistakesHTML(run.mistakes)}
     <div class="row center"><button class="btn btn-primary btn-big" id="retry">🔄 حاول مجدداً</button>
     <button class="btn btn-ghost" data-go="${run.kind === 'level' ? 'map' : 'menu'}">العودة</button></div></div>`);
-  $('#retry').onclick = () => startRun(run.kind, { w: run.w, l: run.l });
+  $('#retry').onclick = () => startRun(run.kind, { w: run.w, l: run.l, mode: run.mode });
   $('#retry').focus();
   Mascot.say(tip('wrong'), 'sad');
 };
@@ -3930,6 +3949,9 @@ Screens.learn = () => {
   const card = (go, icon, title, sub, rec) => `<button class="hub-card glass ${rec ? 'rec' : ''}" data-go="${go}">
     <span class="emoji">${icon}</span><span class="hub-txt"><b>${title}</b><small>${sub}</small></span>${rec ? '<span class="badge">⭐ مقترح لك</span>' : ''}</button>`;
   render(hubHeader('📚 تعلّم') + `
+    <h2 class="section-title">🎮 ألعاب سريعة</h2>
+    <div class="quick-games">${practiceGames().slice(0, 4).map(x => `<button class="quick-game glass" data-qg="${x.mode}"><span class="emoji">${x.icon}</span><small>${x.name}</small></button>`).join('')}
+      <button class="quick-game glass" data-go="games"><span class="emoji">➕</span><small>كل الألعاب</small></button></div>
     <h2 class="section-title">🌱 الأساسيات</h2><div class="hub-grid">
       ${card('abc', '🔤', 'الحروف ABC', `${Object.keys(p.abc).length}/26 حرفاً · ارسم بإصبعك`, kidsy)}
       ${card('sounds', '👂', 'أصوات صعبة', 'P/B · F/V · i/ee · TH', !kidsy || age === 'young')}</div>
@@ -3941,6 +3963,7 @@ Screens.learn = () => {
     <h2 class="section-title">🔁 راجع</h2><div class="hub-grid">
       ${card('review', '🔁', 'المراجعة الذكية', due ? `${due} كلمات تنتظرك` : 'لا شيء الآن', due > 0)}
       ${card('words', '📒', 'كلماتي', `${learned} كلمة`, false)}</div>`);
+  $$('[data-qg]').forEach(b => b.onclick = () => { Sound.click(); startRun('practice', { mode: b.dataset.qg }); });
 };
 
 Screens.me = () => {
@@ -3949,9 +3972,10 @@ Screens.me = () => {
   const tiles = [
     ['room', '🏡', 'بيت حكيم', 'زيّن الغرفة بالعملات'], ['shop', '🛍️', 'المتجر', 'قبعات وألوان لحكيم'],
     ['certificates', '📜', 'شهاداتي', certs ? `${certs} شهادات` : 'أكمل عالماً لتحصل عليها'], ['achievements', '🏅', 'الإنجازات', `${Object.keys(p.ach).length}/${ACHIEVEMENTS.length}`],
-    ['family', '🏆', 'تحدي العائلة', 'منافسة الأسبوع'], parentOrStats,
+    ['family', '👨‍👩‍👧', 'تحدي العائلة', 'منافسة الأسبوع'], parentOrStats,
+    p.age === 'teens' && ['leaderboard', '🏆', 'المتصدّرون', 'هذا الأسبوع'],
     ['settings', '⚙️', 'الإعدادات', 'الصوت والمظهر والتذكير'], ['profiles', '👥', 'تبديل اللاعب', `${Store.data.profiles.length} ملفات`]
-  ];
+  ].filter(Boolean);
   render(hubHeader('😊 أنا') + `
     <div class="me-card glass"><div class="buddy-wrap me-buddy">${buddySVG()}</div>
       <div class="me-info"><span class="avatar sm">${p.avatar}</span><b>${esc(p.name)}</b><small>${g.icon} ${g.ar}</small>
@@ -4540,6 +4564,50 @@ window.hakeemDl = (done, total, failed, finished) => {
 function reelWords(r) {
   const text = r.cues.map(c => c[1]).join(' ');
   return WORLDS[P().age].flatMap(w => w.words).filter(w => wordRegex(w.word).test(text)).slice(0, 4);
+}
+
+/* =========================================================
+   23. QUICK GAMES — play any game mode directly with unlocked words
+   ========================================================= */
+const PRACTICE_GAMES = [
+  { mode:'pop',       icon:'🎈', name:'فقاعات الكلمات',  desc:'افقع البالون الصحيح قبل أن يطير' },
+  { mode:'match',     icon:'🃏', name:'بطاقات الذاكرة',   desc:'طابق كل كلمة مع صورتها' },
+  { mode:'truefalse', icon:'✅', name:'صح أم خطأ',        desc:'هل الكلمة تطابق الصورة؟' },
+  { mode:'listen',    icon:'👂', name:'استمع واختر',      desc:'اختر الصورة الصحيحة' },
+  { mode:'look',      icon:'👀', name:'انظر واختر',       desc:'ما اسم الصورة بالإنجليزية؟' },
+  { mode:'spell',     icon:'🔡', name:'رتّب الحروف',      desc:'اكتب الكلمة حرفاً حرفاً' },
+  { mode:'speak',     icon:'🎤', name:'قلها بصوتك',       desc:'تمرين النطق بالميكروفون' },
+  { mode:'fill',      icon:'✏️', name:'أكمل الجملة',      desc:'اختر الكلمة الناقصة' },
+  { mode:'build',     icon:'🧩', name:'ركّب الجملة',      desc:'رتّب الكلمات في جملة' },
+  { mode:'dialogue',  icon:'💬', name:'استمع للحوار',     desc:'افهم حواراً قصيراً وأجب' }
+];
+TAB_OF.games = 'learn';
+SCREEN_PARENT.games = 'learn';
+const practiceGames = () => PRACTICE_GAMES.filter(x => AGE_GROUPS[P().age].modes.includes(x.mode));
+Screens.games = () => {
+  render(topbar('🎮 ألعاب سريعة', 'learn') + `
+    <p class="muted center" style="margin-bottom:12px">العب أي لعبة مباشرة بالكلمات التي فتحتها في الخريطة 🗺️</p>
+    <div class="hub-grid">${practiceGames().map(x => `<button class="hub-card glass" data-game="${x.mode}"><span class="emoji">${x.icon}</span>
+      <span class="hub-txt"><b>${x.name}</b><small>${x.desc}</small></span></button>`).join('')}</div>`);
+  $$('[data-game]').forEach(b => b.onclick = () => { Sound.click(); startRun('practice', { mode: b.dataset.game }); });
+};
+/** Questions for a quick game: one mode only, words from the levels already unlocked. */
+function buildPractice(run) {
+  const g = AGE_GROUPS[run.group], ws = WORLDS[run.group], mode = run.mode;
+  let words = ws.flatMap((w, wi) => w.words.filter(x => isUnlocked(wi, x.level - 1)));
+  if (words.length < 8) words = ws[0].words;
+  if (mode === 'match' || mode === 'pop') return [0, 1, 2].map(() => {
+    const uniq = [];
+    shuffle(words).forEach(x => { if (!uniq.some(u => u.emoji === x.emoji)) uniq.push(x); });
+    return { mode, words: uniq.slice(0, mode === 'pop' ? 3 : g.pairs) };
+  });
+  if (mode === 'dialogue') {
+    const dl = shuffle(ws.flatMap((w, wi) => isUnlocked(wi, 0) ? w.dialogues : []));
+    return (dl.length ? dl : ws[0].dialogues).slice(0, 5).map(d => ({ mode, dlg: d, order: shuffle([0, 1, 2, 3]) }));
+  }
+  let fit = shuffle(words).filter(x => FITS[mode](x, run.group));
+  if (fit.length < 4) fit = shuffle(ws.flatMap(w => w.words)).filter(x => FITS[mode](x, run.group));
+  return fit.slice(0, 8).map(w => makeQ(mode, w, run));
 }
 
 /* =========================================================
