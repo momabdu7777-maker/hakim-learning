@@ -925,7 +925,7 @@ const ACHIEVEMENTS = [
   { id:'review',  icon:'🔁', name:'المراجِع الذكي',  desc:'أكمل جلسة مراجعة ذكية',      test:p => p.stats.reviews >= 1 },
   { id:'rich',    icon:'🪙', name:'جامع الكنوز',     desc:'اجمع 500 عملة',             test:p => p.coins >= 500 },
   { id:'reels5',  icon:'🎬', name:'مشاهد نشيط',      desc:'شاهد 5 ريلز وأجب عنها',      test:p => Object.keys((p.reels || {}).done || {}).length >= 5 },
-  { id:'reels15', icon:'🍿', name:'عاشق الريلز',     desc:'شاهد كل الريلز',             test:p => Object.keys((p.reels || {}).done || {}).length >= REELS.length }
+  { id:'reels15', icon:'🍿', name:'عاشق الريلز',     desc:'شاهد كل الريلز الـ41',             test:p => Object.keys((p.reels || {}).done || {}).length >= REELS.length }
 ];
 
 const AVATARS = ['🦊','🐼','🐯','🦁','🐸','🐵','🦄','🐙','🐨','🐰','🐧','🦖','🐱','🐶','🧑‍🚀','🧑‍🎓','👩‍💼','👨‍💼','🧕','🧔'];
@@ -977,7 +977,19 @@ const REEL_FILMS = {
   cam2: { title:'Caminandes 2: Gran Dillama', by:'Pablo Vazquez, Beorn Leonard, Francesco Siddi — caminandes.com', year:2013, license:'CC BY-SA 3.0',
           licenseUrl:'https://creativecommons.org/licenses/by-sa/3.0/', source:'https://commons.wikimedia.org/wiki/File:Caminandes_-_Gran_Dillama_-_Blender_Foundation%27s_new_Open_Movie.webm' },
   cam3: { title:'Caminandes 3: Llamigos', by:'Blender Foundation', year:2016, license:'CC BY 3.0',
-          licenseUrl:'https://creativecommons.org/licenses/by/3.0/', source:'https://commons.wikimedia.org/wiki/File:Caminandes_3_-_Llamigos_-_Blender_Animated_Short.webm' }
+          licenseUrl:'https://creativecommons.org/licenses/by/3.0/', source:'https://commons.wikimedia.org/wiki/File:Caminandes_3_-_Llamigos_-_Blender_Animated_Short.webm' },
+  wingit: { title:'Wing It!', by:'Blender Studio', year:2023, license:'CC BY 4.0',
+          licenseUrl:'https://creativecommons.org/licenses/by/4.0/', source:'https://commons.wikimedia.org/wiki/File:WING_IT!_-_Blender_Open_Movie-full_movie.webm' },
+  dweebs: { title:'The Daily Dweebs', by:'Blender Foundation', year:2017, license:'CC BY 4.0',
+          licenseUrl:'https://creativecommons.org/licenses/by/4.0/', source:'https://commons.wikimedia.org/wiki/File:The_Daily_Dweebs_-_Blender_Open_Movie-full_movie.webm' },
+  spring: { title:'Spring', by:'Andy Goralczyk, Blender Foundation (cloud.blender.org/spring)', year:2019, license:'CC BY 4.0',
+          licenseUrl:'https://creativecommons.org/licenses/by/4.0/', source:'https://commons.wikimedia.org/wiki/File:Spring_-_Blender_Open_Movie.webm' },
+  coffee: { title:'Coffee Run', by:'Blender Foundation', year:2020, license:'CC BY 4.0',
+          licenseUrl:'https://creativecommons.org/licenses/by/4.0/', source:'https://commons.wikimedia.org/wiki/File:Coffee_Run_-_Blender_Open_Movie-full_movie.webm' },
+  gertie: { title:'Gertie the Dinosaur', by:'Winsor McCay', year:1914, license:'Public Domain',
+          licenseUrl:'https://creativecommons.org/publicdomain/mark/1.0/', source:'https://commons.wikimedia.org/wiki/File:Winsor_McCay_(1914)Gertie_the_Dinosaur.webm' },
+  gertie2: { title:'Gertie on Tour', by:'Winsor McCay', year:1921, license:'Public Domain',
+          licenseUrl:'https://creativecommons.org/publicdomain/mark/1.0/', source:'https://commons.wikimedia.org/wiki/File:Winsor_McCay_(1921)_Gertie_on_Tour.webm' }
 };
 const REELS = [
   { id:'bbb-birds', film:'bbb', en:'A Beautiful Morning', ar:'صباح جميل', cues:[
@@ -1024,6 +1036,13 @@ const REELS = [
       [20, "Surprise! The big bunny is here.", "مفاجأة! الأرنب الكبير هنا."],
       [26, "The bunny is big. The chinchilla is small.", "الأرنب كبير، والشنشيلة صغيرة."]],
     quiz:{ q:"Who is big?", qAr:"من الكبير؟", options:["The bunny","The chinchilla","The nut","The butterfly"], answer:0 } },
+  { id:'bbb-bird', film:'bbb', en:"The Squirrel and the Bird", ar:"السنجاب والطائر", cues:[
+      [1, "The bunny is in the forest.", "الأرنب في الغابة."],
+      [3, "The red squirrel climbs a tree.", "السنجاب الأحمر يتسلّق شجرة."],
+      [7, "He sees a bird on the branch.", "يرى طائراً على الغصن."],
+      [12, "The bird looks at him. Hello!", "الطائر ينظر إليه. مرحباً!"],
+      [15, "The squirrel jumps away.", "السنجاب يقفز بعيداً."]],
+    quiz:{ q:"Who climbs the tree?", qAr:"من يتسلّق الشجرة؟", options:["The red squirrel", "The bunny", "The bird", "The butterfly"], answer:0 } },
   { id:'bbb-fly', film:'bbb', en:'I Can Fly!', ar:'أستطيع الطيران!', cues:[
       [1, "The red squirrel is on a branch.", "السنجاب الأحمر على غصن."],
       [4, "He opens his arms. He wants to fly!", "يفتح ذراعيه. يريد أن يطير!"],
@@ -1074,6 +1093,13 @@ const REELS = [
       [14, "Everyone is safe. Phew!", "الجميع بأمان. يا للراحة!"],
       [19, "The llama sees a red berry. He wants to eat it.", "يرى اللاما توتة حمراء. يريد أن يأكلها."]],
     quiz:{ q:"What color is the train?", qAr:"ما لون القطار؟", options:["Black","Pink","Green","White"], answer:0 } },
+  { id:'cam3-mine', film:'cam3', en:"A Wild Ride!", ar:"رحلة مجنونة!", cues:[
+      [1, "The penguin jumps up high!", "البطريق يقفز عالياً!"],
+      [5, "Oops! The llama falls into a dark hole.", "أوه! اللاما يسقط في حفرة مظلمة."],
+      [10, "They ride in a little cart. Hold on!", "يركبان في عربة صغيرة. تمسّك جيداً!"],
+      [18, "They come out into the light.", "يخرجان إلى الضوء."],
+      [22, "The penguin has the berries. Yummy!", "البطريق معه التوت. لذيذ!"]],
+    quiz:{ q:"What do they ride in?", qAr:"بماذا يركبان؟", options:["A little cart", "A big ship", "A plane", "A bus"], answer:0 } },
   { id:'cam3-snow', film:'cam3', en:'Fun in the Snow', ar:'مرح في الثلج', cues:[
       [1, "The penguin has many red berries.", "مع البطريق الكثير من التوت الأحمر."],
       [4, "The llama slides down the snowy hill.", "اللاما ينزلق على التلة الثلجية."],
@@ -1087,7 +1113,174 @@ const REELS = [
       [18, "Look! The penguin brings berries.", "انظر! البطريق يحضر التوت."],
       [21, "Many penguins come. They bring food!", "تأتي بطاريق كثيرة. يحضرون الطعام!"],
       [27, "Now they are friends. Friends share food.", "الآن هم أصدقاء. الأصدقاء يتشاركون الطعام."]],
-    quiz:{ q:"What do the penguins bring?", qAr:"ماذا تحضر البطاريق؟", options:["Red berries","Pizza","Books","Toys"], answer:0 } }
+    quiz:{ q:"What do the penguins bring?", qAr:"ماذا تحضر البطاريق؟", options:["Red berries","Pizza","Books","Toys"], answer:0 } },
+  { id:'wing-plan', film:'wingit', en:"A Big Dream", ar:"حلم كبير", cues:[
+      [1, "Wing It! A cat and a dog have a big dream.", "Wing It! قطة وكلب لديهما حلم كبير."],
+      [8, "The cat is at the controls. The cat wears goggles.", "القطة عند أزرار التحكم، وترتدي نظارة واقية."],
+      [14, "Look! They have a rocket in the barn.", "انظر! لديهما صاروخ في الحظيرة."],
+      [20, "The dog is wearing a space suit. He is so excited!", "الكلب يرتدي بدلة فضاء. إنه متحمس جداً!"],
+      [26, "Here is the plan. Check, check, check!", "هذه هي الخطة. تمّ، تمّ، تمّ!"]],
+    quiz:{ q:"Where is the rocket?", qAr:"أين الصاروخ؟", options:["In the barn", "In the sea", "On the moon", "In a school"], answer:0 } },
+  { id:'wing-buttons', film:'wingit', en:"So Many Buttons!", ar:"أزرار كثيرة!", cues:[
+      [1, "The dog looks through the window.", "الكلب ينظر من النافذة."],
+      [8, "He runs to the control room.", "يركض إلى غرفة التحكم."],
+      [12, "He presses all the buttons. Beep, beep!", "يضغط على كل الأزرار. بيب، بيب!"],
+      [20, "Oh no! The rocket is shaking.", "يا إلهي! الصاروخ يهتز."],
+      [28, "What is this big red button?", "ما هذا الزر الأحمر الكبير؟"]],
+    quiz:{ q:"What color is the big button?", qAr:"ما لون الزر الكبير؟", options:["Red", "Green", "Blue", "Yellow"], answer:0 } },
+  { id:'wing-launch', film:'wingit', en:"Blast Off!", ar:"انطلاق!", cues:[
+      [1, "Don't press the red button!", "لا تضغط الزر الأحمر!"],
+      [8, "The cat says: Stop! Read the plan first.", "القطة تقول: توقف! اقرأ الخطة أولاً."],
+      [16, "Too late! Three, two, one... blast off!", "فات الأوان! ثلاثة، اثنان، واحد... انطلاق!"],
+      [22, "The rocket flies up into the sky.", "الصاروخ يطير عالياً في السماء."],
+      [26, "The dog is laughing. This is fun!", "الكلب يضحك. هذا ممتع!"]],
+    quiz:{ q:"Where does the rocket fly?", qAr:"إلى أين يطير الصاروخ؟", options:["Into the sky", "Under the sea", "Into a cave", "Into a house"], answer:0 } },
+  { id:'wing-sky', film:'wingit', en:"The Umbrella Parachute", ar:"المظلة الشمسية", cues:[
+      [1, "The cat presses the parachute button.", "القطة تضغط زر المظلة."],
+      [3, "Look! The parachute is an umbrella!", "انظر! المظلة عبارة عن شمسية!"],
+      [13, "A pink bird flies next to the rocket.", "طائر وردي يطير بجانب الصاروخ."],
+      [18, "The cat is floating in the air.", "القطة تطفو في الهواء."],
+      [24, "The dog has another idea.", "الكلب لديه فكرة أخرى."]],
+    quiz:{ q:"What is the parachute?", qAr:"ما هي المظلة في القصة؟", options:["An umbrella", "A hat", "A shoe", "A book"], answer:0 } },
+  { id:'wing-wings', film:'wingit', en:"We Are Flying!", ar:"نحن نطير!", cues:[
+      [1, "The dog pulls a lever.", "الكلب يسحب ذراع التحكم."],
+      [7, "Wow! The rocket has wings now.", "واو! أصبح للصاروخ أجنحة الآن."],
+      [10, "The cat is very scared.", "القطة خائفة جداً."],
+      [16, "But the dog is happy. We are flying!", "لكن الكلب سعيد. نحن نطير!"],
+      [24, "He dances in the cockpit.", "إنه يرقص في قمرة القيادة."]],
+    quiz:{ q:"What does the rocket have now?", qAr:"ماذا أصبح لدى الصاروخ الآن؟", options:["Wings", "Wheels", "Legs", "A tail"], answer:0 } },
+  { id:'wing-landing', film:'wingit', en:"Crash Landing", ar:"هبوط صاخب", cues:[
+      [1, "The rocket comes down very fast.", "الصاروخ ينزل بسرعة كبيرة."],
+      [4, "Crash! They are back in the barn.", "طاخ! لقد عادا إلى الحظيرة."],
+      [7, "The dog is OK. He ticks the plan. Done!", "الكلب بخير. يضع علامة على الخطة. تمّ!"],
+      [13, "The barn is a mess. What a trip!", "الحظيرة في فوضى. يا لها من رحلة!"]],
+    quiz:{ q:"Where do they land?", qAr:"أين هبطا؟", options:["In the barn", "On the moon", "In the sea", "On a tree"], answer:0 } },
+  { id:'dweebs-dinner', film:'dweebs', en:"Dinner Time!", ar:"وقت العشاء!", cues:[
+      [1, "This is a little dog. He is hungry.", "هذا كلب صغير. إنه جائع."],
+      [4, "A girl puts food in his bowl. Dinner time!", "فتاة تضع الطعام في وعائه. وقت العشاء!"],
+      [9, "The dog is very happy.", "الكلب سعيد جداً."],
+      [13, "Who is this? A little chick!", "من هذا؟ كتكوت صغير!"],
+      [19, "The dog says: This is my food!", "الكلب يقول: هذا طعامي!"]],
+    quiz:{ q:"What does the girl give the dog?", qAr:"ماذا تعطي الفتاة للكلب؟", options:["Food", "A ball", "A hat", "A book"], answer:0 } },
+  { id:'dweebs-chicken', film:'dweebs', en:"The Big Hen", ar:"الدجاجة الكبيرة", cues:[
+      [1, "The dog watches his food.", "الكلب يراقب طعامه."],
+      [7, "He is tired. He wants to sleep.", "إنه متعب. يريد أن ينام."],
+      [14, "Oh! A big hen is here.", "أوه! دجاجة كبيرة هنا."],
+      [17, "The hen is big. The dog is small.", "الدجاجة كبيرة، والكلب صغير."],
+      [20, "Maybe they can share the food.", "ربما يمكنهما أن يتشاركا الطعام."]],
+    quiz:{ q:"Who is big?", qAr:"من الكبير؟", options:["The hen", "The dog", "The bowl", "The girl"], answer:0 } },
+  { id:'spring-mountain', film:'spring', en:"On the Mountain", ar:"على الجبل", cues:[
+      [1, "Look at the high mountains and the blue lake.", "انظر إلى الجبال العالية والبحيرة الزرقاء."],
+      [12, "It is cold up here.", "الجو بارد هنا في الأعلى."],
+      [19, "A little dog is running.", "كلب صغير يركض."],
+      [28, "This girl is his friend. She gives him a snack.", "هذه الفتاة صديقته. تعطيه وجبة خفيفة."],
+      [40, "She looks at the big valley. She is thinking.", "تنظر إلى الوادي الكبير. إنها تفكّر."]],
+    quiz:{ q:"What does the girl give the dog?", qAr:"ماذا تعطي الفتاة للكلب؟", options:["A snack", "A ball", "A hat", "A shoe"], answer:0 } },
+  { id:'spring-arrives', film:'spring', en:"Spring Is Here!", ar:"جاء الربيع!", cues:[
+      [1, "The night is ending.", "الليل ينتهي."],
+      [8, "The grass is green again.", "العشب أصبح أخضر من جديد."],
+      [12, "The girl and her dog walk in the clouds.", "الفتاة وكلبها يمشيان في الغيوم."],
+      [20, "White flowers open everywhere.", "الزهور البيضاء تتفتح في كل مكان."],
+      [26, "The sun is warm. The ice melts.", "الشمس دافئة. الجليد يذوب."],
+      [31, "Spring is here!", "لقد جاء الربيع!"]],
+    quiz:{ q:"What melts in the sun?", qAr:"ما الذي يذوب في الشمس؟", options:["The ice", "The grass", "The dog", "The mountain"], answer:0 } },
+  { id:'spring-valley', film:'spring', en:"A Beautiful Valley", ar:"وادٍ جميل", cues:[
+      [2, "Look at this pink flower.", "انظر إلى هذه الزهرة الوردية."],
+      [8, "The mountains are beautiful.", "الجبال جميلة."],
+      [12, "The girl and her dog look at the view.", "الفتاة وكلبها ينظران إلى المنظر."],
+      [20, "Now they walk home together.", "الآن يمشيان معاً إلى البيت."],
+      [33, "The plants grow tall. Hello, spring!", "النباتات تنمو عالياً. مرحباً أيها الربيع!"]],
+    quiz:{ q:"What color is the flower?", qAr:"ما لون الزهرة؟", options:["Pink", "Black", "Blue", "Brown"], answer:0 } },
+  { id:'gertie-hello', film:'gertie', en:"Hello, Gertie!", ar:"مرحباً يا جيرتي!", cues:[
+      [1, "This cartoon is more than one hundred years old!", "هذا الكرتون عمره أكثر من مئة عام!"],
+      [4, "The card says: Come out, Gertie, and make a pretty bow.", "البطاقة تقول: اخرجي يا جيرتي وانحني انحناءة جميلة."],
+      [20, "Look! There is a dinosaur behind the rocks.", "انظر! يوجد ديناصور خلف الصخور."],
+      [29, "Her name is Gertie. She is very big.", "اسمها جيرتي. إنها كبيرة جداً."],
+      [35, "She eats leaves from the tree. Yum!", "تأكل أوراق الشجرة. لذيذ!"],
+      [40, "Now she makes a pretty bow. Hello, Gertie!", "الآن تنحني انحناءة جميلة. مرحباً يا جيرتي!"]],
+    quiz:{ q:"What is Gertie?", qAr:"ما هي جيرتي؟", options:["A dinosaur", "A cat", "A bird", "A fish"], answer:0 } },
+  { id:'gertie-stop', film:'gertie', en:"Be a Good Girl!", ar:"كوني مطيعة!", cues:[
+      [5, "The card says: Aw, stop that!", "البطاقة تقول: أوه، توقفي عن ذلك!"],
+      [11, "Be a good girl and bow to the audience.", "كوني مطيعة وانحني للجمهور."],
+      [18, "Gertie bows. Good girl!", "جيرتي تنحني. أحسنتِ!"],
+      [31, "Thanks! Now raise your right foot.", "شكراً! الآن ارفعي قدمك اليمنى."],
+      [40, "Up goes her foot!", "ها هي ترفع قدمها!"]],
+    quiz:{ q:"Which foot does Gertie raise?", qAr:"أي قدم ترفع جيرتي؟", options:["Her right foot", "Her left hand", "Her head", "Her tail"], answer:0 } },
+  { id:'gertie-foot', film:'gertie', en:"The Sea Serpent", ar:"الثعبان البحري", cues:[
+      [5, "That's good! Now raise your left foot.", "جيد! الآن ارفعي قدمك اليسرى."],
+      [20, "Look in the lake! A sea serpent!", "انظر في البحيرة! ثعبان بحري!"],
+      [25, "Never mind that sea serpent! Raise your left foot.", "لا تهتمي بذلك الثعبان! ارفعي قدمك اليسرى."],
+      [31, "Gertie is looking at the sea serpent.", "جيرتي تنظر إلى الثعبان البحري."],
+      [40, "Gertie, please listen!", "جيرتي، أرجوكِ استمعي!"]],
+    quiz:{ q:"What is in the lake?", qAr:"ماذا يوجد في البحيرة؟", options:["A sea serpent", "A car", "A house", "A train"], answer:0 } },
+  { id:'gertie-pumpkin', film:'gertie', en:"Don't Cry, Gertie!", ar:"لا تبكي يا جيرتي!", cues:[
+      [1, "You're a bad girl, shame on you!", "أنتِ فتاة مشاغبة، عيب عليكِ!"],
+      [7, "Oh no! Gertie is crying.", "يا إلهي! جيرتي تبكي."],
+      [13, "Oh, don't cry. Here, catch this pumpkin.", "لا تبكي. خذي، التقطي هذه اليقطينة."],
+      [19, "She catches the pumpkin and eats it. Now she is happy!", "تلتقط اليقطينة وتأكلها. الآن هي سعيدة!"],
+      [29, "Now will you raise your left foot?", "والآن هل سترفعين قدمك اليسرى؟"]],
+    quiz:{ q:"What does Gertie catch?", qAr:"ماذا تلتقط جيرتي؟", options:["A pumpkin", "A ball", "A fish", "An apple"], answer:0 } },
+  { id:'gertie-tree', film:'gertie', en:"A Tree for Lunch", ar:"شجرة على الغداء", cues:[
+      [2, "Gertie is hungry again.", "جيرتي جائعة مرة أخرى."],
+      [6, "She pulls up a whole tree!", "تقتلع شجرة كاملة!"],
+      [9, "She eats it. Crunch, crunch!", "تأكلها. قرمش، قرمش!"],
+      [14, "Dinosaurs eat a lot of plants.", "الديناصورات تأكل الكثير من النباتات."],
+      [24, "Now she looks for more food.", "الآن تبحث عن المزيد من الطعام."]],
+    quiz:{ q:"What does Gertie eat?", qAr:"ماذا تأكل جيرتي؟", options:["A tree", "A pizza", "A cake", "A fish"], answer:0 } },
+  { id:'gertie-dance', film:'gertie', en:"Gertie Dances", ar:"جيرتي ترقص", cues:[
+      [3, "Gertie loves music. Play for her and she'll dance.", "جيرتي تحب الموسيقى. اعزف لها وسترقص."],
+      [12, "Listen to the music!", "استمع إلى الموسيقى!"],
+      [16, "Gertie is dancing. Left and right!", "جيرتي ترقص. يميناً ويساراً!"],
+      [28, "She moves her arms and her tail.", "تحرّك ذراعيها وذيلها."],
+      [40, "What a great dancer!", "يا لها من راقصة رائعة!"]],
+    quiz:{ q:"What does Gertie love?", qAr:"ماذا تحب جيرتي؟", options:["Music", "Rain", "Cars", "Books"], answer:0 } },
+  { id:'gertie-nap', film:'gertie', en:"Nap Time", ar:"وقت القيلولة", cues:[
+      [1, "Gertie is tired.", "جيرتي متعبة."],
+      [8, "She lies down. Time for a nap.", "تستلقي. حان وقت القيلولة."],
+      [14, "Shh! Gertie is sleeping.", "هدوء! جيرتي نائمة."],
+      [28, "She rolls over in her sleep.", "تتقلّب أثناء نومها."],
+      [38, "Look! A flying lizard wakes her up.", "انظر! سحلية طائرة توقظها."]],
+    quiz:{ q:"What does Gertie do?", qAr:"ماذا تفعل جيرتي؟", options:["She takes a nap", "She swims", "She reads", "She cooks"], answer:0 } },
+  { id:'gertie-drink', film:'gertie', en:"A Little Drink", ar:"شربة ماء", cues:[
+      [1, "Will you have a little drink?", "هل تشربين قليلاً؟"],
+      [11, "There's a lake. Take a little drink if you want it.", "هناك بحيرة. اشربي قليلاً إن أردتِ."],
+      [19, "Gertie goes to the lake.", "جيرتي تذهب إلى البحيرة."],
+      [25, "She drinks the water. Glug, glug!", "تشرب الماء. غلغ، غلغ!"],
+      [37, "Oh no! She drinks the whole lake!", "يا إلهي! شربت البحيرة كلها!"]],
+    quiz:{ q:"What does Gertie drink?", qAr:"ماذا تشرب جيرتي؟", options:["Water from the lake", "Milk", "Juice", "Tea"], answer:0 } },
+  { id:'gertie-ride', film:'gertie', en:"A Ride on Gertie", ar:"جولة على جيرتي", cues:[
+      [1, "Gertie is not afraid of her friend.", "جيرتي لا تخاف من صديقها."],
+      [5, "She will take him for a ride.", "ستأخذه في جولة."],
+      [11, "He climbs on Gertie's head.", "يتسلّق على رأس جيرتي."],
+      [16, "Goodbye! They walk away together.", "إلى اللقاء! يبتعدان معاً."]],
+    quiz:{ q:"Who rides on Gertie?", qAr:"من يركب على جيرتي؟", options:["Her friend", "A cat", "A bird", "A fish"], answer:0 } },
+  { id:'gertie-toad', film:'gertie2', en:"The Tiny Toad", ar:"الضفدع الصغير", cues:[
+      [1, "The card says: In her day, toads were ten feet high!", "البطاقة تقول: في زمنها كانت الضفادع بطول عشرة أقدام!"],
+      [7, "Gertie sees a tiny toad.", "جيرتي ترى ضفدعاً صغيراً جداً."],
+      [15, "The toad is so small. Gertie is surprised.", "الضفدع صغير جداً. جيرتي متفاجئة."],
+      [24, "She looks at it again and again.", "تنظر إليه مرة بعد مرة."],
+      [33, "Big Gertie and the little toad!", "جيرتي الكبيرة والضفدع الصغير!"]],
+    quiz:{ q:"What does Gertie see?", qAr:"ماذا ترى جيرتي؟", options:["A tiny toad", "A big ship", "A red car", "A cat"], answer:0 } },
+  { id:'gertie-party', film:'gertie2', en:"The Dinosaur Party", ar:"حفلة الديناصورات", cues:[
+      [1, "Gertie falls asleep.", "جيرتي تغفو."],
+      [3, "As she sleeps, she dreams of other days.", "وهي نائمة، تحلم بالأيام الماضية."],
+      [10, "Look! Many dinosaurs are at a party.", "انظر! ديناصورات كثيرة في حفلة."],
+      [20, "They dance together.", "يرقصون معاً."],
+      [31, "Gertie is having fun with her friends.", "جيرتي تستمتع مع أصدقائها."]],
+    quiz:{ q:"What does Gertie dream about?", qAr:"بماذا تحلم جيرتي؟", options:["A dinosaur party", "A school", "A car race", "The sea"], answer:0 } },
+  { id:'coffee-cafe', film:'coffee', en:"Coffee Time", ar:"وقت القهوة", cues:[
+      [1, "This woman is always in a hurry.", "هذه المرأة دائماً مستعجلة."],
+      [5, "She goes to the coffee shop.", "تذهب إلى المقهى."],
+      [8, "Can I have a coffee, please?", "هل يمكنني الحصول على قهوة من فضلك؟"],
+      [12, "She takes her coffee and runs!", "تأخذ قهوتها وتركض!"],
+      [16, "She is very fast!", "إنها سريعة جداً!"]],
+    quiz:{ q:"Where does the woman go?", qAr:"إلى أين تذهب المرأة؟", options:["To the coffee shop", "To the beach", "To the zoo", "To the hospital"], answer:0 } },
+  { id:'coffee-again', film:'coffee', en:"Another Coffee, Please!", ar:"قهوة أخرى من فضلك!", cues:[
+      [1, "She is in the park now.", "إنها في الحديقة الآن."],
+      [4, "Run, run, run!", "اركضي، اركضي، اركضي!"],
+      [9, "Back to the coffee shop again!", "عادت إلى المقهى مرة أخرى!"],
+      [12, "Another coffee, please!", "قهوة أخرى من فضلك!"]],
+    quiz:{ q:"What does she ask for?", qAr:"ماذا تطلب؟", options:["Another coffee", "A pizza", "A taxi", "A ticket"], answer:0 } }
 ];
 /** Where the clips are streamed from: next to the web version, or the public site for the app/local file. */
 const REELS_BASE = location.protocol.startsWith('http') ? new URL('../reels/', location.href).href
@@ -1636,7 +1829,7 @@ function applyTheme() {
 /* =========================================================
    6. APP STATE + ROUTER
    ========================================================= */
-const state = { screen:null, run:null, key:null, timerId:null, modalResolve:null, modalPrevFocus:null, lastPt:null, reelObs:null };
+const state = { screen:null, run:null, key:null, timerId:null, modalResolve:null, modalPrevFocus:null, lastPt:null, reelObs:null, posterObs:null };
 const Screens = {};
 const PLAY_SCREENS = ['play', 'intro', 'reels'];
 
@@ -2081,9 +2274,14 @@ Screens.settings = () => {
 /* ---------- Hakeem Reels: swipeable cartoon clips with timed narration ---------- */
 function stopReels() {
   if (state.reelObs) { state.reelObs.disconnect(); state.reelObs = null; }
+  if (state.posterObs) { state.posterObs.disconnect(); state.posterObs = null; }
   $$('.reel video').forEach(v => { try { v.pause(); v.removeAttribute('src'); v.load(); } catch (e) {} });
 }
 const reelsDone = () => Object.keys(P().reels.done).length;
+/** "Title © year author · licence" — public-domain films carry no ©. */
+const filmCredit = f => f.license === 'Public Domain'
+  ? `${esc(f.title)} — ${esc(f.by)} (${f.year}) · Public Domain`
+  : `${esc(f.title)} © ${f.year} ${esc(f.by)} · ${f.license}`;
 
 Screens.reels = () => {
   const p = P(), rs = p.reels;
@@ -2094,7 +2292,7 @@ Screens.reels = () => {
       const f = REEL_FILMS[r.film];
       return `<section class="reel" data-i="${i}" aria-label="${esc(r.ar)}">
         <div class="reel-head"><b>${esc(r.en)}</b><small class="muted">${esc(r.ar)}</small>${rs.done[r.id] ? '<span class="badge">✅</span>' : ''}<small class="muted reel-n">${i + 1}/${REELS.length}</small></div>
-        <div class="reel-video"><video playsinline preload="none" poster="${REELS_BASE}${r.id}.jpg"></video>
+        <div class="reel-video"><video playsinline preload="none" data-poster="${REELS_BASE}${r.id}.jpg"></video>
           <button class="reel-play" aria-label="تشغيل">▶</button><div class="reel-msg hidden" role="status"></div></div>
         <div class="reel-cap glass" role="button" tabindex="0" aria-label="استمع للجملة مرة أخرى"><p class="cap-en en">▶</p><p class="cap-ar">اسحب للأعلى لمشاهدة المقطع التالي ⬆️</p></div>
         <div class="reel-actions">
@@ -2103,7 +2301,7 @@ Screens.reels = () => {
           <button class="icon-btn" data-act="next" aria-label="المقطع التالي">⬇️</button>
         </div>
         <div class="reel-quiz glass hidden"></div>
-        <p class="reel-credit en">${esc(f.title)} © ${f.year} ${esc(f.by)} · ${f.license}</p>
+        <p class="reel-credit en">${filmCredit(f)}</p>
       </section>`;
     }).join('')}</div>`);
 
@@ -2203,6 +2401,17 @@ Screens.reels = () => {
     else if (!v.paused) { v.pause(); Speech.cancel(); }
   }), { root: box, threshold: [0, .6] });
   secs.forEach(s => state.reelObs.observe(s));
+  // posters load only when a reel is near the screen (41 posters at once would waste data)
+  state.posterObs = new IntersectionObserver(entries => entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    const v = $('video', en.target);
+    if (v.dataset.poster) { v.poster = v.dataset.poster; delete v.dataset.poster; }
+    state.posterObs.unobserve(en.target);
+  }), { root: box, rootMargin: '150% 0px' });
+  secs.forEach(s => state.posterObs.observe(s));
+  // continue from the first reel the player hasn't finished yet
+  const firstNew = REELS.findIndex(r => !rs.done[r.id]);
+  if (firstNew > 0) secs[firstNew].scrollIntoView({ behavior: 'auto', block: 'start' });
 
   $('#reelAr').onclick = e => {
     p.settings.reelsAr = p.settings.reelsAr === false;
@@ -2211,9 +2420,9 @@ Screens.reels = () => {
     save();
   };
   $('#reelCredits').onclick = () => modal({ title: '© حقوق المقاطع', ok: 'حسناً', cancel: '', html:
-    `<div class="credits">${Object.values(REEL_FILMS).map(f => `<p class="en"><b>${esc(f.title)}</b> (${f.year})<br>© ${esc(f.by)}<br>
+    `<div class="credits">${Object.values(REEL_FILMS).map(f => `<p class="en"><b>${esc(f.title)}</b> (${f.year})<br>${f.license === 'Public Domain' ? '' : '© '}${esc(f.by)}<br>
       <a href="${f.licenseUrl}" target="_blank" rel="noopener">${f.license}</a> · <a href="${f.source}" target="_blank" rel="noopener">source</a></p>`).join('')}
-      <p class="muted small">المقاطع مقتطعة من هذه الأفلام المفتوحة، وأُضيف إليها تعليق صوتي وترجمة. مقاطع «Gran Dillama» المعدّلة منشورة بنفس رخصة CC BY-SA 3.0.</p></div>` });
+      <p class="muted small">المقاطع مقتطعة من هذه الأفلام المفتوحة وأفلام الملكية العامة، وأُضيف إليها تعليق صوتي وترجمة. مقاطع «Gran Dillama» المعدّلة منشورة بنفس رخصة CC BY-SA 3.0.</p></div>` });
   state.key = e => {
     const cur = secs.findIndex(s => { const r = s.getBoundingClientRect(); return r.top >= -10 && r.top < innerHeight / 2; });
     if (e.key === 'ArrowDown' && secs[cur + 1]) { e.preventDefault(); secs[cur + 1].scrollIntoView({ behavior: 'smooth' }); }
