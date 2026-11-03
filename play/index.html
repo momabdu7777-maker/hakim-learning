@@ -623,6 +623,71 @@ canvas.trace{background:var(--surface-solid);border-radius:var(--radius);border:
 .quick-game small{font-weight:700;font-size:.75rem;line-height:1.3}
 @media (max-width:420px){.shortcuts{grid-template-columns:repeat(3,1fr)}.quick-games{grid-template-columns:repeat(3,1fr)}}
 
+/* =========================================================
+   13. v1.8: HEAR YOURSELF, WORD OF THE DAY, WEEKLY REPORT, DUEL
+   ========================================================= */
+.wod.tap{cursor:pointer;border:2px solid transparent;transition:transform .15s}
+.wod.tap:active{transform:scale(.98)}
+.wod .go{font-size:.8rem;font-weight:800;color:var(--primary)}
+.voice-box{padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:440px;margin:0 auto 14px}
+.v-steps{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.v-steps span{padding:3px 10px;border-radius:999px;background:var(--line);font-size:.8rem;font-weight:800;color:var(--muted)}
+.v-steps span.on{background:var(--primary);color:#fff}
+.v-steps span.ok{background:var(--good-bg);color:var(--good)}
+.v-recbar{width:min(260px,80%);height:8px}
+.v-recbar>i{width:0;background:linear-gradient(90deg,#ef4444,#f97316)}
+.v-compare{display:flex;flex-direction:column;gap:8px;width:100%}
+.v-track{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:calc(var(--radius) * .7);background:var(--surface-solid);border:2px solid var(--line);text-align:start;width:100%}
+.v-track.playing{border-color:var(--primary);box-shadow:0 0 0 3px var(--chip)}
+.v-track .emoji,.v-track .v-av{font-size:1.8rem;width:44px;height:48px;flex-shrink:0;display:grid;place-items:center}
+.v-track .v-mid{flex:1;min-width:0;display:flex;flex-direction:column}
+.v-track canvas{width:100%;height:36px;display:block}
+.v-track .v-play{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;display:grid;place-items:center;flex-shrink:0;font-size:.95rem}
+.v-eq{display:flex;gap:3px;align-items:flex-end;height:36px;direction:ltr}
+.v-eq i{flex:1;max-width:6px;border-radius:3px;background:var(--primary-2);opacity:.55;height:30%}
+.v-track.playing .v-eq i{animation:eq .5s ease-in-out infinite alternate}
+.v-eq i:nth-child(3n){animation-delay:-.2s!important} .v-eq i:nth-child(3n+1){animation-delay:-.35s!important}
+@keyframes eq{from{height:20%}to{height:100%}}
+.v-rate{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%}
+.v-self{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.v-self button{padding:6px 12px;border-radius:999px;background:var(--surface-solid);border:1px solid var(--line);font-weight:700;min-height:42px}
+.v-stars{font-size:2.2rem;letter-spacing:4px;direction:ltr;color:var(--line)}
+.v-stars .on{color:var(--gold);text-shadow:0 3px 10px rgba(245,179,1,.45)}
+.report-img{width:100%;border-radius:12px;box-shadow:var(--shadow)}
+.duel-vs{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin:14px 0}
+.duel-card{padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.duel-card small{color:var(--muted)}
+.vs{font-family:var(--font-en);font-weight:800;font-size:1.6rem;color:var(--primary-2)}
+.pick-row{display:flex;gap:8px;flex-wrap:wrap}
+.pick-row button{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:var(--surface);border:2px solid var(--line);font-weight:700;min-height:44px}
+.pick-row button[aria-pressed=true]{border-color:var(--primary);background:var(--chip);color:var(--primary)}
+body[data-screen=duel] #app{max-width:none;padding:0}
+.duel{height:100vh;height:100dvh;display:grid;grid-template-rows:1fr auto 1fr;overflow:hidden}
+.duel-half{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:10px 14px;transition:background .3s}
+.duel-half.p1{background:color-mix(in srgb,var(--primary) 13%,transparent)}
+.duel-half.p2{background:color-mix(in srgb,var(--primary-2) 13%,transparent);transform:rotate(180deg)}
+.duel-half.win{background:color-mix(in srgb,var(--good) 26%,transparent)}
+.duel-half.locked .duel-opts{opacity:.45}
+.duel-head{display:flex;align-items:center;gap:10px;width:100%;max-width:460px}
+.duel-head b{flex:1}
+.duel-head .avatar{width:42px;height:42px;font-size:1.5rem}
+.duel-score{font-family:var(--font-en);font-size:1.7rem;font-weight:800;min-width:40px;text-align:center}
+.duel-q{min-height:56px;display:grid;place-items:center}
+.duel-q .emoji{font-size:clamp(2.6rem,9vh,4rem)}
+.duel-hear{width:56px;height:56px;border-radius:50%;background:var(--surface-solid);box-shadow:var(--shadow);font-family:var(--emoji-font);font-size:1.5rem}
+.duel-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:460px}
+.duel-opt{min-height:clamp(58px,12vh,110px);border-radius:var(--radius);background:var(--surface-solid);border:3px solid var(--border);box-shadow:var(--shadow);display:grid;place-items:center;font-family:var(--emoji-font);font-size:clamp(2rem,7.5vh,3.4rem);touch-action:manipulation;user-select:none;padding:4px}
+.duel-opt.text{font-family:var(--font-en);font-size:clamp(1rem,2.6vh,1.3rem);font-weight:800}
+.duel-opt.correct{border-color:var(--good);background:var(--good-bg);animation:bounce .6s}
+.duel-opt.wrong{border-color:var(--bad);background:var(--bad-bg);animation:shake .45s}
+.duel-mid{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 12px;background:var(--surface-solid);box-shadow:0 0 18px rgba(0,0,0,.12);z-index:2}
+.duel-mid b{font-family:var(--font-en);font-size:1.1rem}
+.duel-end{padding:16px;max-width:780px;margin:0 auto;min-height:100dvh;display:flex;align-items:center}
+.duel-end .results{width:100%}
+.duel-podium{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.duel-podium .stat .avatar{margin:0 auto 4px;width:56px;height:56px;font-size:2rem}
+.duel-podium .stat.win{outline:3px solid var(--gold)}
+
 @media (max-width:420px){
   .menu-row{grid-template-columns:1fr}
   .opt{min-height:104px}
@@ -641,7 +706,7 @@ canvas.trace{background:var(--surface-solid);border-radius:var(--radius);border:
 <nav id="tabbar" class="tabbar hidden" aria-label="التنقل الرئيسي">
   <button data-tab="menu">🏠<span>الرئيسية</span></button>
   <button data-tab="learn">📚<span>تعلّم</span></button>
-  <button data-tab="reels">🎬<span>ريلز</span></button>
+  <button data-tab="reels">🎬<span>كرتون</span></button>
   <button data-tab="me">😊<span>أنا</span></button>
 </nav>
 <div id="mascot" class="buddy-wrap off" role="button" tabindex="0" aria-label="حكيم — اضغط لنصيحة"></div>
@@ -1030,8 +1095,11 @@ const ACHIEVEMENTS = [
   { id:'daily',   icon:'📅', name:'بطل التحدي',      desc:'أكمل تحدياً يومياً',          test:p => p.stats.daily >= 1 },
   { id:'review',  icon:'🔁', name:'المراجِع الذكي',  desc:'أكمل جلسة مراجعة ذكية',      test:p => p.stats.reviews >= 1 },
   { id:'rich',    icon:'🪙', name:'جامع الكنوز',     desc:'اجمع 500 عملة',             test:p => p.coins >= 500 },
-  { id:'reels5',  icon:'🎬', name:'مشاهد نشيط',      desc:'شاهد 5 ريلز وأجب عنها',      test:p => Object.keys((p.reels || {}).done || {}).length >= 5 },
-  { id:'reels15', icon:'🍿', name:'عاشق الريلز',     desc:'شاهد كل الريلز الـ41',             test:p => Object.keys((p.reels || {}).done || {}).length >= REELS.length }
+  { id:'reels5',  icon:'🎬', name:'مشاهد نشيط',      desc:'شاهد 5 مقاطع في كرتون حكيم وأجب عنها',      test:p => Object.keys((p.reels || {}).done || {}).length >= 5 },
+  { id:'reels15', icon:'🍿', name:'عاشق الكرتون',     desc:'شاهد كل مقاطع الكرتون الـ41',             test:p => Object.keys((p.reels || {}).done || {}).length >= REELS.length },
+  { id:'voice10', icon:'🗣️', name:'صوتي رائع',       desc:'سجّل صوتك وقارنه بحكيم في 10 كلمات', test:p => Object.keys((p.voice || {}).done || {}).length >= 10 },
+  { id:'wod7',    icon:'💡', name:'صديق الكلمات',     desc:'العب بكلمة اليوم في 7 أيام',          test:p => Object.keys((p.wod || {}).done || {}).length >= 7 },
+  { id:'duel1',   icon:'⚔️', name:'المنافس الشجاع',   desc:'العب تحدّي الإخوة',                   test:p => ((p.duels || {}).played || 0) >= 1 }
 ];
 
 const AVATARS = ['🦊','🐼','🐯','🦁','🐸','🐵','🦄','🐙','🐨','🐰','🐧','🦖','🐱','🐶','🧑‍🚀','🧑‍🎓','👩‍💼','👨‍💼','🧕','🧔'];
@@ -1068,7 +1136,9 @@ const QUESTS = [
   { id:'speak',   icon:'🎤', name:'انطق كلمات بشكل صحيح',   target:{ def:3 } },
   { id:'words',   icon:'🆕', name:'تعلّم كلمات جديدة',        target:{ def:5 } },
   { id:'review',  icon:'🔁', name:'أكمل جلسة مراجعة ذكية',   target:{ def:1 } },
-  { id:'reels',   icon:'🎬', name:'شاهد ريلز حكيم وأجب عنها', target:{ def:2 } }
+  { id:'reels',   icon:'🎬', name:'شاهد مقاطع كرتون حكيم وأجب عنها', target:{ def:2 } },
+  { id:'wod',     icon:'💡', name:'العب بكلمة اليوم',          target:{ def:1 } },
+  { id:'voice',   icon:'🗣️', name:'سجّل صوتك وقارنه بحكيم',   target:{ def:3 } }
 ];
 const QUEST_REWARD = { coins:30, xp:20 };
 
@@ -2277,15 +2347,16 @@ function applyTheme() {
    ========================================================= */
 const state = { screen:null, run:null, key:null, timerId:null, modalResolve:null, modalPrevFocus:null, lastPt:null, reelObs:null, posterObs:null };
 const Screens = {};
-const PLAY_SCREENS = ['play', 'intro', 'reels'];
+const PLAY_SCREENS = ['play', 'intro', 'reels', 'voice', 'duel'];
 
 function show(name, ...args) {
   stopTimer(); stopRecognition(); stopReels(); Speech.cancel();
   if (state.songStop) { state.songStop(); state.songStop = null; }
+  if (state.leave) { const f = state.leave; state.leave = null; f(); }   // screens with timers / recordings clean up here
   $('#feedback').className = 'feedback';
   state.screen = name; state.key = null;
   document.body.dataset.screen = name;
-  Mascot.visible(name !== 'splash' && name !== 'reels');
+  Mascot.visible(!['splash', 'reels', 'duel', 'voice'].includes(name));   // voice: Hakeem is already on screen
   updateTabbar(name);
   Screens[name](...args);
   window.scrollTo(0, 0);
@@ -2316,12 +2387,15 @@ function floatGain(...lines) {
     setTimeout(() => el.remove(), 1300);
   });
 }
-/** Word of the day: one word per day from the levels the player has unlocked. */
-function wordOfDay() {
+/** Word of the day: one word per day from the levels the player has unlocked
+    (kept in p.wod.plan once chosen, so the home card and the notification agree). */
+function wordOfDay(day = todayKey()) {
+  const p = P(), planned = p.wod && VOCAB_BY_KEY.get(p.wod.plan[day]);
+  if (planned && planned.ageGroup === p.age) return planned;
   const ws = worldsOf();
   let words = ws.flatMap((w, wi) => w.words.filter(x => isUnlocked(wi, x.level - 1)));
   if (!words.length) words = ws[0].words;
-  return words[Math.floor(seeded(+todayKey().replace(/-/g, ''))() * words.length)];
+  return words[Math.floor(seeded(+day.replace(/-/g, ''))() * words.length)];
 }
 
 /* =========================================================
@@ -2413,7 +2487,7 @@ Screens.menu = () => {
     ['games', '🎮', 'ألعاب سريعة', '🎈 البالونات وغيرها'],
     ['review', '🔁', 'المراجعة الذكية', due ? `${due} للمراجعة` : 'لا شيء الآن', due],
     ['words', '📒', 'كلماتي', `${learned} كلمة`],
-    ['reels', '🎬', 'ريلز حكيم', `✅ ${Object.keys(p.reels.done).length}/${REELS.length}`],
+    ['reels', '🎬', 'كرتون حكيم', `✅ ${Object.keys(p.reels.done).length}/${REELS.length}`],
     ['stories', '📖', 'قصص حكيم', 'أنت تختار النهاية'],
     ['room', '🏡', 'بيت حكيم', `🪙 ${p.coins}`]
   ];
@@ -2439,13 +2513,19 @@ Screens.menu = () => {
   </div>
   ${freeW >= 0 ? `<button class="mini-card glass season" data-go="map"><span class="emoji">${worldsOf()[freeW].icon}</span><span><b>عالم ${worldsOf()[freeW].ar} مفتوح لك الآن!</b><small>كلمات وعبارات جديدة 🎉</small></span></button>` : ''}
   ${questsHTML()}
-  ${(() => { const w = wordOfDay(); return `<div class="mini-card glass wod"><span class="emoji">${w.emoji}</span>
-    <span class="wod-txt"><small>💡 كلمة اليوم</small><b class="en">${esc(w.word)}</b><small>${esc(w.arabic)}</small></span>
+  ${(() => { const w = wordOfDay(); return `<div class="mini-card glass wod tap" id="wodCard" role="button" tabindex="0" aria-label="كلمة اليوم: افتح والعب بها"><span class="emoji">${w.emoji}</span>
+    <span class="wod-txt"><small>💡 كلمة اليوم</small><b class="en">${esc(w.word)}</b><small>${esc(w.arabic)}</small>
+      <small class="go">${p.wod.done[todayKey()] ? '✅ لعبت بها اليوم' : '🎮 اضغط لتلعب بها'}</small></span>
     <button class="icon-btn" data-say="${esc(w.word)}" aria-label="استمع إلى كلمة اليوم">🔊</button></div>`; })()}
   <div class="shortcuts">${shortcuts.map(([id, ic, name]) => `<button class="shortcut" data-go="${id}"><span class="emoji">${ic}</span><small>${name}</small></button>`).join('')}</div>
   <div class="menu-grid">${tiles.map(([id, ic, name, sub, count]) => `<button class="tile-btn glass" data-go="${id}"><span class="emoji">${ic}</span><b>${name}</b><small class="muted">${sub}</small>${count ? `<span class="count">${count}</span>` : ''}</button>`).join('')}</div>`);
   $('#daily').onclick = () => { Sound.click(); startRun('daily'); };
   $$('[data-claim]').forEach(b => b.onclick = () => claimQuest(+b.dataset.claim));
+  const wc = $('#wodCard');
+  wc.onclick = e => { if (!e.target.closest('[data-say]')) { Sound.click(); show('wod'); } };
+  wc.onkeydown = e => { if (e.key === 'Enter' && e.target === wc) show('wod'); };
+  // keep the next two weeks of words planned for the reminder notification
+  if (state.planDay !== todayKey()) { state.planDay = todayKey(); syncReminder(); }
   Mascot.say(tip('hello'), 'happy');
 };
 
@@ -2633,7 +2713,8 @@ function statsHTML(p) {
 }
 Screens.stats = () => {
   const p = P();
-  render(topbar('📊 إحصائياتي', 'me', `<span class="chip">🎯 ${p.settings.goal} د يومياً</span>`) + statsHTML(p));
+  render(topbar('📊 إحصائياتي', 'me', `<span class="chip">🎯 ${p.settings.goal} د يومياً</span>`) + reportButton() + statsHTML(p));
+  bindReport(p);
 };
 Screens.parent = () => {
   const a = 3 + rand(7), b = 3 + rand(7);
@@ -2645,7 +2726,8 @@ Screens.parent = () => {
   const go = () => {
     if (+$('#gate').value === a * b) {
       const p = P();
-      render(topbar('👪 لوحة الوالدين', 'me') + `<p class="muted" style="margin-bottom:12px">ملخص تقدّم <b>${esc(p.name)}</b> ${p.avatar} في فئة ${AGE_GROUPS[p.age].ar}</p>` + statsHTML(p));
+      render(topbar('👪 لوحة الوالدين', 'me') + `<p class="muted" style="margin-bottom:12px">ملخص تقدّم <b>${esc(p.name)}</b> ${p.avatar} في فئة ${AGE_GROUPS[p.age].ar}</p>` + reportButton() + statsHTML(p));
+      bindReport(p);
     } else { toast('إجابة غير صحيحة'); $('#gate').value = ''; }
   };
   $('#gateGo').onclick = go;
@@ -2674,7 +2756,7 @@ Screens.settings = () => {
   ${Native && Native.setReminder ? `<div class="panel glass">
     <div class="set-row"><div><b>⏰ تذكير يومي</b><small>إشعار لطيف إذا لم تلعب اليوم</small></div>${sw('reminder', (s.reminder || {}).on, 'التذكير اليومي')}</div>
     ${(s.reminder || {}).on ? `<div class="set-row"><div><b>وقت التذكير</b></div><div class="seg" role="group">${REMINDER_HOURS.map(h => `<button data-rhour="${h}" aria-pressed="${(s.reminder || {}).hour === h}">${h - 12}:00 م</button>`).join('')}</div></div>` : ''}
-    <div class="set-row"><div><b>⬇️ الريلز بدون إنترنت</b><small>حمّل المقاطع مرة واحدة</small></div><button class="btn btn-ghost" id="offReels">إدارة</button></div>
+    <div class="set-row"><div><b>⬇️ كرتون حكيم بدون إنترنت</b><small>حمّل المقاطع مرة واحدة</small></div><button class="btn btn-ghost" id="offReels">إدارة</button></div>
   </div>` : ''}
   <div class="panel glass">
     <div class="set-row"><div><b>اختبار تحديد المستوى</b><small>نقترح لك نقطة بداية مناسبة</small></div><button class="btn btn-ghost" id="placement">🎯 ابدأ</button></div>
@@ -2746,7 +2828,7 @@ const filmCredit = f => f.license === 'Public Domain'
 
 Screens.reels = () => {
   const p = P(), rs = p.reels;
-  render(topbar('🎬 ريلز حكيم', 'menu', `<span class="chip" id="reelCount">✅ ${reelsDone()}/${REELS.length}</span>
+  render(topbar('🎬 كرتون حكيم', 'menu', `<span class="chip" id="reelCount">✅ ${reelsDone()}/${REELS.length}</span>
       <button class="icon-btn sm" id="reelAr" aria-pressed="${p.settings.reelsAr !== false}" aria-label="إظهار الترجمة العربية">ع</button>
       <button class="icon-btn sm" id="reelCredits" aria-label="حقوق المقاطع">©</button>
       ${Native && Native.downloadReels ? '<button class="icon-btn sm" id="reelDl" aria-label="تحميل للمشاهدة بدون إنترنت">⬇️</button>' : ''}`) +
@@ -2808,7 +2890,7 @@ Screens.reels = () => {
       save(); checkAchievements();
       q.insertAdjacentHTML('beforeend', i < REELS.length - 1
         ? `<button class="btn btn-primary btn-wide" data-act="next">المقطع التالي ⬇️</button>`
-        : `<p class="center"><b>🍿 شاهدت كل الريلز!</b></p>`);
+        : `<p class="center"><b>🍿 شاهدت كل مقاطع الكرتون!</b></p>`);
     });
     q.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
   };
@@ -2895,7 +2977,7 @@ Screens.reels = () => {
     else if (e.key === ' ' && secs[cur]) { e.preventDefault(); $('video', secs[cur]).click(); }
     else if (/^[1-4]$/.test(e.key) && secs[cur]) { const b = $$('.reel-quiz .opt', secs[cur])[+e.key - 1]; b && b.click(); }
   };
-  Speech.say('Welcome to Hakeem Reels!');
+  Speech.say("Welcome to Hakeem's Cartoons!");
 };
 
 /* =========================================================
@@ -2921,7 +3003,7 @@ function reviewPool() {
 
 function startRun(kind, opt = {}) {
   const p = P(), g = AGE_GROUPS[p.age];
-  const practice = kind === 'placement' || kind === 'review' || kind === 'practice';
+  const practice = kind === 'placement' || kind === 'review' || kind === 'practice' || kind === 'wod';
   const run = {
     kind, group: p.age, w: opt.w || 0, l: opt.l || 0, mode: opt.mode, idx: 0,
     correct: 0, wrong: 0, skipped: 0, mistakes: [], combo: 0, bestCombo: 0, xp: 0, coins: 0,
@@ -2941,6 +3023,7 @@ function startRun(kind, opt = {}) {
 
 function buildQuestions(run) {
   if (run.kind === 'practice') return buildPractice(run);
+  if (run.kind === 'wod') return buildWod(run);
   const g = AGE_GROUPS[run.group], ws = WORLDS[run.group];
   if (run.kind === 'level') {
     const w = ws[run.w], boss = run.l === 5;
@@ -3076,7 +3159,7 @@ const comboMult = c => c >= 6 ? 3 : c >= 3 ? 2 : 1;
 Screens.play = () => {
   const run = state.run;
   const tag = { level: run.l === 5 ? '👑 مستوى الزعيم' : `${WORLDS[run.group][run.w].icon} المستوى ${run.l + 1}`,
-                daily: '📅 تحدي اليوم', review: '🔁 مراجعة ذكية', placement: '🎯 تحديد المستوى',
+                daily: '📅 تحدي اليوم', review: '🔁 مراجعة ذكية', placement: '🎯 تحديد المستوى', wod: '💡 كلمة اليوم',
                 practice: '🎮 ' + ((PRACTICE_GAMES.find(x => x.mode === run.mode) || {}).name || '') }[run.kind];
   render(`<div class="game-top"><button class="icon-btn" id="quit" aria-label="خروج">✕</button>
       <div class="bar" role="progressbar" aria-label="التقدّم"><i id="prog"></i></div><span id="hearts" class="hearts" aria-label="القلوب"></span></div>
@@ -3193,10 +3276,11 @@ function answer(ok, extra = {}) {
   }
   if (!extra.skip) {
     p.stats.answers++; if (ok) p.stats.correct++;
+    const ds = dayStat(); ds.a++; if (ok) ds.c++;   // per-day numbers for the weekly report
     qWords(q).forEach(w => {
       const fresh = !(G().words[w.key] && G().words[w.key].c);
       srsMark(w, ok);
-      if (ok && fresh) questEvent('words');
+      if (ok && fresh) { questEvent('words'); ds.n++; }
     });
   }
   if (run.kind === 'placement') run.placeLog.push({ w: q.placeWorld, ok: ok && !extra.skip });
@@ -3289,12 +3373,20 @@ function finishRun() {
     if (run.l === 5) p.stats.boss++;
     run.worldComplete = run.l === 5 && !prev;
     run.firstClear = !prev;
+    dayStat().l++;
     questEvent('levels'); questEvent('stars', run.stars);
   } else if (run.kind === 'daily' && gp.dailyDone !== todayKey()) {
     gp.dailyDone = todayKey(); p.stats.daily++;
     addXP(50); run.xp += 50; p.coins += 50; run.coins += 50; run.bonus = true;
   } else if (run.kind === 'review') { p.stats.reviews++; questEvent('review'); }
   else if (run.kind === 'practice') questEvent('learn');
+  else if (run.kind === 'wod') {
+    questEvent('wod');
+    if (!p.wod.done[todayKey()]) {   // first time today: small prize
+      p.wod.done[todayKey()] = run.questions[0].word.key;
+      addXP(15); run.xp += 15; p.coins += 15; run.coins += 15; run.wodBonus = true;
+    }
+  }
   save();
   show('results');
   checkAchievements();
@@ -3321,7 +3413,7 @@ Screens.results = () => {
   }
   render(`<div class="results glass">
     <div class="buddy-wrap celebrate" style="width:110px;height:122px">${buddySVG()}</div>
-    <h1>${run.kind === 'level' ? head : run.kind === 'daily' ? 'أنهيت تحدي اليوم! 📅' : run.kind === 'practice' ? 'أحسنت! انتهت اللعبة 🎮' : 'أنهيت المراجعة! 🔁'}</h1>
+    <h1>${run.kind === 'level' ? head : run.kind === 'daily' ? 'أنهيت تحدي اليوم! 📅' : run.kind === 'practice' ? 'أحسنت! انتهت اللعبة 🎮' : run.kind === 'wod' ? 'أتقنت كلمة اليوم! 💡' : 'أنهيت المراجعة! 🔁'}</h1>
     ${run.worldComplete ? `<p class="chip">🏆 أكملت عالم ${ws[run.w].ar}!</p>` : ''}
     ${run.kind === 'level' ? `<div class="big-stars" role="img" aria-label="${run.stars} من 3 نجوم"><span>★</span><span>★</span><span>★</span></div>` : ''}
     <div class="stat-grid">
@@ -3331,6 +3423,7 @@ Screens.results = () => {
       <div class="stat"><b>${fmtTime(run.time)}</b><small>الوقت</small></div>
     </div>
     ${run.bonus ? '<p class="chip">🎁 مكافأة التحدي: +50 XP و +50 🪙</p>' : ''}
+    ${run.wodBonus ? '<p class="chip">💡 مكافأة كلمة اليوم: +15 XP و +15 🪙</p>' : ''}
     ${run.kind === 'level' && !run.chestOpened ? '<button class="chest" id="chest"><span class="emoji">🎁</span><small>اضغط لفتح صندوق الكنز!</small></button>' : ''}
     ${mistakesHTML(run.mistakes)}
     <div class="row center">
@@ -3914,6 +4007,11 @@ function migrateExtras(p) {
   p.lessons = p.lessons || {};
   p.room = p.room || { paint:'cream', owned:['cream'], slots:{} };
   if (!('lastWeek' in p)) p.lastWeek = null;
+  // v1.8
+  p.voice = p.voice || { done:{} };                 // «اسمع صوتك»: best stars per word
+  p.wod = p.wod || { plan:{}, done:{} };            // word of the day: planned words + days played
+  p.duels = p.duels || { played:0, won:0 };         // تحدّي الإخوة
+  p.dayStats = p.dayStats || {};                    // { day: {a answers, c correct, n new words, l levels} }
 }
 /** Shared reward for finishing a Learn activity. */
 function learnReward(coins, xp, label) {
@@ -3954,7 +4052,9 @@ Screens.learn = () => {
       <button class="quick-game glass" data-go="games"><span class="emoji">➕</span><small>كل الألعاب</small></button></div>
     <h2 class="section-title">🌱 الأساسيات</h2><div class="hub-grid">
       ${card('abc', '🔤', 'الحروف ABC', `${Object.keys(p.abc).length}/26 حرفاً · ارسم بإصبعك`, kidsy)}
-      ${card('sounds', '👂', 'أصوات صعبة', 'P/B · F/V · i/ee · TH', !kidsy || age === 'young')}</div>
+      ${card('sounds', '👂', 'أصوات صعبة', 'P/B · F/V · i/ee · TH', !kidsy || age === 'young')}
+      ${card('voice', '🗣️', 'اسمع صوتك', `سجّل نطقك وقارنه بحكيم · ${Object.keys(p.voice.done).length} كلمة`, false)}
+      ${card('wod', '💡', 'كلمة اليوم', `${wordOfDay().emoji} ${esc(wordOfDay().word)}`, false)}</div>
     <h2 class="section-title">📖 اقرأ واستمع</h2><div class="hub-grid">
       ${card('stories', '📖', 'قصص حكيم', `${Object.keys(p.stories).length}/${STORIES.length} · أنت تختار النهاية`, true)}
       ${card('songs', '🎵', 'أناشيد', `${SONGS.length} أناشيد مع الكلمات`, kidsy)}</div>
@@ -4494,7 +4594,7 @@ async function shareImage(dataUrl, text, name) {
     if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], text }); return; }
   } catch (e) { if (e && e.name === 'AbortError') return; }
   const a = document.createElement('a'); a.href = dataUrl; a.download = name + '.png'; document.body.appendChild(a); a.click(); a.remove();
-  toast('📥 حُفظت الشهادة في التنزيلات');
+  toast('📥 حُفظت الصورة في التنزيلات');
 }
 
 /* =========================================================
@@ -4521,7 +4621,8 @@ Screens.family = () => {
     ${rows.map((r, i) => `<div class="lb-row ${r.p.id === me.id ? 'me' : ''}"><span class="rank">${['🥇', '🥈', '🥉'][i] || i + 1}</span>
       <span class="avatar sm">${r.p.avatar}</span><div style="flex:1"><b>${esc(r.p.name)}</b><small class="muted" style="display:block">${AGE_GROUPS[r.p.age].icon} ${AGE_GROUPS[r.p.age].ar}</small>
       <div class="bar" style="margin-top:4px"><i style="width:${rows[0].xp ? r.xp / rows[0].xp * 100 : 0}%"></i></div></div><b class="en">${r.xp} XP</b></div>`).join('')}</div>
-    ${ps.length < 2 ? '<div class="center"><p class="muted">أضف ملفاً لكل فرد في العائلة لتبدأ المنافسة! 👨‍👩‍👧</p><button class="btn btn-primary" data-go="create">➕ إضافة ملف</button></div>' : ''}`);
+    ${ps.length < 2 ? '<div class="center"><p class="muted">أضف ملفاً لكل فرد في العائلة لتبدأ المنافسة! 👨‍👩‍👧</p><button class="btn btn-primary" data-go="create">➕ إضافة ملف</button></div>' : ''}
+    <button class="mini-card glass season" data-go="duelSetup"><span class="emoji">⚔️</span><span><b>تحدّي الإخوة الآن!</b><small>العبوا معاً على نفس الهاتف — من يجيب أسرع؟</small></span></button>`);
 };
 
 /* =========================================================
@@ -4532,6 +4633,8 @@ function syncReminder() {
   const p = P(); if (!Native || !Native.setReminder || !p) return;
   const r = p.settings.reminder || { on: false, hour: 18 };
   try { Native.setReminder(!!r.on, r.hour, 0, `🔥 ${p.name}، حكيم ينتظرك!`, 'خمس دقائق من الإنجليزية تكفي اليوم 💬'); } catch (e) {}
+  // the notification shows that day's word; tapping it opens the word-of-the-day screen
+  if (Native.setDailyWords) try { Native.setDailyWords(JSON.stringify(planWords(p))); } catch (e) {}
 }
 window.hakeemNotifDenied = () => toast('🔕 لم يُسمح بالإشعارات — يمكنك تفعيلها من إعدادات الهاتف');
 
@@ -4542,7 +4645,7 @@ function reelSrc(id, ext) {
 }
 function openOfflineReels() {
   const have = () => { try { return Native.reelsDownloaded(); } catch (e) { return 0; } };
-  modal({ title: '⬇️ الريلز بدون إنترنت', ok: 'تحميل الكل', cancel: 'إغلاق', html: `
+  modal({ title: '⬇️ كرتون حكيم بدون إنترنت', ok: 'تحميل الكل', cancel: 'إغلاق', html: `
     <p>حمّل المقاطع مرة واحدة (حوالي 70 ميغابايت) لتشاهدها في أي وقت بدون إنترنت.</p>
     <p class="center"><b id="dlCount">${have()} / ${REELS.length}</b> مقطعاً محمّلاً</p>
     <div class="bar"><i id="dlBar" style="width:${have() / REELS.length * 100}%"></i></div>
@@ -4557,7 +4660,7 @@ window.hakeemDl = (done, total, failed, finished) => {
   const c = $('#dlCount'), b = $('#dlBar');
   if (c) c.textContent = `${done} / ${total}`;
   if (b) b.style.width = (done / total * 100) + '%';
-  if (finished) toast(failed ? `⚠️ اكتمل التحميل مع ${failed} مقاطع لم تُحمّل — حاول مجدداً` : '✅ كل الريلز جاهزة للمشاهدة بدون إنترنت!', 3500);
+  if (finished) toast(failed ? `⚠️ اكتمل التحميل مع ${failed} مقاطع لم تُحمّل — حاول مجدداً` : '✅ كل مقاطع الكرتون جاهزة للمشاهدة بدون إنترنت!', 3500);
 };
 
 /** Vocabulary words heard in a reel (current age group) — added to «My Words» after its quiz. */
@@ -4587,6 +4690,8 @@ const practiceGames = () => PRACTICE_GAMES.filter(x => AGE_GROUPS[P().age].modes
 Screens.games = () => {
   render(topbar('🎮 ألعاب سريعة', 'learn') + `
     <p class="muted center" style="margin-bottom:12px">العب أي لعبة مباشرة بالكلمات التي فتحتها في الخريطة 🗺️</p>
+    <div class="hub-grid" style="margin-bottom:10px"><button class="hub-card glass rec" data-go="duelSetup"><span class="emoji">⚔️</span>
+      <span class="hub-txt"><b>تحدّي الإخوة</b><small>لاعبان على نفس الهاتف: من يضغط أولاً؟</small></span><span class="badge">🆕 جديد</span></button></div>
     <div class="hub-grid">${practiceGames().map(x => `<button class="hub-card glass" data-game="${x.mode}"><span class="emoji">${x.icon}</span>
       <span class="hub-txt"><b>${x.name}</b><small>${x.desc}</small></span></button>`).join('')}</div>`);
   $$('[data-game]').forEach(b => b.onclick = () => { Sound.click(); startRun('practice', { mode: b.dataset.game }); });
@@ -4611,6 +4716,611 @@ function buildPractice(run) {
 }
 
 /* =========================================================
+   24. HEAR YOURSELF — record your voice, then compare it with Hakeem's
+   ========================================================= */
+TAB_OF.voice = 'learn';
+SCREEN_PARENT.voice = 'learn';
+
+/** Microphone recording: Android's MediaRecorder through the bridge, or MediaRecorder in the browser. */
+const Rec = {
+  stream: null, mr: null, chunks: [], waitPerm: null, onMax: null,
+  available() {
+    try { return Native ? !!Native.recStart : !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder); }
+    catch (e) { return false; }
+  },
+  /** Resolves once the microphone is live; rejects with 'denied' or 'error'. */
+  async start(maxMs) {
+    this.cancel(); Speech.cancel(); stopRecognition();
+    if (Native) {
+      let r = Native.recStart(maxMs + 1500);
+      if (r === 'perm') {                       // Android asks for the microphone, then calls hakeemRec()
+        const ok = await new Promise(res => { this.waitPerm = res; });
+        if (!ok) throw 'denied';
+        r = Native.recStart(maxMs + 1500);
+      }
+      if (r !== 'ok') throw r === 'perm' ? 'denied' : 'error';
+      return;
+    }
+    try { this.stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } }); }
+    catch (e) { throw e && (e.name === 'NotAllowedError' || e.name === 'SecurityError') ? 'denied' : 'error'; }
+    this.chunks = [];
+    this.mr = new MediaRecorder(this.stream);
+    this.mr.ondataavailable = e => { if (e.data && e.data.size) this.chunks.push(e.data); };
+    this.mr.start();
+  },
+  /** Stop and return the recording as an ArrayBuffer, or null when nothing usable was recorded. */
+  async stop() {
+    if (Native) {
+      let b64 = '';
+      try { b64 = Native.recStop(); } catch (e) {}
+      if (!b64) return null;
+      const bin = atob(b64), u = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+      return u.buffer;
+    }
+    const mr = this.mr; if (!mr) return null;
+    if (mr.state !== 'inactive') {
+      const stopped = new Promise(res => { mr.onstop = res; });
+      try { mr.stop(); } catch (e) {}
+      await stopped;
+    }
+    const blob = new Blob(this.chunks, { type: mr.mimeType || 'audio/webm' });
+    this.release();
+    return blob.size ? blob.arrayBuffer() : null;
+  },
+  release() { if (this.stream) this.stream.getTracks().forEach(t => t.stop()); this.stream = null; this.mr = null; },
+  cancel() {
+    this.onMax = null;
+    if (Native) { try { Native.recCancel && Native.recCancel(); } catch (e) {} }
+    else if (this.mr) { try { this.mr.onstop = null; if (this.mr.state !== 'inactive') this.mr.stop(); } catch (e) {} }
+    this.release();
+    if (this.waitPerm) { const r = this.waitPerm; this.waitPerm = null; r(false); }
+  }
+};
+// callbacks from MainActivity: microphone permission answered, or the maximum length reached
+window.hakeemRec = type => {
+  if (type === 'max') { if (Rec.onMax) Rec.onMax(); return; }
+  const r = Rec.waitPerm; Rec.waitPerm = null;
+  if (r) r(type === 'perm-ok');
+};
+
+/** Plays a recording back (louder when it was quiet) and draws its waveform. */
+const Voice = {
+  src: null, el: null,
+  async decode(buf) {
+    const c = Sound.ensure(); if (!c || !buf) return null;
+    try { return await new Promise((res, rej) => { const pr = c.decodeAudioData(buf.slice(0), res, rej); if (pr && pr.catch) pr.catch(rej); }); }
+    catch (e) { return null; }
+  },
+  peak(ab) { const d = ab.getChannelData(0); let m = 0; for (let i = 0; i < d.length; i += 4) m = Math.max(m, Math.abs(d[i])); return m; },
+  play(ab, onend) {
+    this.stop();
+    const c = Sound.ensure(); if (!c || !ab) { if (onend) onend(); return; }
+    const s = c.createBufferSource(), g = c.createGain();
+    s.buffer = ab; g.gain.value = Math.min(6, 0.8 / Math.max(this.peak(ab), 0.02));
+    s.connect(g).connect(c.destination);
+    s.onended = () => { if (this.src === s) { this.src = null; if (onend) onend(); } };
+    this.src = s; s.start();
+  },
+  /** Fallback when the browser can't decode the recording: a plain <audio> element. */
+  playRaw(buf, onend) {
+    this.stop();
+    try {
+      const a = new Audio(URL.createObjectURL(new Blob([buf])));
+      a.onended = a.onerror = () => { if (this.el === a) { this.el = null; URL.revokeObjectURL(a.src); if (onend) onend(); } };
+      this.el = a; a.play().catch(() => a.onended());
+    } catch (e) { if (onend) onend(); }
+  },
+  stop() {
+    const s = this.src; this.src = null; if (s) try { s.stop(); } catch (e) {}
+    const a = this.el; this.el = null; if (a) try { a.pause(); } catch (e) {}
+  },
+  draw(cv, ab) {
+    const W = cv.width = (cv.clientWidth || 240) * 2, H = cv.height = 72, x = cv.getContext('2d');
+    const d = ab.getChannelData(0), n = 48, step = Math.max(1, Math.floor(d.length / n)), pk = Math.max(this.peak(ab), 0.02), bw = W / n;
+    x.clearRect(0, 0, W, H);
+    x.fillStyle = getComputedStyle(document.body).getPropertyValue('--primary').trim() || '#7c5cff';
+    for (let i = 0; i < n; i++) {
+      let m = 0;
+      for (let j = i * step; j < (i + 1) * step && j < d.length; j += 8) m = Math.max(m, Math.abs(d[j]));
+      const h = Math.max(4, Math.min(1, m / pk) * (H - 8));
+      x.fillRect(i * bw + bw * .2, (H - h) / 2, bw * .6, h);
+    }
+  }
+};
+
+/** Words for a session: unlocked ones, already-learned words first, short enough to say in one go. */
+function voiceWords(n = 5) {
+  const ws = worldsOf(), gp = G(), maxLen = P().age === 'kids' ? 2 : 4;
+  let words = ws.flatMap((w, wi) => w.words.filter(x => isUnlocked(wi, x.level - 1)));
+  if (words.length < n) words = ws[0].words;
+  const short = words.filter(w => w.word.split(/\s+/).length <= maxLen);
+  const known = w => !!(gp.words[w.key] && gp.words[w.key].c);
+  return shuffle(short.length >= n ? short : words).sort((a, b) => known(b) - known(a)).slice(0, n);
+}
+
+Screens.voice = (words, back = 'learn') => {
+  const p = P(), pass = AGE_GROUPS[p.age].speakPass;
+  SCREEN_PARENT.voice = back;
+  const list = words && words.length ? words : voiceWords(5), got = [];
+  let i = 0, tok = 0;
+  state.leave = () => { tok++; Rec.cancel(); Voice.stop(); };
+
+  const draw = () => {
+    const w = list[i], last = i === list.length - 1, my = ++tok;
+    const maxMs = Math.min(6000, 2600 + w.word.split(/\s+/).length * 600);
+    let rec = null, raw = null, recording = false, recId = 0, stars = 0, rated = false;
+    render(topbar('🗣️ اسمع صوتك', back, `<span class="chip en">${i + 1}/${list.length}</span>`) + `
+      <div class="learn-card glass"><span class="big-emoji emoji">${w.emoji}</span><b class="en word">${esc(w.word)}</b><span class="ar">${esc(w.arabic)}</span>
+        <div class="speak-row" style="margin-top:8px"><button class="speak-btn" id="vHear" aria-label="استمع لحكيم">🔊</button>
+          <button class="speak-btn slow" id="vSlow" aria-label="استمع ببطء">🐢</button></div></div>
+      <div class="voice-box glass">
+        <div class="v-steps"><span id="vs1" class="on">1 استمع</span><span id="vs2">2 سجّل صوتك</span><span id="vs3">3 قارن</span></div>
+        <button class="mic" id="vMic" aria-label="سجّل صوتك">🎙️</button>
+        <div class="bar v-recbar hidden" id="vRecBar"><i></i></div>
+        <p class="heard" id="vMsg">${Rec.available() ? 'اضغط على الميكروفون وقل الكلمة' : 'التسجيل غير متاح هنا — استمع ثم قل الكلمة بصوت عالٍ 🗣️'}</p>
+        <div class="v-compare hidden" id="vCompare">
+          <button class="v-track" id="vMine"><span class="emoji">${p.avatar}</span><span class="v-mid"><b>صوتك</b><canvas id="vWave" aria-hidden="true"></canvas></span><span class="v-play">▶</span></button>
+          <button class="v-track" id="vHak"><span class="v-av">${buddySVG()}</span><span class="v-mid"><b>حكيم</b><span class="v-eq" aria-hidden="true">${'<i></i>'.repeat(16)}</span></span><span class="v-play">▶</span></button>
+          <div class="row center"><button class="btn btn-ghost" id="vBoth">🔁 صوتك ثم حكيم</button><button class="btn btn-ghost" id="vAgain">🎙️ سجّل مرة أخرى</button></div>
+        </div>
+        <div class="v-rate hidden" id="vRate">
+          <b>كيف كان نطقك؟</b>
+          ${Recog.available() ? '<button class="btn btn-primary" id="vTest">🎯 اختبرني يا حكيم</button><small class="muted">أو قيّم نفسك:</small>' : ''}
+          <div class="v-self"><button data-self="3">😀 مثل حكيم</button><button data-self="2">🙂 قريب</button><button data-self="1">🤔 أحتاج تدريباً</button></div>
+          <div class="v-stars hidden" id="vStars" role="img"><span>★</span><span>★</span><span>★</span></div>
+          <p class="heard" id="vHeard"></p>
+        </div>
+      </div>
+      <div class="row center"><button class="btn btn-ghost" id="vSkip">تخطَّ ⏭️</button>
+        <button class="btn btn-primary btn-big" id="vNext" disabled>${last ? 'إنهاء 🏁' : 'التالي ←'}</button></div>`);
+    const msg = $('#vMsg'), mic = $('#vMic'), bar = $('#vRecBar');
+    const step = n => [1, 2, 3].forEach(k => { $('#vs' + k).className = k < n ? 'ok' : k === n ? 'on' : ''; });
+    const hear = (slow, onend) => { Voice.stop(); Speech.say(w.word, { slow, onend }); pulse('#vHear'); };
+    const showRate = () => $('#vRate').classList.remove('hidden');
+    const playMine = onend => {
+      const t = $('#vMine'); t.classList.add('playing');
+      const done = () => { t.classList.remove('playing'); if (onend && my === tok) onend(); };
+      if (rec) Voice.play(rec, done); else if (raw) Voice.playRaw(raw, done); else done();
+    };
+    const playHakeem = onend => {
+      const t = $('#vHak'); Voice.stop(); t.classList.add('playing');
+      Speech.say(w.word, { onend: () => { t.classList.remove('playing'); if (onend && my === tok) onend(); } });
+    };
+    const stopRec = async () => {
+      if (!recording || my !== tok) return;
+      recording = false; Rec.onMax = null;
+      mic.classList.remove('rec'); bar.classList.add('hidden');
+      msg.textContent = '⏳';
+      const buf = await Rec.stop();
+      if (my !== tok) return;
+      rec = await Voice.decode(buf);
+      raw = rec ? null : buf;
+      if (my !== tok) return;
+      if (!buf || (rec && Voice.peak(rec) < 0.01)) {
+        rec = raw = null;
+        msg.textContent = 'لم أسمع صوتك 🤔 اقترب من الميكروفون وحاول مرة أخرى';
+        return;
+      }
+      step(3);
+      msg.textContent = 'استمع لصوتك ثم لصوت حكيم — هل يتشابهان؟ 👂';
+      mic.classList.add('hidden'); $('#vCompare').classList.remove('hidden');
+      if (rec) Voice.draw($('#vWave'), rec);
+      showRate();
+      playMine(() => setTimeout(() => { if (my === tok) playHakeem(); }, 300));
+    };
+    const startRec = async () => {
+      if (recording) return stopRec();
+      Voice.stop(); Speech.cancel(); Recog.stop();
+      msg.textContent = '⏳';
+      try { await Rec.start(maxMs); }
+      catch (e) {
+        if (my !== tok) return;
+        msg.textContent = e === 'denied' ? '🎙️ لم يُسمح باستخدام الميكروفون — قل الكلمة بصوت عالٍ وقيّم نفسك' : 'تعذّر تشغيل الميكروفون — قل الكلمة بصوت عالٍ وقيّم نفسك';
+        showRate(); return;
+      }
+      if (my !== tok) { Rec.cancel(); return; }
+      const id = ++recId;
+      recording = true; step(2);
+      mic.classList.add('rec'); msg.textContent = '🔴 أنا أسجّل… قل الكلمة الآن';
+      bar.classList.remove('hidden');
+      const fill = bar.firstElementChild;
+      fill.style.transition = 'none'; fill.style.width = '0%'; void fill.offsetWidth;
+      fill.style.transition = `width ${maxMs}ms linear`; fill.style.width = '100%';
+      Rec.onMax = stopRec;
+      setTimeout(() => { if (my === tok && id === recId) stopRec(); }, maxMs);
+    };
+    const setStars = n => {
+      stars = Math.max(stars, n);
+      const st = $('#vStars'); st.classList.remove('hidden'); st.setAttribute('aria-label', `${stars} من 3 نجوم`);
+      $$('span', st).forEach((s, k) => s.classList.toggle('on', k < stars));
+      Sound.star(Math.min(2, n - 1)); if (n >= 2) buzz(20);
+      if (!rated) { rated = true; questEvent('voice'); }
+      p.voice.done[w.key] = Math.max(p.voice.done[w.key] || 0, stars);
+      $('#vNext').disabled = false;
+      save();
+    };
+
+    $('#vHear').onclick = () => hear(false);
+    $('#vSlow').onclick = () => hear(true);
+    if (Rec.available()) mic.onclick = startRec; else { mic.classList.add('hidden'); showRate(); }
+    $('#vMine').onclick = () => playMine();
+    $('#vHak').onclick = () => playHakeem();
+    $('#vBoth').onclick = () => playMine(() => setTimeout(() => { if (my === tok) playHakeem(); }, 300));
+    $('#vAgain').onclick = () => { Voice.stop(); rec = raw = null; $('#vCompare').classList.add('hidden'); mic.classList.remove('hidden'); startRec(); };
+    $$('[data-self]').forEach(b => b.onclick = () => {
+      setStars(+b.dataset.self);
+      $('#vHeard').textContent = { 3: 'رائع! 🌟', 2: 'جميل! استمع مرة أخرى وحاول تقليد حكيم 👂', 1: 'لا بأس، التدريب يصنع الفرق 💪' }[b.dataset.self];
+    });
+    if ($('#vTest')) $('#vTest').onclick = () => {
+      const btn = $('#vTest'), heard = $('#vHeard');
+      if (Recog.active) { Recog.stop(); btn.textContent = '🎯 اختبرني يا حكيم'; return; }
+      Voice.stop(); Speech.cancel(); Rec.cancel();
+      btn.textContent = '👂 قل الكلمة الآن…';
+      try {
+        Recog.start({
+          onresult: alts => {
+            if (my !== tok || !alts.length) return;
+            const best = alts.map(t => ({ t, s: similarity(t, w.word) })).sort((a, b) => b.s - a.s)[0];
+            const score = Math.round(best.s * 100);
+            heard.innerHTML = `سمعتُ: <span class="en">"${esc(best.t)}"</span> — <b class="en">${score}%</b>`;
+            const n = score >= Math.max(85, pass + 15) ? 3 : score >= pass ? 2 : score >= pass - 20 ? 1 : 0;
+            if (n) setStars(n); else { Sound.wrong(); heard.innerHTML += '<br><small>حاول مرة أخرى 💪</small>'; }
+            if (score >= pass) { p.stats.speak++; questEvent('speak'); save(); checkAchievements(); }
+          },
+          onerror: err => {
+            if (my !== tok) return;
+            heard.textContent = err === 'no-speech' ? 'لم أسمع شيئاً، حاول مرة أخرى 🎤'
+              : err === 'network' ? 'الاختبار يحتاج اتصالاً بالإنترنت — قيّم نفسك بالأزرار' : 'تعذّر الاختبار — قيّم نفسك بالأزرار';
+          },
+          onend: () => { if (my === tok && btn.isConnected) btn.textContent = '🎯 اختبرني مرة أخرى'; }
+        });
+      } catch (e) { heard.textContent = 'تعذّر الاختبار — قيّم نفسك بالأزرار'; }
+    };
+    const next = () => { got.push(stars); Voice.stop(); Rec.cancel(); Recog.stop(); if (last) finish(); else { i++; draw(); } };
+    $('#vNext').onclick = next;
+    $('#vSkip').onclick = next;
+    state.key = e => {
+      if (e.key === 'r' || e.key === 'R') hear(false);
+      else if ((e.key === 'm' || e.key === 'M') && !mic.classList.contains('hidden')) mic.click();
+    };
+    setTimeout(() => { if (my === tok) hear(false, () => { if (my === tok && $('#vs1').className === 'on') step(2); }); }, 350);
+  };
+
+  const finish = () => {
+    tok++;
+    const total = sum(got), coins = total * 2 + 4, xp = total * 3 + 5;
+    render(`<div class="results glass">
+      <div class="buddy-wrap celebrate" style="width:110px;height:122px">${buddySVG()}</div>
+      <h1>${total >= list.length * 2 ? 'نطق رائع! 🌟' : 'أحسنت التدريب! 👏'}</h1>
+      <div class="v-stars"><span class="on">★</span> <b class="en">${total} / ${list.length * 3}</b></div>
+      <div class="word-list">${list.map((w, k) => wordRow(w, `<small class="en" style="color:var(--gold)">${'★'.repeat(got[k])}${'☆'.repeat(3 - got[k])}</small>`)).join('')}</div>
+      <div class="row center"><button class="btn btn-primary btn-big" id="vMore">${back === 'learn' ? '🔄 كلمات أخرى' : '🔄 مرة أخرى'}</button>
+        <button class="btn btn-ghost" data-go="${back}">رجوع</button></div></div>`);
+    learnReward(coins, xp, `🗣️ +${coins} 🪙 على تدريب صوتك!`);
+    $('#vMore').onclick = () => show('voice', back === 'learn' ? null : list, back);
+    Mascot.say(total >= list.length * 2 ? 'صوتك يشبه صوتي! 💬' : 'كل تسجيل يجعل نطقك أفضل 💪', 'celebrate');
+  };
+  draw();
+};
+
+/* =========================================================
+   25. WORD OF THE DAY — its own screen, a mini game and the reminder notification
+   ========================================================= */
+TAB_OF.wod = 'menu';
+SCREEN_PARENT.wod = 'menu';
+/** Plan words for the next 14 days (kept a week back) and return them as notification texts. */
+function planWords(p) {
+  const plan = p.wod.plan, from = dayKeyOffset(-7), out = {};
+  Object.keys(plan).forEach(k => { if (k < from) delete plan[k]; });
+  for (let i = 0; i < 14; i++) {
+    const day = dayKeyOffset(i), w = wordOfDay(day);
+    plan[day] = w.key;
+    out[day] = { t: `💡 ${p.name}، كلمة اليوم: ${w.word} ${w.emoji}`, b: `${w.arabic} — اضغط لتسمعها وتلعب بها مع حكيم 🎮`, k: w.key };
+  }
+  save();
+  return out;
+}
+Screens.wod = () => {
+  const p = P(); planWords(p);
+  const w = wordOfDay(), done = p.wod.done[todayKey()];
+  const past = [1, 2, 3, 4, 5, 6, 7].map(i => dayKeyOffset(-i)).map(d => ({ d, w: VOCAB_BY_KEY.get(p.wod.plan[d]) })).filter(x => x.w && x.w.ageGroup === p.age);
+  render(topbar('💡 كلمة اليوم', 'menu', done ? '<span class="chip">✅ لعبت بها اليوم</span>' : '<span class="chip">🎁 +15 🪙</span>') + `
+    <div class="learn-card glass"><small class="muted">${new Date().toLocaleDateString('ar', { weekday: 'long', day: 'numeric', month: 'long' })}</small>
+      <span class="big-emoji emoji">${w.emoji}</span><b class="en word">${esc(w.word)}</b><span class="ar">${esc(w.arabic)}</span>
+      <div class="speak-row" style="margin-top:10px"><button class="speak-btn" data-say="${esc(w.word)}" aria-label="استمع">🔊</button>
+        <button class="speak-btn slow" data-say-slow="${esc(w.word)}" aria-label="استمع ببطء">🐢</button></div>
+      ${p.age !== 'kids' ? `<p class="example"><span class="en">${esc(w.exampleSentence)}</span><button class="icon-btn sm" data-say="${esc(w.exampleSentence)}" aria-label="استمع للجملة">🔊</button></p>` : ''}
+    </div>
+    <div class="hub-grid">
+      <button class="hub-card glass rec" id="wodPlay"><span class="emoji">🎮</span><span class="hub-txt"><b>العب بها</b><small>4 أسئلة سريعة عن كلمة اليوم</small></span></button>
+      <button class="hub-card glass" id="wodVoice"><span class="emoji">🗣️</span><span class="hub-txt"><b>اسمع صوتك</b><small>سجّل نطقك وقارنه بحكيم</small></span></button></div>
+    ${past.length ? `<h2 class="section-title">📅 كلمات الأيام الماضية</h2><div class="word-list">${past.map(x => wordRow(x.w, p.wod.done[x.d] ? '<small> · ✅ لعبت بها</small>' : '')).join('')}</div>` : ''}`);
+  $('#wodPlay').onclick = () => { Sound.click(); startRun('wod'); };
+  $('#wodVoice').onclick = () => { Sound.click(); show('voice', [w], 'wod'); };
+  setTimeout(() => { if (state.screen === 'wod') Speech.say(w.word); }, 400);
+  Mascot.say(p.age === 'adults' ? 'كلمة جديدة كل يوم 💡' : 'كلمة جديدة كل يوم! العب بها لتحفظها 💡', 'happy');
+};
+/** Four quick questions, all about today's word. */
+function buildWod(run) {
+  const g = AGE_GROUPS[run.group], w = wordOfDay(), has = m => g.modes.includes(m);
+  const modes = ['listen', has('look') ? 'look' : 'truefalse', 'truefalse'];
+  if (has('spell') && canSpell(w)) modes.push('spell');
+  else if (has('fill') && canFill(w)) modes.push('fill');
+  else if (has('speak') && Recog.available()) modes.push('speak');
+  else modes.push('listen');
+  return modes.map(m => makeQ(m, w, run));
+}
+/** The app calls this when the reminder notification (which shows the day's word) is tapped. */
+window.hakeemOpenWod = () => {
+  if (!P() || ['play', 'intro', 'duel', 'voice'].includes(state.screen)) return;   // never interrupt a game
+  applyTheme(); Mascot.refresh(); Music.sync();
+  show('wod');
+};
+
+/* =========================================================
+   26. WEEKLY REPORT — a shareable picture of the last 7 days, for parents
+   ========================================================= */
+/** Today's counters for the report: answers, correct answers, new words, levels. */
+function dayStat(p = P()) {
+  const k = todayKey();
+  return p.dayStats[k] || (p.dayStats[k] = { a:0, c:0, n:0, l:0 });
+}
+const reportButton = () => '<button class="btn btn-primary btn-wide" id="weekReport" style="margin-bottom:14px">📤 التقرير الأسبوعي — صورة للمشاركة</button>';
+function bindReport(p) {
+  const b = $('#weekReport'); if (!b) return;
+  b.onclick = async () => {
+    const label = b.textContent;
+    b.disabled = true; b.textContent = '⏳ جارٍ تجهيز التقرير…';
+    let url = null;
+    try { url = await makeReport(p); } catch (e) {}
+    b.disabled = false; b.textContent = label;
+    if (!url) return toast('تعذّر إنشاء التقرير');
+    const share = await modal({ title: '📊 التقرير الأسبوعي', html: `<img src="${url}" class="report-img" alt="التقرير الأسبوعي لـ ${esc(p.name)}">`, ok: '📤 مشاركة', cancel: 'إغلاق' });
+    if (share) shareImage(url, `تقرير ${p.name} الأسبوعي في لعبة حكيم لتعلّم الإنجليزية 📊`, 'hakeem-report-' + todayKey());
+  };
+}
+function weekData(p) {
+  const gp = G(p), weekAgo = Date.now() - 7 * 864e5;
+  const days = [-6, -5, -4, -3, -2, -1, 0].map(off => {
+    const k = dayKeyOffset(off);
+    return { s: p.daily[k] || 0, d: p.dayStats[k] || { a:0, c:0, n:0, l:0 }, label: new Date(Date.now() + off * 864e5).toLocaleDateString('ar', { weekday: 'short' }) };
+  });
+  const ans = sum(days.map(d => d.d.a)), cor = sum(days.map(d => d.d.c));
+  const words = Object.entries(gp.words).map(([k, r]) => ({ w: VOCAB_BY_KEY.get(k), r })).filter(x => x.w);
+  return {
+    days,
+    mins: Math.round(sum(days.map(d => d.s)) / 60),
+    active: days.filter(d => d.s > 0 || d.d.a > 0).length,
+    acc: ans ? Math.round(cor / ans * 100) : p.stats.answers ? Math.round(p.stats.correct / p.stats.answers * 100) : null,
+    accWeek: ans > 0,
+    fresh: sum(days.map(d => d.d.n)),
+    learned: words.filter(x => x.r.c > 0).length,
+    strong: words.filter(x => x.r.c > 0 && x.r.seen >= weekAgo && !isWeak(x.r)).sort((a, b) => b.r.box - a.r.box || b.r.c - a.r.c).slice(0, 4).map(x => x.w),
+    weak: words.filter(x => isWeak(x.r)).sort((a, b) => (b.r.w - b.r.c) - (a.r.w - a.r.c)).slice(0, 4).map(x => x.w)
+  };
+}
+function reportNote(d) {
+  if (!d.mins && !d.active) return 'لم يبدأ اللعب هذا الأسبوع بعد — خمس دقائق يومياً تصنع الفرق! 💬';
+  if (d.active >= 5) return `أسبوع رائع! 🌟 تعلّم منتظم في ${d.active} أيام من 7`;
+  if (d.acc != null && d.acc >= 85) return 'دقة ممتازة في الإجابات! استمرّوا هكذا 👏';
+  if (d.weak.length >= 3) return 'بعض الكلمات تحتاج مراجعة — جرّبوا «المراجعة الذكية» 🔁';
+  return 'بداية جيدة! اللعب كل يوم ولو قليلاً يثبّت الكلمات 💪';
+}
+/** Draw the report on a canvas (same size as the certificates) and return a PNG data URL. */
+async function makeReport(p) {
+  const d = weekData(p), g = AGE_GROUPS[p.age], W = 1080, H = 1350;
+  await Promise.all([document.fonts.load('800 60px "Cairo"', 'تقرير'), document.fonts.load('800 60px "Baloo 2"', 'Hakeem')]).catch(() => {});
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const x = c.getContext('2d');
+  const EMOJI = '"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",sans-serif';
+  const AR = (wt, s) => `${wt} ${s}px "Cairo", sans-serif`, EN = (wt, s) => `${wt} ${s}px "Baloo 2", "Cairo", sans-serif`;
+  const rr = (X, Y, w, h, r) => {
+    r = Math.min(r, w / 2, h / 2);
+    x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r);
+    x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath();
+  };
+  const card = (X, Y, w, h, r = 28) => { rr(X, Y, w, h, r); x.fillStyle = '#fff'; x.fill(); };
+  /** Shorten t (adding …) until it fits maxW in the given font. */
+  const fit = (t, font, maxW) => { x.font = font; if (x.measureText(t).width <= maxW) return t; while (t.length > 1 && x.measureText(t + '…').width > maxW) t = t.slice(0, -1); return t + '…'; };
+  const text = (t, X, Y, font, color, align = 'center', dir = 'rtl', maxW = 0) => {
+    x.font = font; x.fillStyle = color; x.textAlign = align; x.direction = dir;
+    x.fillText(maxW ? fit(t, font, maxW) : t, X, Y);
+  };
+
+  const bg = x.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#f5f3ff'); bg.addColorStop(1, '#e0f2fe');
+  x.fillStyle = bg; x.fillRect(0, 0, W, H);
+  // header
+  const hd = x.createLinearGradient(0, 0, W, 0); hd.addColorStop(0, '#db2777'); hd.addColorStop(1, '#7c3aed');
+  rr(40, 40, W - 80, 240, 36); x.fillStyle = hd; x.fill();
+  text('📊 التقرير الأسبوعي', W / 2, 140, AR(800, 72), '#fff');
+  text('Weekly Report', W / 2, 198, EN(800, 40), 'rgba(255,255,255,.85)', 'center', 'ltr');
+  const fmt = dt => dt.toLocaleDateString('ar', { day: 'numeric', month: 'long' });
+  text(`${fmt(new Date(Date.now() - 6 * 864e5))} — ${fmt(new Date())}`, W / 2, 250, AR(600, 32), 'rgba(255,255,255,.92)');
+  // who
+  card(40, 310, W - 80, 150);
+  text(p.avatar, W - 115, 415, `84px ${EMOJI}`, '#000');
+  text(p.name, W - 190, 385, AR(800, 58), '#1e1b3a', 'right', 'rtl', 560);
+  text(`${g.icon} ${g.ar} · المستوى ${levelInfo(p.xp).lvl} · 🔥 ${displayStreak(p)}`, W - 190, 435, AR(600, 28), '#5f5c80', 'right', 'rtl', 560);
+  text(String(d.learned), 165, 395, EN(800, 64), '#7c3aed', 'center', 'ltr');
+  text('كلمة متعلَّمة', 165, 435, AR(700, 26), '#5f5c80');
+  // the four numbers
+  const stats = [['⏱️', String(d.mins), 'دقيقة لعب'], ['📅', `${d.active}/7`, 'أيام لعب'],
+    ['🎯', d.acc == null ? '—' : d.acc + '%', d.accWeek ? 'دقة الإجابات' : 'الدقة الإجمالية'], ['🆕', String(d.fresh), 'كلمة جديدة']];
+  const bw = (W - 80 - 60) / 4;
+  stats.forEach(([ic, v, l], i) => {
+    const X = W - 40 - (i + 1) * bw - i * 20;          // right to left
+    card(X, 490, bw, 180, 26);
+    text(ic, X + bw / 2, 545, `40px ${EMOJI}`, '#000');
+    text(v, X + bw / 2, 615, EN(800, 58), '#1e1b3a', 'center', 'ltr');
+    text(l, X + bw / 2, 652, AR(700, 26), '#5f5c80');
+  });
+  // minutes per day (oldest on the left, like the chart in the app)
+  card(40, 700, W - 80, 265);
+  text('⏱️ دقائق اللعب يومياً', W - 80, 752, AR(800, 32), '#1e1b3a', 'right');
+  const mx = Math.max(5, ...d.days.map(k => k.s / 60)), cw = (W - 200) / 7;
+  d.days.forEach((k, i) => {
+    const m = Math.round(k.s / 60), h = Math.max(8, (k.s / 60) / mx * 120), X = 100 + i * cw + cw * .2, bwid = cw * .6;
+    const grad = x.createLinearGradient(0, 915 - h, 0, 915); grad.addColorStop(0, '#7c3aed'); grad.addColorStop(1, '#db2777');
+    rr(X, 915 - h, bwid, h, 10); x.fillStyle = k.s > 0 ? grad : '#e5e7eb'; x.fill();
+    text(String(m), X + bwid / 2, 905 - h, EN(700, 26), '#5f5c80', 'center', 'ltr');
+    text(k.label, X + bwid / 2, 950, AR(600, 24), '#5f5c80');
+  });
+  // strong and weak words
+  const pw = (W - 100) / 2;
+  const panel = (X, title, list, empty, color) => {
+    card(X, 990, pw, 200, 26);
+    text(title, X + pw - 24, 1034, AR(800, 30), color, 'right');
+    if (!list.length) text(empty, X + pw / 2, 1110, AR(600, 26), '#9ca3af');
+    list.forEach((w, i) => {
+      const Y = 1076 + i * 34;
+      text(w.emoji, X + pw - 40, Y, `26px ${EMOJI}`, '#000');
+      text(w.word, X + pw - 66, Y, EN(700, 27), '#1e1b3a', 'right', 'ltr', 230);
+      text(w.arabic, X + 24, Y, AR(600, 23), '#5f5c80', 'left', 'rtl', 150);
+    });
+  };
+  panel(W - 40 - pw, '⭐ كلمات أتقنها', d.strong, 'العب أكثر لتظهر هنا 🌱', '#16a34a');
+  panel(40, '💪 تحتاج مراجعة', d.weak, 'لا كلمات صعبة حالياً 🎉', '#dc2626');
+  // Hakeem's note (lids removed: the blink animation's CSS isn't available inside an image)
+  const svg = buddySVG(p.look).replace(/<g fill="var\(--buddy-body\)"><ellipse class="lid"[\s\S]*?<\/g>/, '').replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" width="96" height="106" ');
+  const img = new Image(); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  await new Promise(r => { img.onload = r; img.onerror = r; });
+  try { x.drawImage(img, 44, 1206, 96, 106); } catch (e) {}
+  card(160, 1214, W - 200, 84, 26);
+  text(reportNote(d), W - 70, 1267, AR(700, 30), '#4c1d95', 'right', 'rtl', W - 270);
+  text('حكيم | Hakeem — لعبة تعلّم الإنجليزية', W / 2, 1332, AR(700, 24), '#5f5c80');
+  return c.toDataURL('image/png');
+}
+
+/* =========================================================
+   27. SIBLING DUEL — two players, one phone, a half of the screen each
+   ========================================================= */
+TAB_OF.duelSetup = 'learn';
+SCREEN_PARENT.duelSetup = 'games';
+const DUEL_GUEST = { name: 'ضيف', avatar: '🙂' };
+Screens.duelSetup = () => {
+  const me = P(), g = AGE_GROUPS[me.age], others = Store.data.profiles.filter(x => x.id !== me.id);
+  if (state.duelP2 !== 'guest' && !others.some(o => o.id === state.duelP2)) state.duelP2 = others.length ? others[0].id : 'guest';
+  state.duelRounds = state.duelRounds || 10;
+  const p2 = others.find(o => o.id === state.duelP2) || DUEL_GUEST;
+  render(topbar('⚔️ تحدّي الإخوة', 'games') + `
+    <div class="panel glass"><p>📱 ضعوا الهاتف بينكما على الطاولة: كل لاعب يلعب في نصف الشاشة القريب منه.</p>
+      <p>👂 استمعوا للكلمة، ومن يضغط على الإجابة الصحيحة أولاً يربح النقطة! الإجابة الخاطئة تُوقف اللاعب حتى الجولة التالية.</p></div>
+    <div class="duel-vs"><div class="duel-card glass"><span class="avatar">${me.avatar}</span><b>${esc(me.name)}</b><small>اللاعب 1</small></div>
+      <span class="vs">VS</span>
+      <div class="duel-card glass"><span class="avatar">${p2.avatar}</span><b>${esc(p2.name)}</b><small>اللاعب 2</small></div></div>
+    <h2 class="section-title">من سيلعب ضدّ ${esc(me.name)}؟</h2>
+    <div class="pick-row">${others.map(o => `<button data-p2="${o.id}" aria-pressed="${state.duelP2 === o.id}"><span class="emoji">${o.avatar}</span>${esc(o.name)}</button>`).join('')}
+      <button data-p2="guest" aria-pressed="${state.duelP2 === 'guest'}"><span class="emoji">${DUEL_GUEST.avatar}</span>${DUEL_GUEST.name}</button></div>
+    <h2 class="section-title">عدد الجولات</h2>
+    <div class="pick-row">${[[5, '5 جولات'], [10, '10 جولات'], [15, '15 جولة']].map(([n, l]) => `<button data-rounds="${n}" aria-pressed="${state.duelRounds === n}">${l}</button>`).join('')}</div>
+    <button class="btn btn-primary btn-big btn-wide" id="duelGo" style="margin-top:18px">ابدأ التحدّي ⚔️</button>
+    <p class="muted small center" style="margin-top:8px">الكلمات من مستوى ${esc(me.name)} (${g.icon} ${g.ar}). الفائز يربح 20 🪙 والآخر 10 🪙.</p>`);
+  $$('[data-p2]').forEach(b => b.onclick = () => { state.duelP2 = b.dataset.p2; Sound.click(); rerender(); });
+  $$('[data-rounds]').forEach(b => b.onclick = () => { state.duelRounds = +b.dataset.rounds; Sound.click(); rerender(); });
+  $('#duelGo').onclick = () => { Sound.click(); show('duel'); };
+};
+
+Screens.duel = () => {
+  const me = P(), group = me.age, total = state.duelRounds || 10;
+  const prof2 = Store.data.profiles.find(x => x.id === state.duelP2 && x.id !== me.id) || null;
+  const pl = [{ prof: me, name: me.name, avatar: me.avatar, score: 0 },
+    { prof: prof2, name: prof2 ? prof2.name : DUEL_GUEST.name, avatar: prof2 ? prof2.avatar : DUEL_GUEST.avatar, score: 0 }];
+  const ws = WORLDS[group];
+  let pool = ws.flatMap((w, wi) => w.words.filter(x => isUnlocked(wi, x.level - 1)));
+  if (pool.length < 8) pool = ws[0].words.concat(ws[1] ? ws[1].words : []);
+  const uniq = [];
+  shuffle(pool).forEach(x => { if (!uniq.some(u => u.emoji === x.emoji)) uniq.push(x); });
+  const targets = [...Array(total)].map((_, i) => uniq[i % uniq.length]);
+  let r = -1, w = null, settled = true, locked = [false, false], alive = true;
+  const timers = [];
+  // timers wait while a dialog (e.g. "quit?") is open
+  const later = (fn, ms) => timers.push(setTimeout(function go() { if (!alive) return; if ($('#modal-root').firstChild) timers.push(setTimeout(go, 300)); else fn(); }, ms));
+  state.leave = () => { alive = false; timers.forEach(clearTimeout); };
+  const half = i => `<section class="duel-half p${i + 1}" id="h${i}" aria-label="${esc(pl[i].name)}">
+      <div class="duel-head"><span class="avatar">${pl[i].avatar}</span><b>${esc(pl[i].name)}</b><span class="duel-score" id="s${i}">0</span></div>
+      <div class="duel-q" id="q${i}"></div><div class="duel-opts" id="o${i}"></div></section>`;
+  render(`<div class="duel">${half(1)}
+    <div class="duel-mid"><button class="icon-btn sm" id="dQuit" aria-label="إنهاء التحدّي">✕</button><b id="dRound">استعدّوا… 🚦</b>
+      <button class="icon-btn" id="dSay" aria-label="أعد الكلمة">🔊</button></div>${half(0)}</div>`);
+  const say = () => { if (w) Speech.say(w.word); };
+  $('#dQuit').onclick = quitDuel;
+  $('#dSay').onclick = say;
+
+  const settle = winner => {
+    settled = true;
+    $$('.duel-opt').forEach(b => { if (b.dataset.ok === 'true') b.classList.add('correct'); });
+    later(say, winner >= 0 ? 350 : 100);
+    later(round, 1900);
+  };
+  const tap = (i, b) => {
+    if (settled || locked[i]) return;
+    if (b.dataset.ok === 'true') {
+      b.classList.add('correct'); pl[i].score++; $('#s' + i).textContent = pl[i].score;
+      $('#h' + i).classList.add('win');
+      Sound.correct(pl[i].score); buzz(25);
+      settle(i);
+    } else {
+      b.classList.add('wrong'); locked[i] = true; $('#h' + i).classList.add('locked');
+      Sound.wrong(); buzz([30, 40, 30]);
+      if (locked[0] && locked[1]) settle(-1);
+    }
+  };
+  const round = () => {
+    r++;
+    if (r >= total) return finish();
+    const myR = r, mode = group === 'kids' || Math.random() < .6 ? 'listen' : 'look';
+    w = targets[r]; settled = false; locked = [false, false];
+    const opts = [w, ...distractors(w, 3, group)];
+    $('#dRound').innerHTML = `<span class="en">${r + 1} / ${total}</span>`;
+    [0, 1].forEach(i => {
+      const h = $('#h' + i), order = shuffle(opts);
+      h.classList.remove('win', 'locked');
+      $('#q' + i).innerHTML = mode === 'look' ? `<span class="emoji">${w.emoji}</span>` : '<button class="duel-hear" aria-label="استمع للكلمة">🔊</button>';
+      $('#o' + i).innerHTML = order.map(o => `<button class="duel-opt ${mode === 'look' ? 'text' : ''}" data-ok="${o === w}">${mode === 'look' ? esc(o.word) : o.emoji}</button>`).join('');
+      const hb = $('.duel-hear', h); if (hb) hb.onpointerdown = e => { e.preventDefault(); say(); };
+      // pointerdown: both players can press at the same moment, and the first press wins
+      $$('.duel-opt', h).forEach(b => b.onpointerdown = e => { e.preventDefault(); tap(i, b); });
+    });
+    if (mode === 'listen') later(say, 450);
+    later(() => { if (r === myR && !settled) settle(-1); }, 12000);
+  };
+  const finish = () => {
+    state.key = null; w = null;
+    const [a, b] = pl, tie = a.score === b.score, win = tie ? null : a.score > b.score ? a : b;
+    pl.forEach(x => {
+      x.prize = x.prof ? (tie ? 15 : x === win ? 20 : 10) : 0;
+      if (!x.prof) return;
+      x.prof.coins += x.prize; x.prof.duels.played++;
+      if (x === win) x.prof.duels.won++;
+    });
+    save(); checkAchievements();
+    render(`<div class="duel-end"><div class="results glass">
+      <div class="buddy-wrap celebrate" style="width:100px;height:110px">${buddySVG()}</div>
+      <h1>${tie ? 'تعادل! 🤝 كلاكما رائع' : `🏆 الفائز: ${esc(win.name)} ${win.avatar}`}</h1>
+      <div class="duel-podium">${pl.map(x => `<div class="stat ${x === win ? 'win' : ''}"><span class="avatar">${x.avatar}</span><b>${x.score}</b>
+        <small>${esc(x.name)}${x.prize ? ` · +${x.prize} 🪙` : ''}</small></div>`).join('')}</div>
+      <div class="row center"><button class="btn btn-primary btn-big" id="dAgain">🔄 جولة جديدة</button><button class="btn btn-ghost" data-go="games">رجوع</button></div></div></div>`);
+    Sound.fanfare(); Confetti.burst(120);
+    Speech.say(tie ? 'It is a draw! Great job, both of you!' : 'Well done! Great game!');
+    $('#dAgain').onclick = () => show('duel');
+    $('#dAgain').focus();
+  };
+  state.key = e => {
+    const k = '1234'.indexOf(e.key), k2 = '7890'.indexOf(e.key);
+    if (k >= 0) { const b = $$('#o0 .duel-opt')[k]; if (b) tap(0, b); }
+    else if (k2 >= 0) { const b = $$('#o1 .duel-opt')[k2]; if (b) tap(1, b); }
+    else if (e.key === 'r' || e.key === 'R') say();
+  };
+  later(round, 1200);
+};
+async function quitDuel() {
+  if (!$('.duel')) return show('games');      // already on the results card
+  const ok = await modal({ title: 'إنهاء التحدّي؟', text: 'لن تُحسب نتيجة هذا التحدّي.', ok: 'إنهاء', cancel: 'متابعة اللعب', danger: true });
+  if (ok && state.screen === 'duel') show('games');
+}
+
+/* =========================================================
    10. GLOBAL EVENTS + INIT
    ========================================================= */
 // 🔊 buttons and navigation anywhere in the app
@@ -4629,6 +5339,7 @@ document.addEventListener('keydown', e => {
   if (e.target.matches && e.target.matches('input,textarea,select')) return;
   if ((e.key === 'Enter' || e.key === ' ') && e.target.closest && e.target.closest('button,[role=button]')) return;
   if (e.key === 'Escape' && (state.screen === 'play' || state.screen === 'intro')) { quitRun(); return; }
+  if (e.key === 'Escape' && state.screen === 'duel') { quitDuel(); return; }
   if (state.key) state.key(e);
 });
 
@@ -4651,6 +5362,7 @@ window.addEventListener('resize', () => { const c = $('#confetti'); if (Confetti
 window.hakimBack = () => {
   if ($('#modal-root').firstChild) { closeModal(false); return true; }
   if (state.screen === 'play' || state.screen === 'intro') { quitRun(); return true; }
+  if (state.screen === 'duel') { quitDuel(); return true; }
   const run = state.run;
   const parent = {
     ...SCREEN_PARENT, fail: 'map',
@@ -4661,7 +5373,7 @@ window.hakimBack = () => {
   if (parent) { show(parent); return true; }
   return false;
 };
-window.hakimPause = () => { save(); Speech.cancel(); stopRecognition(); Music.stop(); $$('.reel video').forEach(v => v.pause()); };
+window.hakimPause = () => { save(); Speech.cancel(); stopRecognition(); Music.stop(); $$('.reel video').forEach(v => v.pause()); Rec.cancel(); Voice.stop(); };
 window.hakimResume = () => { Music.sync(); };
 
 function init() {
@@ -4670,6 +5382,7 @@ function init() {
   // prune play-time history older than ~90 days
   const cutoff = dayKeyOffset(-90);
   Store.data.profiles.forEach(p => Object.keys(p.daily || {}).forEach(k => { if (k < cutoff) delete p.daily[k]; }));
+  Store.data.profiles.forEach(p => Object.keys(p.dayStats || {}).forEach(k => { if (k < cutoff) delete p.dayStats[k]; }));
   Speech.init();
   Mascot.init();
   if (window.matchMedia) {
