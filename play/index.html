@@ -5242,10 +5242,12 @@ Screens.duel = () => {
       <div class="duel-q" id="q${i}"></div><div class="duel-opts" id="o${i}"></div></section>`;
   render(`<div class="duel">${half(1)}
     <div class="duel-mid"><button class="icon-btn sm" id="dQuit" aria-label="إنهاء التحدّي">✕</button><b id="dRound">استعدّوا… 🚦</b>
-      <button class="icon-btn" id="dSay" aria-label="أعد الكلمة">🔊</button></div>${half(0)}</div>`);
+      <div class="row" style="flex-wrap:nowrap;gap:6px"><button class="icon-btn sm" id="dSkip" aria-label="تخطَّ هذه الكلمة">⏭️</button>
+      <button class="icon-btn" id="dSay" aria-label="أعد الكلمة">🔊</button></div></div>${half(0)}</div>`);
   const say = () => { if (w) Speech.say(w.word); };
   $('#dQuit').onclick = quitDuel;
   $('#dSay').onclick = say;
+  $('#dSkip').onclick = () => { if (w && !settled) settle(-1); };   // nobody knows it: show the answer and move on
 
   const settle = winner => {
     settled = true;
@@ -5282,8 +5284,8 @@ Screens.duel = () => {
       // pointerdown: both players can press at the same moment, and the first press wins
       $$('.duel-opt', h).forEach(b => b.onpointerdown = e => { e.preventDefault(); tap(i, b); });
     });
-    if (mode === 'listen') later(say, 450);
-    later(() => { if (r === myR && !settled) settle(-1); }, 12000);
+    // no time limit: the round waits for the players; in listening rounds Hakeem repeats the word once as a reminder
+    if (mode === 'listen') { later(say, 450); later(() => { if (r === myR && !settled) say(); }, 8000); }
   };
   const finish = () => {
     state.key = null; w = null;
