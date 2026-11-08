@@ -541,7 +541,8 @@ body.has-tabs[data-screen=reels] .reels,body.has-tabs[data-screen=reels] .reel{h
 .hub-card .hub-txt{flex:1;display:flex;flex-direction:column;min-width:0}
 .hub-card small{color:var(--muted)}
 .hub-card.rec{border-color:var(--primary)}
-.hub-card .badge{position:absolute;top:8px;left:8px}
+.hub-card .badge{flex-shrink:0;align-self:flex-start;white-space:nowrap}   /* beside the text, never over it */
+.hub-card .hub-txt .en{align-self:flex-start}                             /* English titles line up with the Arabic line */
 .sound-ico{font-family:var(--font-en)!important;font-weight:800;font-size:1.25rem!important;color:var(--primary)}
 .mini-card.season{width:100%;margin-bottom:12px;border:2px solid var(--primary)}
 .me-card{display:flex;gap:14px;align-items:center;padding:14px;margin-bottom:14px}
