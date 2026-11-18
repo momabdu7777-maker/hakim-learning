@@ -52,6 +52,7 @@ main{max-width:600px;margin:0 auto;padding:36px 16px 40px;text-align:center}
 .primary{background:linear-gradient(135deg,var(--gold-2),var(--orange));color:#2a1400;box-shadow:0 10px 28px rgba(249,115,22,.35)}
 .secondary{margin-top:12px;border:1px solid var(--line);color:var(--text);background:linear-gradient(135deg,rgba(124,58,237,.55),rgba(236,72,153,.45))}
 .meta{font-size:13px;color:var(--muted);margin-top:10px}
+.meta a{color:#fde68a;font-weight:700}
 
 .shots{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:30px -16px 0;padding:4px 16px 14px;scrollbar-width:thin}
 .shots img{flex:0 0 auto;width:min(48vw,210px);aspect-ratio:1/2;border-radius:22px;border:3px solid rgba(255,255,255,.14);scroll-snap-align:center;background:var(--ink-2);box-shadow:0 12px 26px rgba(0,0,0,.35)}
@@ -100,9 +101,10 @@ footer{margin-top:32px;font-size:13px;color:var(--muted)}
 
   <div class="stats"><span>516 كلمة وعبارة</span><span>41 مقطع كرتون</span><span>6 قصص و5 أناشيد</span><span>10 دروس قواعد</span><span>4 فئات عمرية</span><span>مجانية</span></div>
 
-  <a class="btn primary" href="hakeem.apk" download="hakeem.apk">⬇ تحميل لأندرويد</a>
-  <p class="meta">الإصدار 1.8.2 · 0.7 ميغابايت · أندرويد 7 فما فوق</p>
-  <a class="btn secondary" href="play/">▶ العب الآن من المتصفح</a>
+  <a class="btn primary" href="hakeem-flutter.apk" download="hakeem-flutter.apk">⬇ تحميل لأندرويد — الإصدار الجديد</a>
+  <p class="meta">الإصدار 2.0 · 59 ميغابايت · أندرويد 6 فما فوق</p>
+  <a class="btn secondary" href="app/">📱 للآيفون والمتصفح: افتح اللعبة</a>
+  <p class="meta"><a href="#iphone">طريقة تثبيتها على الآيفون</a> · النسخة السابقة: <a href="hakeem.apk" download="hakeem.apk">hakeem.apk</a> (1.8.2 · 0.7 ميغابايت) و<a href="play/">نسختها في المتصفح</a></p>
 
   <div class="shots" aria-label="صور من اللعبة">
     <img src="shots/reels.webp" alt="كرتون حكيم: مقاطع بتعليق إنجليزي وترجمة عربية" loading="lazy">
@@ -155,19 +157,32 @@ footer{margin-top:32px;font-size:13px;color:var(--muted)}
   </section>
 
   <section>
-    <h2>طريقة التثبيت</h2>
+    <h2>طريقة التثبيت على أندرويد</h2>
     <ol>
       <li>اضغط «تحميل لأندرويد» وانتظر حتى ينتهي التحميل.</li>
-      <li>افتح الملف <b>hakeem.apk</b> من الإشعارات أو من مجلد التنزيلات.</li>
+      <li>افتح الملف <b>hakeem-flutter.apk</b> من الإشعارات أو من مجلد التنزيلات.</li>
       <li>إذا ظهرت رسالة «لا يُسمح بالتثبيت من هذا المصدر»، اضغط <b>الإعدادات</b> وفعّل <b>السماح من هذا المصدر</b>، ثم ارجع واضغط <b>تثبيت</b>.</li>
       <li>إذا ظهر تنبيه من Play Protect، اختر <b>التثبيت على أي حال</b>.</li>
     </ol>
     <p class="note">اللعبة لا تجمع أي بيانات، وتقدّمك محفوظ على هاتفك فقط. تعمل بدون إنترنت، ما عدا «كرتون حكيم» التي تُعرض من هذا الموقع (ويمكن تحميلها داخل التطبيق لمشاهدتها بدون إنترنت). التذكير اليومي اختياري، ويطلب إذن الإشعارات عند تفعيله فقط. تطلب إذن <b>الميكروفون</b> فقط عند تمرين النطق، ويتم التعرّف على الصوت عبر خدمة جوجل في هاتفك.</p>
   </section>
 
+  <section id="iphone">
+    <h2>طريقة التثبيت على الآيفون والآيباد</h2>
+    <ol>
+      <li>افتح <a href="app/">رابط اللعبة</a> في متصفح <b>Safari</b>.</li>
+      <li>اضغط زر المشاركة <b>⬆️</b> في أسفل الشاشة.</li>
+      <li>اختر <b>إضافة إلى الشاشة الرئيسية</b> ثم <b>إضافة</b>.</li>
+      <li>ستظهر أيقونة «حكيم» على شاشتك، وتفتح اللعبة بملء الشاشة مثل أي تطبيق.</li>
+    </ol>
+    <p class="note">تحتاج اللعبة الإنترنت عند فتحها أول مرة. التذكير اليومي وتحميل الكرتون بدون إنترنت متاحان في تطبيق أندرويد فقط حالياً، وتطبيق الآيفون الرسمي قادم قريباً.</p>
+  </section>
+
   <section>
     <h2>التحقق من الملف</h2>
-    <p class="note">بصمة SHA-256 للملف الرسمي:</p>
+    <p class="note">بصمة SHA-256 للملف الرسمي (الإصدار 2.0):</p>
+    <code>1dbf4144442533178226c9d9525ce1c6b5d91f01276c0455767ead2bdf38b726</code>
+    <p class="note">النسخة السابقة 1.8.2 (hakeem.apk):</p>
     <code>5d1765f1a4c5e354cf63975cd59740254d135e22b7d5b77364b142687f4c2534</code>
   </section>
 
